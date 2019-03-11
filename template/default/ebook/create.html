@@ -1,0 +1,155 @@
+{extend name="common/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+    <h2>发布书籍</h2>
+    <div class="mdui-divider"></div>
+    <form enctype='multipart/form-data'>
+        <div class="mdui-row mdui-m-y-3">
+            <div class="mdui-col-xs-12">
+                <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
+                    {volist name="forum" id="vo"}
+                    <option value="{$vo.fid}">{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+
+        <div class="mdui-row mdui-m-y-3">
+            <label class="mdui-textfield-label">电子书名称</label>
+            <input name="name" class="mdui-textfield-input" type="text" placeholder="title" max="60" required/>
+        </div>
+        <div class="mdui-row mdui-textfield mdui-m-y-3">
+            <label class="mdui-textfield-label">描述</label>
+            <textarea name="description" class="mdui-textfield-input"></textarea>{:token()}
+        </div>
+        <input type="hidden" name="sign" value="{$attaSign}">
+        <input id="eurl" type="hidden" name="ebook_url" value="">
+        <input id="eimgurl" type="hidden" name="images" value="/public/static/images/ebook_default.jpg">
+    </form>
+    <div class="mdui-row">
+        <div class="mdui-col-xs-12">
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <button id="upebook" title="上传电子书" class="layui-btn layui-btn-primary">
+                    <i class="layui-icon layui-icon-read" style="font-size: 30px; color: #1E9FFF;"></i>
+                        点击上传电子书
+                </button>
+            </div>
+            <div class="layui-form-item">
+                <a id="upebookimg" class="mdui-hidden">
+                    <img src="/public/static/images/ebook_default.jpg" alt="" id="preview" width="30%" height="auto" />
+                </a>
+                <p>电子书文件上传大小不得超过32M，如有需要请联系管理员QQ：3127176962</p>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button id="create" class="mdui-btn mdui-color-theme mdui-float-right">发布电子书</button>
+    </div>
+</div>
+{/block} {block name="js"}
+<script src="__JS__/simplemde.min.js"></script>
+<script>
+    var option = {
+        uid: "{:session('uid')}",
+        url: '{:url("index/ebook/create")}',
+        ebookUrl: "{:url('index/ebook/upebook')}",
+        ebookImgUrl: "{:url('index/ebook/upebookimg')}",
+    }
+
+    layui.use(['upload', 'form','layer'], function() {
+        var upload = layui.upload,
+            form = layui.form,
+            layer = layui.layer;
+        var $$ = mdui.JQ;
+        //图片上传
+        var uploadInst = upload.render({
+            elem: '#upebookimg'
+            , accept: 'images'
+            ,acceptMime: 'image/*'
+            , field: 'ebookimg' //后台控制器中接受的参数，必须
+            ,auto:true // 自动上传
+            ,url: option.ebookImgUrl //上传接口
+            ,before:function (obj) {
+                  console.log(obj);
+                  // 预览
+                  obj.preview(function(index,file,result) {
+                      $('#preview').attr('src',result); //图片链接 base64
+                  });
+              }
+            ,done: function (res) {
+                if (res.code == 0) {
+                    layer.msg('上传成功！', {
+                        icon: 1,
+                        end: function () {
+                            $$('#preview').attr('src', res.url);
+                        }
+                    });
+                    $$('#eimgurl').val(res.ebookurl);
+                }
+            }
+            ,error: function () {
+
+            }
+        });
+        //电子书上传
+        var uploadebook = upload.render({
+            elem: '#upebook'
+            , accept: 'file'
+            , field: 'ebook' //后台控制器中接受的参数，必须
+            ,auto:true // 自动上传
+            ,url: option.ebookUrl //上传接口
+            ,before: function(obj){
+                layer.load();//上传loading
+            }
+            ,done: function (res,index,upload) {
+                if (res.code == 0) {
+                    layer.msg('上传成功！');
+                    $$('#upebookimg').toggleClass('mdui-hidden');
+                    $$('#eurl').val(res.ebookurl);
+                    layer.closeAll('loading');
+                }
+            }
+            ,error: function (index, upload) {
+                layer.msg('上传文件太大');
+                layer.closeAll('loading');
+            }
+        });
+        //绑定上传更新事件
+        $$('#create').on('click', function() {
+            //获取表单内容
+            var submitData = $$('form').serialize();
+            $$.ajax({
+                    method: 'post',
+                    url: option.url,
+                    data: submitData,
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.code == 1) {
+                            mdui.snackbar({
+                                message: res.message,
+                                position: 'top',
+                                onClosed: function() {
+                                    location.reload();
+                                }
+                            })
+                        } else {
+                            mdui.snackbar({
+                                message: res.message,
+                                position: 'top',
+                                onClosed: function() {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    }
+                });
+            return false;
+        });
+
+        layer.photos({
+            photos: '#mf-content,#mf-comments',
+            anim: 5
+        });
+    });
+</script> {/block}
