@@ -8,8 +8,13 @@
         <div class="mdui-m-y-3">
             <label class="mdui-textfield-label">栏目</label>
             <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
-                {volist name="forum" id="vo"}
-                <option value="{$vo.fid}">{$vo.name}</option>
+                {volist name="forum" id="forum"}
+                <option value="{$forum.fid}">
+                    {if condition ="$forum['pid'] neq '0'"}|
+                    <?php echo str_repeat("——",$forum['level']); ?>
+                    {/if}
+                    {$forum.name}
+                </option>
                 {/volist}
             </select>
         </div>

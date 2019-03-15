@@ -155,8 +155,9 @@ class Set extends Base
 
     public function forum()
     {
-        $fourm = Db::name('forum')->select();
-
+        $group = Db::name('group')->select();
+        $modlist = new \app\admin\model\Forum();
+        $fourm = $modlist->listTree();
         if (!empty(input('post.'))) {
             if (empty(input('post.fid'))) {
                 $res = $this->validate(input('post.'),'app\admin\validate\Set.forum');
@@ -181,6 +182,7 @@ class Set extends Base
 
         return view('admin@set/forum', [
             'forumData' => $fourm,
+            'group'     => $group,
         ]);
     }
 

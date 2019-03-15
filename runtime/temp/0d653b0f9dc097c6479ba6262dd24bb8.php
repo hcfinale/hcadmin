@@ -1,4 +1,4 @@
-<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1546402587;s:49:"./application/admin/view/public/admin_public.html";i:1546402501;s:43:"./application/admin/view/public/header.html";i:1547689121;s:43:"./application/admin/view/public/topbar.html";i:1546402672;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
+<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1552531368;s:49:"./application/admin/view/public/admin_public.html";i:1546402501;s:43:"./application/admin/view/public/header.html";i:1547689121;s:43:"./application/admin/view/public/topbar.html";i:1546402672;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -146,7 +146,7 @@
                 <th>#</th>
                 <th>Fid</th>
                 <th>板块名称</th>
-                <th>板块描述</th>
+                <th style="display: none;">板块描述</th>
                 <th>权限用户祖</th>
                 <th>板块管理</th>
             </tr>
@@ -156,8 +156,13 @@
             <tr id="<?php echo htmlentities($vo['fid']); ?>">
                 <td><?php echo htmlentities($vo['sort']); ?></td>
                 <td><?php echo htmlentities($vo['fid']); ?></td>
-                <td><?php echo htmlentities($vo['name']); ?></td>
-                <td><?php echo htmlentities($vo['introduce']); ?></td>
+                <td>
+                    <?php if($vo['pid'] != '0'): ?>|
+                    <?php echo str_repeat("_",$vo['level']*4); ?>
+                    <?php endif; ?>
+                    <?php echo htmlentities($vo['name']); ?>
+                </td>
+                <td style="display: none;"><?php echo htmlentities($vo['introduce']); ?></td>
                 <td><?php echo htmlentities($vo['cgroup']); ?></td>
                 <td>
                     <div class="layui-btn-group">
@@ -175,6 +180,22 @@
             <div class="mdui-dialog-title">添加板块</div>
             <form id="addForm" class="layui-form layui-form-pane mdui-m-y-1">
                 <div class="layui-form-item">
+                    <label class="layui-form-label">选择框</label>
+                    <div class="layui-input-block">
+                        <select name="pid" lay-verify="required" style="display: block;min-height: 36px;border: 1px solid #dedede;">
+                            <option value="0">顶级栏目</option>
+                            <?php if(is_array($forumData) || $forumData instanceof \think\Collection || $forumData instanceof \think\Paginator): $i = 0; $__LIST__ = $forumData;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$forum): $mod = ($i % 2 );++$i;?>
+                            <option value="<?php echo htmlentities($forum['fid']); ?>">
+                                <?php if($forum['pid'] != '0'): ?>|
+                                <?php echo str_repeat("——",$forum['level']); ?>
+                                <?php endif; ?>
+                                <?php echo htmlentities($forum['name']); ?>
+                            </option>
+                            <?php endforeach; endif; else: echo "" ;endif; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">板块名称</label>
                     <div class="layui-input-block">
                         <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off" class="layui-input">
@@ -189,7 +210,13 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">权限用户组</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cgroup" required lay-verify="required" placeholder="请输入权限用户祖" autocomplete="off" class="layui-input">
+                        <select name="cgroup" lay-verify="required" style="display: block;min-height: 36px;border: 1px solid #dedede;">
+                            <?php if(is_array($group) || $group instanceof \think\Collection || $group instanceof \think\Paginator): $i = 0; $__LIST__ = $group;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$guser): $mod = ($i % 2 );++$i;?>
+                            <option value="<?php echo htmlentities($guser['gid']); ?>">
+                                <?php echo htmlentities($guser['groupName']); ?>
+                            </option>
+                            <?php endforeach; endif; else: echo "" ;endif; ?>
+                        </select>
                     </div>
                     <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
                 </div>
@@ -209,7 +236,7 @@
                     <input type="hidden" name="fid" id="editfid">
                     <label class="layui-form-label">板块名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off" class="layui-input">
+                        <input type="text" name="name" required lay-verify="required" placeholder="请修改" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -217,13 +244,6 @@
                     <div class="layui-input-block">
                         <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">权限用户组</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="cgroup" required lay-verify="required" placeholder="请输入权限用户祖" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
                 </div>
                  <?php echo token(); ?>
             </form>
@@ -279,7 +299,7 @@
         data = $$('#editForm').serialize();
         $$.ajax({
             method: 'post',
-            url: '',
+            url: '<?php echo url("admin/set/forum"); ?>',
             data: data,
             dataType: 'json',
             success: function (res) {
@@ -312,12 +332,10 @@
 
     function editorForum(id) {
         var data = $$(id).find('td');
-
+        console.log(data);
         $$('#editorForum [name="fid"]').val(data[1].innerText);
-        $$('#editorForum [name="name"]').val(data[2].innerText);
+        // $$('#editorForum [name="name"]').val(data[2].innerText);
         $$('#editorForum textarea').val(data[3].innerText);
-        $$('#editorForum [name="cgroup"]').val(data[4].innerText);
-
         inst.open();
 
     }

@@ -13,6 +13,7 @@ Route::rule('/', 'index/index'); // 首页访问路由
 Route::rule('topic/:tid', 'index/topic/index');
 Route::rule('ebook/:eid', 'index/ebook/index');
 Route::rule('forum/[:fid]', 'index/forum/index');
+Route::rule('flist/[:fid]', 'index/forum/lists');
 
 Route::rule('register', 'user/reg');
 Route::rule('forget', 'user/forgetpas');

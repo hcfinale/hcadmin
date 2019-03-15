@@ -77,10 +77,10 @@ function get_runtime()
 }
 
 function mOutTopabr(){
-    $data = Db::name('forum')->select();
+    $data = Db::name('forum')->where('pid',0)->select();
     $html = '';
     foreach ($data as $key => $value) {
-        $html .= '<a href="'.url('index/forum/index', ['fid'=>$value['fid']]).'" title="'.$value['name'].'"><li class="mdui-list-item mdui-ripple">'.$value['name'].'</li></a>';
+        $html .= '<a href="'.url('index/forum/lists', ['fid'=>$value['fid']]).'" title="'.$value['name'].'"><li class="mdui-list-item mdui-ripple">'.$value['name'].'</li></a>';
     }
     return $html;
 }
@@ -89,26 +89,11 @@ function outTopbar()
 {
     $data = Db::name('forum')->where('pid',0)->select();
         $html = '';
-        $html2 = '';
         foreach ($data as $key => $value) {
-            $children = Db::name('forum')->where('pid','eq',$value['fid'])->select();
-            if ($children) {
-                $data[$key]['children'] = $children;
-                foreach ($data[$key]['children'] as $k2 => $v2) {
-                    if ($value['fid']==$v2['pid']) {
-                        $html2 .= '<li><a href="'.url('index/forum/index', ['fid'=>$v2['fid']]).'">'.$v2['name'].'</a></li>';
-                    }
-                }
-                $html .= '<a href="'.url('index/forum/index', ['fid'=>$value['fid']]).'" class="mdui-hidden-xs" title="'.$value['name'].'">'.$value['name'].'</a>'.'<ul>'.$html2.'</ul>';
-                $html2 = '';
-            }else{
-                $data[$key]['children'] = 0;
-                $html .= '<a href="'.url('index/forum/index', ['fid'=>$value['fid']]).'" class="mdui-hidden-xs" title="'.$value['name'].'">'.$value['name'].'</a>';
-            }
+            $html .= '<a href="'.url('index/forum/lists', ['fid'=>$value['fid']]).'" class="mdui-hidden-xs" title="'.$value['name'].'">'.$value['name'].'</a>';
         }
         return $html;
 }
-
 
 function outBadge($data){
     $value = '';

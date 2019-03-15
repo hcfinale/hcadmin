@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/index\index.html";i:1545790858;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1546497005;s:37:"./template/default/common\footer.html";i:1545980649;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/index\index.html";i:1552446579;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1552631466;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -191,6 +191,7 @@
 <!-- 置顶的内容 -->
 <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-shadow-1">
     <ul class="mdui-list">
+        <!--
         <li class="mdui-subheader">置顶</li>
         <?php if(is_array($tops) || $tops instanceof \think\Collection || $tops instanceof \think\Paginator): $i = 0; $__LIST__ = $tops;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
         <li class="mdui-divider-inset mdui-m-y-0"></li>
@@ -212,6 +213,7 @@
             </div>
         </li>
         <?php endforeach; endif; else: echo "" ;endif; ?>
+        -->
         <li class="mdui-subheader">所有帖子</li>
     </ul>
 
@@ -241,6 +243,16 @@
 </div>
 <!-- 论坛右侧各类信息展示 -->
 <div class="mdui-hidden-xs mdui-col-sm-4 mdui-typo mdui-float-right">
+    <!-- 搜索 -->
+    <div class="mdui-m-b-1">
+        <form action="<?php echo url('index/search'); ?>" method="GET">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">search</i>
+                <label class="mdui-textfield-label">Search</label>
+                <input class="mdui-textfield-input" type="search" name="keyword" />
+            </div>
+        </form>
+    </div>
     <!-- 公告栏 -->
     <div class="mdui-card mdui-m-b-1">
         <div class="mdui-card-header">
@@ -269,16 +281,6 @@
 			<a href="<?php echo url('index/ebook/create'); ?>" class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple mdui-m-l-1">发电子书</a>
 		</div>
 	</div>
-    <!-- 搜索 -->
-    <div class="mdui-m-b-1">
-        <form action="<?php echo url('index/search'); ?>" method="GET">
-            <div class="mdui-textfield mdui-textfield-floating-label">
-                <i class="mdui-icon material-icons">search</i>
-                <label class="mdui-textfield-label">Search</label>
-                <input class="mdui-textfield-input" type="search" name="keyword" />
-            </div>
-        </form>
-    </div>
 
     <!-- 友情链接 -->
     <div class="mdui-m-b-1 ml-friend-panel">

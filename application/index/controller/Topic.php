@@ -64,8 +64,9 @@ class Topic extends Base
             }
         }
 
-        $forumData = Db::name('forum')->field('fid,name,cgroup')->select();
-        
+//        $forumData = Db::name('forum')->field('fid,name,cgroup')->select();
+        $modlist = new \app\admin\model\Forum();
+        $forumData = $modlist->listTree();
         return view('create', [
             'option' => $this->siteOption('发帖'),
             'forum' => $forumData,

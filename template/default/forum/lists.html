@@ -1,0 +1,30 @@
+
+{extend name="common/forum_public"} {block name="content"}
+<!-- 论坛最新内容列表页 -->
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-shadow-1">
+    <div class="mdui-typo">
+        <h4 class="doc-article-title">当前位置：{$column.name} <a class="doc-anchor" id="divider"></a></h4>
+    </div>
+    <style>
+        .mdui-subheader a{font-size: 14px;border-right: 1px solid #dedede;padding: 0px 10px;}
+        .mdui-subheader a:first-child{font-size: 16px;font-weight: bold;}
+    </style>
+    <!-- 最新内容 -->
+    <ul class="mdui-list">
+        {volist name="listss" id="vo"}
+        <li class="mdui-subheader">
+            <a href="{:url('index/forum/index',array('fid'=>$vo.fid))}">
+                {$vo.name}
+                {if condition = "count($vo['child']) > 0"}
+                :
+                {/if}
+            </a>
+            {volist name="$vo['child']" id="son"}
+            <a href="{:url('index/forum/index',array('fid'=>$son.fid))}">{$son.name}</a>
+            {/volist}
+        </li>
+        {/volist}
+    </ul>
+</div>
+{include file="common/right_tool"} {/block}{block name="js"}
+{/block}

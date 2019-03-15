@@ -9991,6 +9991,7 @@ select.mdui-select[multiple] option:last-child {
     -webkit-flex: none;
         -ms-flex: none;
             flex: none;
+     font-weight: bold;
   }
 }
 /* 选项卡始终全宽等分 */

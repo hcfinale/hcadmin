@@ -119,6 +119,7 @@
         $$('#create').on('click', function() {
             //获取表单内容
             var submitData = $$('form').serialize();
+            console.log(submitData);
             $$.ajax({
                     method: 'post',
                     url: option.url,

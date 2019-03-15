@@ -264,3 +264,7 @@ code,pre{
 .CodeMirror, .CodeMirror-scroll {
 	max-height: 500px;
 }
+
+
+.hc-nav-pos{position: relative;}
+.hc-ul-list{display: block; position: absolute;top: 0px;background: #3f51b5!important;z-index: -1;}

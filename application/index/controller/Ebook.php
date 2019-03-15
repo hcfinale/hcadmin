@@ -3,7 +3,7 @@ namespace app\index\controller;
 
 use think\Db;
 use app\index\controller\Base;
-use app\index\model\Ebook as ebookModel;
+use app\index\model\Ebook as EbookModel;
 use app\index\model\User;
 use app\index\model\Group;
 use app\index\model\Comment;
@@ -41,13 +41,13 @@ class Ebook extends Base
             $this->error('你没有权限，请联系管理员开通。','index/index/index');
         }
         if (request()->isPost()) {
-            $ebook = new EbookModel;
+            $ebook = new EbookModel();
             $res = $ebook->found(session('uid'), input('post.'));
             if ($res[0]) {
                 return json([
                     'code'=>'1',
                     'message'=>'发布成功，正在跳转……',
-                    'url'=>url('index/ebook/index', ['eid'=>$res[1]]),
+                    'url'=>url('index/index/index', ['eid'=>$res[1]]),
                 ]);
             } else {
                 return json(\outResult(-1, $res[1]));

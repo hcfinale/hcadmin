@@ -15,7 +15,7 @@
                 <th>#</th>
                 <th>Fid</th>
                 <th>板块名称</th>
-                <th>板块描述</th>
+                <th style="display: none;">板块描述</th>
                 <th>权限用户祖</th>
                 <th>板块管理</th>
             </tr>
@@ -25,8 +25,13 @@
             <tr id="{$vo.fid}">
                 <td>{$vo.sort}</td>
                 <td>{$vo.fid}</td>
-                <td>{$vo.name}</td>
-                <td>{$vo.introduce}</td>
+                <td>
+                    {if condition ="$vo['pid'] neq '0'"}|
+                    <?php echo str_repeat("_",$vo['level']*4); ?>
+                    {/if}
+                    {$vo.name}
+                </td>
+                <td style="display: none;">{$vo.introduce}</td>
                 <td>{$vo.cgroup}</td>
                 <td>
                     <div class="layui-btn-group">
@@ -44,6 +49,22 @@
             <div class="mdui-dialog-title">添加板块</div>
             <form id="addForm" class="layui-form layui-form-pane mdui-m-y-1">
                 <div class="layui-form-item">
+                    <label class="layui-form-label">选择框</label>
+                    <div class="layui-input-block">
+                        <select name="pid" lay-verify="required" style="display: block;min-height: 36px;border: 1px solid #dedede;">
+                            <option value="0">顶级栏目</option>
+                            {volist name="forumData" id="forum"}
+                            <option value="{$forum.fid}">
+                                {if condition ="$forum['pid'] neq '0'"}|
+                                <?php echo str_repeat("——",$forum['level']); ?>
+                                {/if}
+                                {$forum.name}
+                            </option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">板块名称</label>
                     <div class="layui-input-block">
                         <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off" class="layui-input">
@@ -58,7 +79,13 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">权限用户组</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cgroup" required lay-verify="required" placeholder="请输入权限用户祖" autocomplete="off" class="layui-input">
+                        <select name="cgroup" lay-verify="required" style="display: block;min-height: 36px;border: 1px solid #dedede;">
+                            {volist name="group" id="guser"}
+                            <option value="{$guser.gid}">
+                                {$guser.groupName}
+                            </option>
+                            {/volist}
+                        </select>
                     </div>
                     <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
                 </div>
@@ -78,7 +105,7 @@
                     <input type="hidden" name="fid" id="editfid">
                     <label class="layui-form-label">板块名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off" class="layui-input">
+                        <input type="text" name="name" required lay-verify="required" placeholder="请修改" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -86,13 +113,6 @@
                     <div class="layui-input-block">
                         <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">权限用户组</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="cgroup" required lay-verify="required" placeholder="请输入权限用户祖" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
                 </div>
                  {:token()}
             </form>
@@ -144,7 +164,7 @@
         data = $$('#editForm').serialize();
         $$.ajax({
             method: 'post',
-            url: '',
+            url: '{:url("admin/set/forum")}',
             data: data,
             dataType: 'json',
             success: function (res) {
@@ -177,12 +197,10 @@
 
     function editorForum(id) {
         var data = $$(id).find('td');
-
+        console.log(data);
         $$('#editorForum [name="fid"]').val(data[1].innerText);
-        $$('#editorForum [name="name"]').val(data[2].innerText);
+        // $$('#editorForum [name="name"]').val(data[2].innerText);
         $$('#editorForum textarea').val(data[3].innerText);
-        $$('#editorForum [name="cgroup"]').val(data[4].innerText);
-
         inst.open();
 
     }

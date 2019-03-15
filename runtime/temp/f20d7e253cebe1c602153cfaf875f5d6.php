@@ -1,4 +1,4 @@
-<?php /*a:7:{s:36:"./template/default/topic\create.html";i:1546402158;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1546413417;s:37:"./template/default/common\footer.html";i:1545980649;}*/ ?>
+<?php /*a:7:{s:36:"./template/default/topic\create.html";i:1552633046;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -197,8 +197,13 @@
         <div class="mdui-m-y-3">
             <label class="mdui-textfield-label">栏目</label>
             <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
-                <?php if(is_array($forum) || $forum instanceof \think\Collection || $forum instanceof \think\Paginator): $i = 0; $__LIST__ = $forum;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-                <option value="<?php echo htmlentities($vo['fid']); ?>"><?php echo htmlentities($vo['name']); ?></option>
+                <?php if(is_array($forum) || $forum instanceof \think\Collection || $forum instanceof \think\Paginator): $i = 0; $__LIST__ = $forum;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$forum): $mod = ($i % 2 );++$i;?>
+                <option value="<?php echo htmlentities($forum['fid']); ?>">
+                    <?php if($forum['pid'] != '0'): ?>|
+                    <?php echo str_repeat("——",$forum['level']); ?>
+                    <?php endif; ?>
+                    <?php echo htmlentities($forum['name']); ?>
+                </option>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
             </select>
         </div>

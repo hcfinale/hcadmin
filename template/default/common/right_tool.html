@@ -1,5 +1,15 @@
 <!-- 论坛右侧各类信息展示 -->
 <div class="mdui-hidden-xs mdui-col-sm-4 mdui-typo mdui-float-right">
+    <!-- 搜索 -->
+    <div class="mdui-m-b-1">
+        <form action="{:url('index/search')}" method="GET">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">search</i>
+                <label class="mdui-textfield-label">Search</label>
+                <input class="mdui-textfield-input" type="search" name="keyword" />
+            </div>
+        </form>
+    </div>
     <!-- 公告栏 -->
     <div class="mdui-card mdui-m-b-1">
         <div class="mdui-card-header">
@@ -28,16 +38,6 @@
 			<a href="{:url('index/ebook/create')}" class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple mdui-m-l-1">发电子书</a>
 		</div>
 	</div>
-    <!-- 搜索 -->
-    <div class="mdui-m-b-1">
-        <form action="{:url('index/search')}" method="GET">
-            <div class="mdui-textfield mdui-textfield-floating-label">
-                <i class="mdui-icon material-icons">search</i>
-                <label class="mdui-textfield-label">Search</label>
-                <input class="mdui-textfield-input" type="search" name="keyword" />
-            </div>
-        </form>
-    </div>
 
     <!-- 友情链接 -->
     <div class="mdui-m-b-1 ml-friend-panel">
