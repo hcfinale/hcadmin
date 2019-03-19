@@ -1,4 +1,3 @@
-
 {extend name="common/forum_public"} {block name="content"}
 <!-- 论坛最新内容列表页 -->
 <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-shadow-1">
@@ -10,6 +9,36 @@
         .mdui-subheader a:first-child{font-size: 16px;font-weight: bold;}
     </style>
     <!-- 最新内容 -->
+    {volist name="listss" id="vo"}
+    <div class="mdui-row mdui-m-t-2">
+        <div class="mdui-col-sm-12 mdui-col-md-12">
+            <div class="mdui-card">
+                <div class="mdui-col-lg-6 mdui-float-left mdui-hidden-xs">
+                    <div class="mdui-card-media">
+                        <a href="{:url('index/forum/index',array('fid'=>$vo.fid))}">
+                            <img src="{$vo.img}" style="margin: 1rem auto;height: 250px;"/>
+                        </a>
+                    </div>
+                </div>
+                <div class="mdui-col-xs-12 mdui-col-lg-6 mdui-float-right">
+                    <div class="mdui-card-primary">
+                        <div class="mdui-card-primary-title">
+                            <a href="{:url('index/forum/index',array('fid'=>$vo.fid))}">{$vo.name}</a>
+                        </div>
+                        <!--<div class="mdui-card-primary-subtitle">Subtitle</div>-->
+                    </div>
+                    <div class="mdui-card-content mdui-hidden-xs">{$vo.introduce}</div>
+                    <div class="mdui-card-actions">
+                        {volist name="$vo['child']" id="son"}
+                        <a href="{:url('index/forum/index',array('fid'=>$son.fid))}" class="mdui-btn mdui-ripple">{$son.name}</a>
+                        {/volist}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/volist}
+    <!--
     <ul class="mdui-list">
         {volist name="listss" id="vo"}
         <li class="mdui-subheader">
@@ -25,6 +54,7 @@
         </li>
         {/volist}
     </ul>
+    -->
 </div>
 {include file="common/right_tool"} {/block}{block name="js"}
 {/block}

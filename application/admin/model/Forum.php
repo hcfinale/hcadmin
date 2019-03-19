@@ -7,6 +7,9 @@ use think\Db;
 class Forum extends Model
 {
     protected $name = 'forum';
+    protected $pk = 'fid';
+    protected $autoWriteTimestamp = true;
+    protected $updateTime = false;
     public function listTree(){
         $data = $this->select();
         return $this->sortTree($data);
@@ -34,6 +37,7 @@ class Forum extends Model
         }
         return $datas;
     }
+    // 获取夏季栏目
     public function getColumn($fid = 1){
         $columnnow = $this->where('fid',$fid)->field('fid,pid,name')->find();
         return $columnnow;

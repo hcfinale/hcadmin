@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/forum\lists.html";i:1552895257;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1552631466;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:7:{s:36:"./template/default/ebook\create.html";i:1552897955;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -188,131 +188,55 @@
     <div class="mdui-container">
         <div class="mdui-row">
             
-<!-- 论坛最新内容列表页 -->
-<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-shadow-1">
-    <div class="mdui-typo">
-        <h4 class="doc-article-title">当前位置：<?php echo htmlentities($column['name']); ?> <a class="doc-anchor" id="divider"></a></h4>
-    </div>
-    <style>
-        .mdui-subheader a{font-size: 14px;border-right: 1px solid #dedede;padding: 0px 10px;}
-        .mdui-subheader a:first-child{font-size: 16px;font-weight: bold;}
-    </style>
-    <!-- 最新内容 -->
-    <?php if(is_array($listss) || $listss instanceof \think\Collection || $listss instanceof \think\Paginator): $i = 0; $__LIST__ = $listss;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-    <div class="mdui-row mdui-m-t-2">
-        <div class="mdui-col-sm-12 mdui-col-md-12">
-            <div class="mdui-card">
-                <div class="mdui-col-lg-6 mdui-float-left mdui-hidden-xs">
-                    <div class="mdui-card-media">
-                        <a href="<?php echo url('index/forum/index',array('fid'=>$vo['fid'])); ?>">
-                            <img src="<?php echo htmlentities($vo['img']); ?>" style="margin: 1rem auto;height: 250px;"/>
-                        </a>
-                    </div>
-                </div>
-                <div class="mdui-col-xs-12 mdui-col-lg-6 mdui-float-right">
-                    <div class="mdui-card-primary">
-                        <div class="mdui-card-primary-title">
-                            <a href="<?php echo url('index/forum/index',array('fid'=>$vo['fid'])); ?>"><?php echo htmlentities($vo['name']); ?></a>
-                        </div>
-                        <!--<div class="mdui-card-primary-subtitle">Subtitle</div>-->
-                    </div>
-                    <div class="mdui-card-content mdui-hidden-xs"><?php echo htmlentities($vo['introduce']); ?></div>
-                    <div class="mdui-card-actions">
-                        <?php if(is_array($vo['child']) || $vo['child'] instanceof \think\Collection || $vo['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$son): $mod = ($i % 2 );++$i;?>
-                        <a href="<?php echo url('index/forum/index',array('fid'=>$son['fid'])); ?>" class="mdui-btn mdui-ripple"><?php echo htmlentities($son['name']); ?></a>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
-                    </div>
-                </div>
+
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+    <h2>发布书籍</h2>
+    <div class="mdui-divider"></div>
+    <form enctype='multipart/form-data'>
+        <div class="mdui-row mdui-m-y-3">
+            <div class="mdui-col-xs-12">
+                <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
+                    <?php if(is_array($forum) || $forum instanceof \think\Collection || $forum instanceof \think\Paginator): $i = 0; $__LIST__ = $forum;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+                    <option value="<?php echo htmlentities($vo['fid']); ?>"><?php echo htmlentities($vo['name']); ?></option>
+                    <?php endforeach; endif; else: echo "" ;endif; ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="mdui-row mdui-m-y-3">
+            <label class="mdui-textfield-label">电子书名称</label>
+            <input name="name" class="mdui-textfield-input" type="text" placeholder="title" max="60" required/>
+        </div>
+        <div class="mdui-row mdui-textfield mdui-m-y-3">
+            <label class="mdui-textfield-label">描述</label>
+            <textarea name="description" class="mdui-textfield-input"></textarea><?php echo token(); ?>
+        </div>
+        <input type="hidden" name="sign" value="<?php echo htmlentities($attaSign); ?>">
+        <input id="eurl" type="hidden" name="ebook_url" value="">
+        <input id="eimgurl" type="hidden" name="images" value="/public/static/images/ebook_default.jpg">
+    </form>
+    <div class="mdui-row">
+        <div class="mdui-col-xs-12">
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <button id="upebook" title="上传电子书" class="layui-btn layui-btn-primary">
+                    <i class="layui-icon layui-icon-read" style="font-size: 30px; color: #1E9FFF;"></i>
+                        点击上传电子书
+                </button>
+            </div>
+            <div class="layui-form-item">
+                <a id="upebookimg" class="mdui-hidden">
+                    <img src="/public/static/images/ebook_default.jpg" alt="" id="preview" width="30%" height="auto" />
+                </a>
+                <p>电子书文件上传大小不得超过32M，如有需要请联系管理员QQ：3127176962</p>
             </div>
         </div>
     </div>
-    <?php endforeach; endif; else: echo "" ;endif; ?>
-    <!--
-    <ul class="mdui-list">
-        <?php if(is_array($listss) || $listss instanceof \think\Collection || $listss instanceof \think\Paginator): $i = 0; $__LIST__ = $listss;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-        <li class="mdui-subheader">
-            <a href="<?php echo url('index/forum/index',array('fid'=>$vo['fid'])); ?>">
-                <?php echo htmlentities($vo['name']); if(count($vo['child']) > 0): ?>
-                :
-                <?php endif; ?>
-            </a>
-            <?php if(is_array($vo['child']) || $vo['child'] instanceof \think\Collection || $vo['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$son): $mod = ($i % 2 );++$i;?>
-            <a href="<?php echo url('index/forum/index',array('fid'=>$son['fid'])); ?>"><?php echo htmlentities($son['name']); ?></a>
-            <?php endforeach; endif; else: echo "" ;endif; ?>
-        </li>
-        <?php endforeach; endif; else: echo "" ;endif; ?>
-    </ul>
-    -->
+    <div>
+        <button id="create" class="mdui-btn mdui-color-theme mdui-float-right">发布电子书</button>
+    </div>
 </div>
-<!-- 论坛右侧各类信息展示 -->
-<div class="mdui-hidden-xs mdui-col-sm-4 mdui-typo mdui-float-right">
-    <!-- 搜索 -->
-    <div class="mdui-m-b-1">
-        <form action="<?php echo url('index/search'); ?>" method="GET">
-            <div class="mdui-textfield mdui-textfield-floating-label">
-                <i class="mdui-icon material-icons">search</i>
-                <label class="mdui-textfield-label">Search</label>
-                <input class="mdui-textfield-input" type="search" name="keyword" />
-            </div>
-        </form>
-    </div>
-    <!-- 公告栏 -->
-    <div class="mdui-card mdui-m-b-1">
-        <div class="mdui-card-header">
-            <div class="mdui-card-header-title">公告</div>
-            <div class="mdui-card-header-subtitle">Notice</div>
-        </div>
 
-        <div class="mdui-card-media">
-            <img src="/public/static/images/card.png" />
-        </div>
-
-        <div class="mdui-card-content"><?php echo $option['notice']; ?></div>
-    </div>
-
-    <!-- 发帖 -->
-    <!-- <select class="mdui-select" mdui-select="options">
-        <option class="mdui-select" value="">发帖</option>
-        <option class="mdui-select" value="">发视频</option>
-        <option class="mdui-select" value="">发图片</option>
-    </select> -->
-	<div class="mdui-row">
-		<div class="mdui-col-sm-6">
-			<a href="<?php echo url('index/topic/create'); ?>" class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple mdui-m-r-1">发帖</a>
-		</div>
-		<div class="mdui-col-sm-6">
-			<a href="<?php echo url('index/ebook/create'); ?>" class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple mdui-m-l-1">发电子书</a>
-		</div>
-	</div>
-
-    <!-- 友情链接 -->
-    <div class="mdui-m-b-1 ml-friend-panel">
-        <header class="mf-panel-hd">
-            <span class="mdui-typo-title">友情链接</span>
-        </header>
-        <div class="mf-panel-bd">
-            <?php if(is_array($links) || $links instanceof \think\Collection || $links instanceof \think\Paginator): $i = 0; $__LIST__ = $links;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-            <div class="mdui-chip">
-                <img class="mdui-chip-icon" src="<?php echo htmlentities((isset($vo['picurl']) && ($vo['picurl'] !== '')?$vo['picurl']:'/public/static/images/link.jpg')); ?>" />
-                <a class="mdui-chip-title" href="<?php echo htmlentities($vo['url']); ?>" target="_blank"><?php echo htmlentities($vo['title']); ?></a>
-            </div>
-            <?php endforeach; endif; else: echo "" ;endif; ?>
-        </div>
-    </div>
-    
-	<!--
-    <div class="mdui-m-b-1 ml-friend-panel">
-        <header class="mf-panel-hd">
-            <span class="mdui-typo-title">捐助我</span>
-        </header>
-        <div class="mf-panel-bd">
-            <img src="https://dn-coding-net-production-static.qbox.me/56d0ba7d-4881-4719-bc57-9cb50973e47c.jpg" alt="支付宝">
-            <img src="https://dn-coding-net-production-static.qbox.me/70c51181-537a-4974-ba29-4b67119ebfc3.png" alt="微信">
-        </div>
-    </div>
-	 -->
-	 
-</div> 
 
         </div>
     </div>
@@ -372,7 +296,112 @@
     }
 </script>
 <script src="/public/static/js/mltree-message.js"></script> 
- <?php echo $option['siteFooterJs']; ?>
+<script src="/public/static/js/simplemde.min.js"></script>
+<script>
+    var option = {
+        uid: "<?php echo session('uid'); ?>",
+        url: '<?php echo url("index/ebook/create"); ?>',
+        ebookUrl: "<?php echo url('index/ebook/upebook'); ?>",
+        ebookImgUrl: "<?php echo url('index/ebook/upebookimg'); ?>",
+    };
+
+    layui.use(['upload', 'form','layer'], function() {
+        var upload = layui.upload,
+            form = layui.form,
+            layer = layui.layer;
+        var $$ = mdui.JQ;
+        //图片上传
+        var uploadInst = upload.render({
+            elem: '#upebookimg'
+            , accept: 'images'
+            ,acceptMime: 'image/*'
+            , field: 'ebookimg' //后台控制器中接受的参数，必须
+            ,auto:true // 自动上传
+            ,url: option.ebookImgUrl //上传接口
+            ,before:function (obj) {
+                  console.log(obj);
+                  // 预览
+                  obj.preview(function(index,file,result) {
+                      $('#preview').attr('src',result); //图片链接 base64
+                  });
+              }
+            ,done: function (res) {
+                if (res.code == 0) {
+                    layer.msg('上传成功！', {
+                        icon: 1,
+                        end: function () {
+                            $$('#preview').attr('src', res.url);
+                        }
+                    });
+                    $$('#eimgurl').val(res.ebookurl);
+                }
+            }
+            ,error: function () {
+
+            }
+        });
+        //电子书上传
+        var uploadebook = upload.render({
+            elem: '#upebook'
+            , accept: 'file'
+            , field: 'ebook' //后台控制器中接受的参数，必须
+            ,auto:true // 自动上传
+            ,url: option.ebookUrl //上传接口
+            ,before: function(obj){
+                layer.load();//上传loading
+            }
+            ,done: function (res,index,upload) {
+                if (res.code == 0) {
+                    layer.msg('上传成功！');
+                    $$('#upebookimg').toggleClass('mdui-hidden');
+                    $$('#eurl').val(res.ebookurl);
+                    layer.closeAll('loading');
+                }
+            }
+            ,error: function (index, upload) {
+                layer.msg('上传文件太大');
+                layer.closeAll('loading');
+            }
+        });
+        //绑定上传更新事件
+        $$('#create').on('click', function() {
+            //获取表单内容
+            var submitData = $$('form').serialize();
+            console.log(submitData);
+            $$.ajax({
+                    method: 'post',
+                    url: option.url,
+                    data: submitData,
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.code == 1) {
+                            mdui.snackbar({
+                                message: res.message,
+                                position: 'top',
+                                onClosed: function() {
+                                    location.reload();
+                                }
+                            })
+                        } else {
+                            mdui.snackbar({
+                                message: res.message,
+                                position: 'top',
+                                onClosed: function() {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    }
+                });
+            return false;
+        });
+
+        layer.photos({
+            photos: '#mf-content,#mf-comments',
+            anim: 5
+        });
+    });
+</script>  <?php echo $option['siteFooterJs']; ?>
 </body>
 
 </html>

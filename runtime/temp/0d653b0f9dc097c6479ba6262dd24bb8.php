@@ -1,4 +1,4 @@
-<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1552531368;s:49:"./application/admin/view/public/admin_public.html";i:1546402501;s:43:"./application/admin/view/public/header.html";i:1547689121;s:43:"./application/admin/view/public/topbar.html";i:1546402672;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
+<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1552965381;s:49:"./application/admin/view/public/admin_public.html";i:1546402501;s:43:"./application/admin/view/public/header.html";i:1547689121;s:43:"./application/admin/view/public/topbar.html";i:1546402672;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -182,14 +182,11 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">选择框</label>
                     <div class="layui-input-block">
-                        <select name="pid" lay-verify="required" style="display: block;min-height: 36px;border: 1px solid #dedede;">
+                        <select name="pid" lay-verify="required">
                             <option value="0">顶级栏目</option>
                             <?php if(is_array($forumData) || $forumData instanceof \think\Collection || $forumData instanceof \think\Paginator): $i = 0; $__LIST__ = $forumData;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$forum): $mod = ($i % 2 );++$i;?>
                             <option value="<?php echo htmlentities($forum['fid']); ?>">
-                                <?php if($forum['pid'] != '0'): ?>|
-                                <?php echo str_repeat("——",$forum['level']); ?>
-                                <?php endif; ?>
-                                <?php echo htmlentities($forum['name']); ?>
+                                <?php if($forum['pid'] != '0'): ?>|<?php echo str_repeat("___",$forum['level']); ?><?php endif; ?><?php echo htmlentities($forum['name']); ?>
                             </option>
                             <?php endforeach; endif; else: echo "" ;endif; ?>
                         </select>
@@ -208,9 +205,18 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label">栏目图片</label>
+                    <button id="upebookimg" title="上传图片" class="layui-btn layui-btn-primary">
+                        <i class="layui-icon layui-icon-read" style="font-size: 30px; color: #1E9FFF;"></i>
+                        点击上传图片
+                    </button>
+                    <input id="eimgurl" type="hidden" name="img" required lay-verify="required" autocomplete="off" value="/public/static/images/tea_column_default.jpg">
+                    <img src="" alt="" id="preview" width="30%" height="auto" />
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">权限用户组</label>
                     <div class="layui-input-block">
-                        <select name="cgroup" lay-verify="required" style="display: block;min-height: 36px;border: 1px solid #dedede;">
+                        <select name="cgroup" lay-verify="required">
                             <?php if(is_array($group) || $group instanceof \think\Collection || $group instanceof \think\Paginator): $i = 0; $__LIST__ = $group;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$guser): $mod = ($i % 2 );++$i;?>
                             <option value="<?php echo htmlentities($guser['gid']); ?>">
                                 <?php echo htmlentities($guser['groupName']); ?>
@@ -245,7 +251,20 @@
                         <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
                     </div>
                 </div>
-                 <?php echo token(); ?>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限用户组</label>
+                    <div class="layui-input-block">
+                        <select name="cgroup" lay-verify="required">
+                            <?php if(is_array($group) || $group instanceof \think\Collection || $group instanceof \think\Paginator): $i = 0; $__LIST__ = $group;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$guser): $mod = ($i % 2 );++$i;?>
+                            <option value="<?php echo htmlentities($guser['gid']); ?>">
+                                <?php echo htmlentities($guser['groupName']); ?>
+                            </option>
+                            <?php endforeach; endif; else: echo "" ;endif; ?>
+                        </select>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
+                </div>
+                <?php echo token(); ?>
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -260,41 +279,80 @@
     <div>HC版权设置</div>
 </footer> 
 <script>
+    var option = {
+        columnImgUrl: "<?php echo url('admin/set/upcolumnimg'); ?>",
+    };
     var $$ = mdui.JQ,
         data = '',
         inst = new mdui.Dialog('#editorForum');//注册对话框
+    layui.use(['upload', 'form','layer'], function() {
+        var upload = layui.upload,
+            form = layui.form,
+            layer = layui.layer;
 
-    $$('#forum').addClass('mdui-collapse-item-open');
-    $$('#setForum').addClass('mdui-list-item-active');
+        $$('#forum').addClass('mdui-collapse-item-open');
+        $$('#setForum').addClass('mdui-list-item-active');
 
-    $$('#submit').on('click', function () {
-        data = $$('#addForm').serialize();
-        $$.ajax({
-            method: 'post',
-            url: '',
-            data: data,
-            dataType: 'json',
-            success: function (res) {
-                if (res.code == 0) {
-                    mdui.snackbar(res.message, {
-                        timeout: 2000,
-                        position: 'top',
-                        onClosed: function () {
-                            location.reload();
-                        }
-                    })
-                } else {
-                    mdui.snackbar(res.message, {
-                        timeout: 2000,
-                        position: 'top'
-                    })
+        $$('#submit').on('click', function () {
+            data = $$('#addForm').serialize();
+            $$.ajax({
+                method: 'post',
+                url: '',
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code == 0) {
+                        mdui.snackbar(res.message, {
+                            timeout: 2000,
+                            position: 'top',
+                            onClosed: function () {
+                                location.reload();
+                            }
+                        })
+                    } else {
+                        mdui.snackbar(res.message, {
+                            timeout: 2000,
+                            position: 'top'
+                        })
+                    }
+
                 }
+            });
+
+            return false;
+        });
+
+        //上传图片
+        var uploadInst = upload.render({
+            elem: '#upebookimg'
+            , accept: 'images'
+            ,acceptMime: 'image/*'
+            , field: 'columnimg' //后台控制器中接受的参数，必须
+            ,auto:true // 自动上传
+            ,url: option.columnImgUrl //上传接口
+            ,before:function (obj) {
+                console.log(obj);
+                // 预览
+                obj.preview(function(index,file,result) {
+                    $('#preview').attr('src',result); //图片链接 base64
+                });
+            }
+            ,done: function (res) {
+                if (res.code == 0) {
+                    layer.msg('上传成功！', {
+                        icon: 1,
+                        end: function () {
+                            $$('#preview').attr('src', res.url);
+                        }
+                    });
+                    $$('#eimgurl').val(res.ebookurl);
+                }
+            }
+            ,error: function () {
 
             }
-        })
-
-        return false;
-    })
+        });
+    });
     $$('#edit').on('click', function () {
         data = $$('#editForm').serialize();
         $$.ajax({
@@ -325,21 +383,18 @@
                 }
 
             }
-        })
+        });
 
         return false;
-    })
+    });
 
     function editorForum(id) {
         var data = $$(id).find('td');
-        console.log(data);
         $$('#editorForum [name="fid"]').val(data[1].innerText);
-        // $$('#editorForum [name="name"]').val(data[2].innerText);
+        $$('#editorForum [name="name"]').val(data[2].innerText);
         $$('#editorForum textarea').val(data[3].innerText);
         inst.open();
-
     }
-
     function del(fid) {
         mdui.dialog({
             title: '你确定吗？',
@@ -380,7 +435,6 @@
                 }
             ]
         });
-
     }
 </script> 
 </body>

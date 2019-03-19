@@ -156,26 +156,26 @@ class Set extends Base
     public function forum()
     {
         $group = Db::name('group')->select();
-        $modlist = new \app\admin\model\Forum();
-        $fourm = $modlist->listTree();
+        $forumList = new \app\admin\model\Forum();
+        $fourm = $forumList->listTree();
         if (!empty(input('post.'))) {
             if (empty(input('post.fid'))) {
                 $res = $this->validate(input('post.'),'app\admin\validate\Set.forum');
                 if(true !== $res){
                     return json(['code'=>-1,'message'=>$res]);
                 }
-                Forum::create(input('post.'));
+                $forumList->allowField(true)->save(input('post.'));
                 return json(['code'=>0,'message'=>'添加板块成功']);
             } else {
                 $res = $this->validate(input('post.'),'app\admin\validate\Set.forum');
                 if(true !== $res){
                     return json(['code'=>-1,'message'=>$res]);
                 }
-                $res = Db::name('forum')->where('fid', input('post.fid'))->find();
+                $res = $forumList->where('fid', input('post.fid'))->find();
                 if (empty($res)) {
                     return json(['code'=>'2041','message'=>'该板块不存在！']);
                 }
-                Db::name('forum')->update(input('post.'));
+                $forumList->save(input('post.'),['fid' => input('post.fid')]);
                 return json(['code'=>0,'message'=>'修改板块成功']);
             }
         }
@@ -184,6 +184,21 @@ class Set extends Base
             'forumData' => $fourm,
             'group'     => $group,
         ]);
+    }
+
+    public function upcolumnimg(){
+        $file = request()->file('columnimg');
+        if (empty($file)) {
+            return json(array('code'=>1,'errmsg'=>'上传失败,文件为空.'));
+        }
+        $info = $file->move('./public/uploads');
+        if ($info) {
+            $path = $info->getSaveName();
+            $data['images'] = '/public/uploads/'.$path;
+            return json(array('code'=>0,'url'=>'/public/uploads/'.$path,'msg'=>'上传成功！','ebookurl'=>$data['images']));
+        } else {
+            return json(array('code'=>1,'errmsg'=>'上传失败'));
+        }
     }
 
     public function topic()

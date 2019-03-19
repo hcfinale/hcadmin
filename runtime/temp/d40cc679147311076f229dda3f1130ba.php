@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/forum\lists.html";i:1552895257;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1552631466;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:7:{s:34:"./template/default/user\index.html";i:1546497704;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -188,131 +188,103 @@
     <div class="mdui-container">
         <div class="mdui-row">
             
-<!-- 论坛最新内容列表页 -->
-<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-shadow-1">
-    <div class="mdui-typo">
-        <h4 class="doc-article-title">当前位置：<?php echo htmlentities($column['name']); ?> <a class="doc-anchor" id="divider"></a></h4>
-    </div>
-    <style>
-        .mdui-subheader a{font-size: 14px;border-right: 1px solid #dedede;padding: 0px 10px;}
-        .mdui-subheader a:first-child{font-size: 16px;font-weight: bold;}
-    </style>
-    <!-- 最新内容 -->
-    <?php if(is_array($listss) || $listss instanceof \think\Collection || $listss instanceof \think\Paginator): $i = 0; $__LIST__ = $listss;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-    <div class="mdui-row mdui-m-t-2">
-        <div class="mdui-col-sm-12 mdui-col-md-12">
-            <div class="mdui-card">
-                <div class="mdui-col-lg-6 mdui-float-left mdui-hidden-xs">
-                    <div class="mdui-card-media">
-                        <a href="<?php echo url('index/forum/index',array('fid'=>$vo['fid'])); ?>">
-                            <img src="<?php echo htmlentities($vo['img']); ?>" style="margin: 1rem auto;height: 250px;"/>
-                        </a>
-                    </div>
-                </div>
-                <div class="mdui-col-xs-12 mdui-col-lg-6 mdui-float-right">
-                    <div class="mdui-card-primary">
-                        <div class="mdui-card-primary-title">
-                            <a href="<?php echo url('index/forum/index',array('fid'=>$vo['fid'])); ?>"><?php echo htmlentities($vo['name']); ?></a>
-                        </div>
-                        <!--<div class="mdui-card-primary-subtitle">Subtitle</div>-->
-                    </div>
-                    <div class="mdui-card-content mdui-hidden-xs"><?php echo htmlentities($vo['introduce']); ?></div>
-                    <div class="mdui-card-actions">
-                        <?php if(is_array($vo['child']) || $vo['child'] instanceof \think\Collection || $vo['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$son): $mod = ($i % 2 );++$i;?>
-                        <a href="<?php echo url('index/forum/index',array('fid'=>$son['fid'])); ?>" class="mdui-btn mdui-ripple"><?php echo htmlentities($son['name']); ?></a>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php endforeach; endif; else: echo "" ;endif; ?>
-    <!--
-    <ul class="mdui-list">
-        <?php if(is_array($listss) || $listss instanceof \think\Collection || $listss instanceof \think\Paginator): $i = 0; $__LIST__ = $listss;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-        <li class="mdui-subheader">
-            <a href="<?php echo url('index/forum/index',array('fid'=>$vo['fid'])); ?>">
-                <?php echo htmlentities($vo['name']); if(count($vo['child']) > 0): ?>
-                :
-                <?php endif; ?>
-            </a>
-            <?php if(is_array($vo['child']) || $vo['child'] instanceof \think\Collection || $vo['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$son): $mod = ($i % 2 );++$i;?>
-            <a href="<?php echo url('index/forum/index',array('fid'=>$son['fid'])); ?>"><?php echo htmlentities($son['name']); ?></a>
-            <?php endforeach; endif; else: echo "" ;endif; ?>
-        </li>
-        <?php endforeach; endif; else: echo "" ;endif; ?>
-    </ul>
-    -->
-</div>
-<!-- 论坛右侧各类信息展示 -->
-<div class="mdui-hidden-xs mdui-col-sm-4 mdui-typo mdui-float-right">
-    <!-- 搜索 -->
-    <div class="mdui-m-b-1">
-        <form action="<?php echo url('index/search'); ?>" method="GET">
-            <div class="mdui-textfield mdui-textfield-floating-label">
-                <i class="mdui-icon material-icons">search</i>
-                <label class="mdui-textfield-label">Search</label>
-                <input class="mdui-textfield-input" type="search" name="keyword" />
-            </div>
-        </form>
-    </div>
-    <!-- 公告栏 -->
-    <div class="mdui-card mdui-m-b-1">
-        <div class="mdui-card-header">
-            <div class="mdui-card-header-title">公告</div>
-            <div class="mdui-card-header-subtitle">Notice</div>
-        </div>
 
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+    <div class="mdui-card">
         <div class="mdui-card-media">
-            <img src="/public/static/images/card.png" />
-        </div>
-
-        <div class="mdui-card-content"><?php echo $option['notice']; ?></div>
-    </div>
-
-    <!-- 发帖 -->
-    <!-- <select class="mdui-select" mdui-select="options">
-        <option class="mdui-select" value="">发帖</option>
-        <option class="mdui-select" value="">发视频</option>
-        <option class="mdui-select" value="">发图片</option>
-    </select> -->
-	<div class="mdui-row">
-		<div class="mdui-col-sm-6">
-			<a href="<?php echo url('index/topic/create'); ?>" class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple mdui-m-r-1">发帖</a>
-		</div>
-		<div class="mdui-col-sm-6">
-			<a href="<?php echo url('index/ebook/create'); ?>" class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple mdui-m-l-1">发电子书</a>
-		</div>
-	</div>
-
-    <!-- 友情链接 -->
-    <div class="mdui-m-b-1 ml-friend-panel">
-        <header class="mf-panel-hd">
-            <span class="mdui-typo-title">友情链接</span>
-        </header>
-        <div class="mf-panel-bd">
-            <?php if(is_array($links) || $links instanceof \think\Collection || $links instanceof \think\Paginator): $i = 0; $__LIST__ = $links;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-            <div class="mdui-chip">
-                <img class="mdui-chip-icon" src="<?php echo htmlentities((isset($vo['picurl']) && ($vo['picurl'] !== '')?$vo['picurl']:'/public/static/images/link.jpg')); ?>" />
-                <a class="mdui-chip-title" href="<?php echo htmlentities($vo['url']); ?>" target="_blank"><?php echo htmlentities($vo['title']); ?></a>
+            <img src="/public/static/images/snake.jpg" width="100%" />
+            <div class="mlt-user-info">
+              <div class="mlt-avatar-box">
+                <div class="mlt-avatar-upload">
+                  <button id="avatar_new" title="上传新头像" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">photo_camera</i></button>
+                </div>
+                <img src="<?php echo htmlentities($userData['avatar']); ?>" alt="<?php echo htmlentities($userData['username']); ?>的头像" id="avatar_preview" />
+              </div>
+              <div class="mlt-user-username">
+                <?php echo htmlentities($userData['username']); ?>
+              </div>
+              <div class="mlt-user-data">
+                <a href><?php echo htmlentities((isset($userData['motto']) && ($userData['motto'] !== '')?$userData['motto']:"这家伙很懒，什么也没留下")); ?></a>
+              </div>
             </div>
-            <?php endforeach; endif; else: echo "" ;endif; ?>
+        </div>
+
+        <div class="mdui-card-content">
+            <div class="mdui-tab" mdui-tab>
+                <a href="#topic" class="mdui-ripple">主题</a>
+                <a href="#information" class="mdui-ripple">资料</a>
+                <a href="#password" class="mdui-ripple">安全</a>
+            </div>
+            <div id="topic">
+                <ul class="mdui-list">
+                    <?php if(is_array($userTopic) || $userTopic instanceof \think\Collection || $userTopic instanceof \think\Paginator): $i = 0; $__LIST__ = $userTopic;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+                    <li class="mdui-list-item mdui-ripple">
+                        <div class="mdui-list-item-avatar">
+                            <img src="<?php echo htmlentities($vo['userData']['avatar']); ?>" alt="<?php echo htmlentities($vo['userData']['username']); ?>" title="<?php echo htmlentities($vo['userData']['username']); ?>">
+                        </div>
+                        <div class="mdui-list-item-content">
+                            <a class="mdui-list-item-title" href="<?php echo url('index/topic/index',['tid'=>$vo['tid']]); ?>"><?php echo htmlentities($vo['subject']); ?></a>
+                            <div class="mdui-list-item-text mdui-list-item-one-line"><?php echo $vo['content']; ?></div>
+                            <div class="mdui-list-item-text">
+                                <a class="mdui-list-item-title" href="<?php echo url('index/user/inde',['uid'=>$vo['uid']]); ?>"><?php echo htmlentities($vo['userData']['username']); ?></a>
+                                <span title="<?php echo htmlentities($vo['create_time']); ?>"> <?php echo htmlentities($vo['time_format']); ?></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mdui-divider-inset mdui-m-y-0"></li>
+                    <?php endforeach; endif; else: echo "" ;endif; ?>
+                </ul>
+            </div>
+            <div id="information">
+                <form action="" method="post" class="layui-form">
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <i class="mdui-icon material-icons">info</i>
+                        <label class="mdui-textfield-label">签名</label>
+                        <input name="motto" class="mdui-textfield-input" type="text" value="<?php echo htmlentities($userData['motto']); ?>"/>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <button lay-submit lay-filter="info" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">发布签名</button>
+                    </div>
+                </form>
+
+            </div>
+            <div id="password">
+                <form action="" class="layui-form" method="post">
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <i class="mdui-icon material-icons">https</i>
+                        <label class="mdui-textfield-label">旧密码</label>
+                        <input name="oldpassword" class="mdui-textfield-input" type="password" required/>
+                        <div class="mdui-textfield-error">旧密码不能为空</div>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <i class="mdui-icon material-icons">https</i>
+                        <label class="mdui-textfield-label">新密码</label>
+                        <input name="password" class="mdui-textfield-input" type="password" required/>
+                        <div class="mdui-textfield-error">新密码不能为空</div>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <i class="mdui-icon material-icons">https</i>
+                        <label class="mdui-textfield-label">确认新密码</label>
+                        <input name="repassword" class="mdui-textfield-input" type="password" required/> <?php echo token(); ?>
+                        <div class="mdui-textfield-error">和新密码不同</div>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <button lay-submit lay-filter="pass" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
+                    </div>
+                </form>
+
+                <hr/>
+                <div class="mdui-typo">
+                    <h4>QQ互联状态:</h4>
+                    <code><?php echo htmlentities($userData['qqconnectStatus']); ?></code>
+                    <blockquote>Tips: 登录时选择QQ登录即可绑定</blockquote>
+                </div>
+            </div>
         </div>
     </div>
-    
-	<!--
-    <div class="mdui-m-b-1 ml-friend-panel">
-        <header class="mf-panel-hd">
-            <span class="mdui-typo-title">捐助我</span>
-        </header>
-        <div class="mf-panel-bd">
-            <img src="https://dn-coding-net-production-static.qbox.me/56d0ba7d-4881-4719-bc57-9cb50973e47c.jpg" alt="支付宝">
-            <img src="https://dn-coding-net-production-static.qbox.me/70c51181-537a-4974-ba29-4b67119ebfc3.png" alt="微信">
-        </div>
-    </div>
-	 -->
-	 
-</div> 
+</div>
+
+
 
         </div>
     </div>
@@ -372,7 +344,77 @@
     }
 </script>
 <script src="/public/static/js/mltree-message.js"></script> 
- <?php echo $option['siteFooterJs']; ?>
+<script>
+    layui.use(['upload', 'form'], function () {
+        var upload = layui.upload,
+            form = layui.form;
+        var $$ = mdui.JQ;
+
+        form.on('submit(pass)', function (data) {
+            $$.ajax({
+                method: 'post',
+                url: '<?php echo url("ResetPas"); ?>',
+                data: data.field,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code == 0) {
+                        mdui.snackbar({
+                            message: res.message,
+                            position: 'top',
+                            onClosed: function () {
+                               window.location.href = res.url;
+                            },
+                        })
+                    } else {
+                        layer.msg(res.message, { icon: 5 });
+                    }
+                },
+            });
+            return false;
+        });
+
+        form.on('submit(info)', function (data) {
+            $$.ajax({
+                method: 'post',
+                url: '<?php echo url("set"); ?>',
+                data: data.field,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code == 0) {
+                        mdui.snackbar({
+                            message: res.message,
+                            position: 'top',
+                        })
+                    } else {
+                        layer.msg(res.message, { icon: 5 });
+                    }
+                },
+            });
+            return false;
+        });
+
+        var uploadInst = upload.render({
+            elem: '#avatar_new'
+            , accept: 'images'
+            , field: 'avatar'
+            , data: { uid: '<?php echo htmlentities($userData['uid']); ?>' }
+            , url: '<?php echo url("index/expand/avatarUpload"); ?>'
+            , done: function (res) {
+                if (res.code == 0) {
+                    layer.msg('上传成功！', {
+                        icon: 1,
+                        end: function () {
+                            $$('#avatar_preview').attr('src', res.url);
+                        }
+                    });
+                }
+            }
+            , error: function () {
+
+            }
+        });
+    })
+</script>  <?php echo $option['siteFooterJs']; ?>
 </body>
 
 </html>

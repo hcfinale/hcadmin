@@ -51,14 +51,11 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">选择框</label>
                     <div class="layui-input-block">
-                        <select name="pid" lay-verify="required" style="display: block;min-height: 36px;border: 1px solid #dedede;">
+                        <select name="pid" lay-verify="required">
                             <option value="0">顶级栏目</option>
                             {volist name="forumData" id="forum"}
                             <option value="{$forum.fid}">
-                                {if condition ="$forum['pid'] neq '0'"}|
-                                <?php echo str_repeat("——",$forum['level']); ?>
-                                {/if}
-                                {$forum.name}
+                                {if condition ="$forum['pid'] neq '0'"}|<?php echo str_repeat("___",$forum['level']); ?>{/if}{$forum.name}
                             </option>
                             {/volist}
                         </select>
@@ -77,9 +74,18 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label">栏目图片</label>
+                    <button id="upebookimg" title="上传图片" class="layui-btn layui-btn-primary">
+                        <i class="layui-icon layui-icon-read" style="font-size: 30px; color: #1E9FFF;"></i>
+                        点击上传图片
+                    </button>
+                    <input id="eimgurl" type="hidden" name="img" required lay-verify="required" autocomplete="off" value="/public/static/images/tea_column_default.jpg">
+                    <img src="" alt="" id="preview" width="30%" height="auto" />
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">权限用户组</label>
                     <div class="layui-input-block">
-                        <select name="cgroup" lay-verify="required" style="display: block;min-height: 36px;border: 1px solid #dedede;">
+                        <select name="cgroup" lay-verify="required">
                             {volist name="group" id="guser"}
                             <option value="{$guser.gid}">
                                 {$guser.groupName}
@@ -114,7 +120,20 @@
                         <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
                     </div>
                 </div>
-                 {:token()}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限用户组</label>
+                    <div class="layui-input-block">
+                        <select name="cgroup" lay-verify="required">
+                            {volist name="group" id="guser"}
+                            <option value="{$guser.gid}">
+                                {$guser.groupName}
+                            </option>
+                            {/volist}
+                        </select>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
+                </div>
+                {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -125,41 +144,80 @@
 
 {/block} {block name="js"}
 <script>
+    var option = {
+        columnImgUrl: "{:url('admin/set/upcolumnimg')}",
+    };
     var $$ = mdui.JQ,
         data = '',
         inst = new mdui.Dialog('#editorForum');//注册对话框
+    layui.use(['upload', 'form','layer'], function() {
+        var upload = layui.upload,
+            form = layui.form,
+            layer = layui.layer;
 
-    $$('#forum').addClass('mdui-collapse-item-open');
-    $$('#setForum').addClass('mdui-list-item-active');
+        $$('#forum').addClass('mdui-collapse-item-open');
+        $$('#setForum').addClass('mdui-list-item-active');
 
-    $$('#submit').on('click', function () {
-        data = $$('#addForm').serialize();
-        $$.ajax({
-            method: 'post',
-            url: '',
-            data: data,
-            dataType: 'json',
-            success: function (res) {
-                if (res.code == 0) {
-                    mdui.snackbar(res.message, {
-                        timeout: 2000,
-                        position: 'top',
-                        onClosed: function () {
-                            location.reload();
-                        }
-                    })
-                } else {
-                    mdui.snackbar(res.message, {
-                        timeout: 2000,
-                        position: 'top'
-                    })
+        $$('#submit').on('click', function () {
+            data = $$('#addForm').serialize();
+            $$.ajax({
+                method: 'post',
+                url: '',
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code == 0) {
+                        mdui.snackbar(res.message, {
+                            timeout: 2000,
+                            position: 'top',
+                            onClosed: function () {
+                                location.reload();
+                            }
+                        })
+                    } else {
+                        mdui.snackbar(res.message, {
+                            timeout: 2000,
+                            position: 'top'
+                        })
+                    }
+
                 }
+            });
+
+            return false;
+        });
+
+        //上传图片
+        var uploadInst = upload.render({
+            elem: '#upebookimg'
+            , accept: 'images'
+            ,acceptMime: 'image/*'
+            , field: 'columnimg' //后台控制器中接受的参数，必须
+            ,auto:true // 自动上传
+            ,url: option.columnImgUrl //上传接口
+            ,before:function (obj) {
+                console.log(obj);
+                // 预览
+                obj.preview(function(index,file,result) {
+                    $('#preview').attr('src',result); //图片链接 base64
+                });
+            }
+            ,done: function (res) {
+                if (res.code == 0) {
+                    layer.msg('上传成功！', {
+                        icon: 1,
+                        end: function () {
+                            $$('#preview').attr('src', res.url);
+                        }
+                    });
+                    $$('#eimgurl').val(res.ebookurl);
+                }
+            }
+            ,error: function () {
 
             }
-        })
-
-        return false;
-    })
+        });
+    });
     $$('#edit').on('click', function () {
         data = $$('#editForm').serialize();
         $$.ajax({
@@ -190,21 +248,18 @@
                 }
 
             }
-        })
+        });
 
         return false;
-    })
+    });
 
     function editorForum(id) {
         var data = $$(id).find('td');
-        console.log(data);
         $$('#editorForum [name="fid"]').val(data[1].innerText);
-        // $$('#editorForum [name="name"]').val(data[2].innerText);
+        $$('#editorForum [name="name"]').val(data[2].innerText);
         $$('#editorForum textarea').val(data[3].innerText);
         inst.open();
-
     }
-
     function del(fid) {
         mdui.dialog({
             title: '你确定吗？',
@@ -245,6 +300,5 @@
                 }
             ]
         });
-
     }
 </script> {/block}
