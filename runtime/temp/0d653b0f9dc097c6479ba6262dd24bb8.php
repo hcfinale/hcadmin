@@ -1,4 +1,4 @@
-<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1552965381;s:49:"./application/admin/view/public/admin_public.html";i:1546402501;s:43:"./application/admin/view/public/header.html";i:1547689121;s:43:"./application/admin/view/public/topbar.html";i:1546402672;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
+<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1552984170;s:49:"./application/admin/view/public/admin_public.html";i:1546402501;s:43:"./application/admin/view/public/header.html";i:1547689121;s:43:"./application/admin/view/public/topbar.html";i:1546402672;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -210,7 +210,7 @@
                         <i class="layui-icon layui-icon-read" style="font-size: 30px; color: #1E9FFF;"></i>
                         点击上传图片
                     </button>
-                    <input id="eimgurl" type="hidden" name="img" required lay-verify="required" autocomplete="off" value="/public/static/images/tea_column_default.jpg">
+                    <input id="eimgurl" type="hidden" name="img" required lay-verify="required" autocomplete="off" >
                     <img src="" alt="" id="preview" width="30%" height="auto" />
                 </div>
                 <div class="layui-form-item">

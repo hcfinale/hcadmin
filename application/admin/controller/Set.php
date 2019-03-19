@@ -164,7 +164,9 @@ class Set extends Base
                 if(true !== $res){
                     return json(['code'=>-1,'message'=>$res]);
                 }
-                $forumList->allowField(true)->save(input('post.'));
+                $data = input('post.');
+                !empty($data['img']) ? $data['img'] : $data['img'] = '/public/static/images/tea_column_default.jpg';
+                $forumList->allowField(true)->save($data);
                 return json(['code'=>0,'message'=>'添加板块成功']);
             } else {
                 $res = $this->validate(input('post.'),'app\admin\validate\Set.forum');
