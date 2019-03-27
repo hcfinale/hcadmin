@@ -1,4 +1,4 @@
-<?php /*a:7:{s:35:"./template/default/topic\index.html";i:1546823512;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:7:{s:35:"./template/default/topic\index.html";i:1553646252;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -188,7 +188,7 @@
     <div class="mdui-container">
         <div class="mdui-row">
             
-<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-m-y-1 mdui-typo">
+<div class="mdui-col-xs-12 mdui-col-sm-9 mdui-m-y-1 mdui-typo">
     <div class="mf-panel mdui-shadow-2">
         <header class="mf-panel-hd">
             <h3><?php echo htmlentities($topicData['subject']); ?>
@@ -203,7 +203,7 @@
         </header>
         <div class="mf-panel-bd">
             <!-- <div class="content" id="mf-content"><?php echo markdownEncode($topicData['content']); ?></div> -->
-            <div class="content" id="mf-content"><?php echo html_entity_decode($topicData['content']); ?></div>
+            <div class="content" id="mf-content"><?php echo $topicData['content']; ?></div>
 
             <?php if(!empty($attaList)): ?>
             <div class="attaList">
@@ -245,7 +245,7 @@
 
     </div>
 </div>
-<div class="mdui-col-xs-0 mdui-col-md-4 mdui-m-y-1 mdui-hidden-xs">
+<div class="mdui-col-xs-0 mdui-col-md-3 mdui-m-y-1 mdui-hidden-xs">
     <div class="mf-panel mdui-text-center">
         <header class="mf-panel-hd mdui-color-theme">
             <img src="<?php echo htmlentities($topicUser['avatar']); ?>" alt="<?php echo htmlentities($topicUser['username']); ?>" class="mdui-img-circle" width="64">

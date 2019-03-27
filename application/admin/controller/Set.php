@@ -205,7 +205,7 @@ class Set extends Base
 
     public function topic()
     {
-        $topic = Db::name('topic')->paginate(10);
+        $topic = Db::name('topic')->order('tid desc')->paginate(10);
         $page = $topic->render();
         $forum = Db::name('forum')->field('fid,name,cgroup')->select();
         foreach ($topic as $key => $value) {
@@ -406,5 +406,9 @@ class Set extends Base
             return json(\outResult(0, '发送成功'));
         }
         return view('admin@set/expand');
+    }
+    public function sort(){
+
+        dump(request()->param());
     }
 }

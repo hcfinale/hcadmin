@@ -1,14 +1,42 @@
 {extend name="common/forum_public"} {block name="content"}
 <!-- 论坛最新内容列表页 -->
-<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-shadow-1">
+<div class="mdui-col-xs-12 mdui-col-sm-9 mdui-shadow-1">
     <div class="mdui-typo">
         <h4 class="doc-article-title">当前位置：{$column.name} <a class="doc-anchor" id="divider"></a></h4>
     </div>
     <style>
         .mdui-subheader a{font-size: 14px;border-right: 1px solid #dedede;padding: 0px 10px;}
         .mdui-subheader a:first-child{font-size: 16px;font-weight: bold;}
+        .mdui-grid-tile-actions{cursor: pointer;}
+        .mdui-ripple{font-weight: bold;}
     </style>
-    <!-- 最新内容 -->
+
+    <div class="mdui-container">
+        <div class="mdui-tab mdui-tab-centered" mdui-tab>
+            {volist name="listss" id="vo"}
+            <a href="#example2-tab{$vo.fid}" class="mdui-ripple">{$vo.name}</a>
+            {/volist}
+        </div>
+    </div>
+    {volist name="listss" id="vo"}
+    <div class="mdui-row" id="example2-tab{$vo.fid}">
+        {volist name="$vo['child']" id="son"}
+        <div class="mdui-col-sm-4">
+            <div class="mdui-grid-tile">
+                <a href="{:url('index/forum/index',array('fid'=>$son.fid))}">
+                    <img src="{$son.img}"/>
+                    <div class="mdui-grid-tile-actions">
+                        <div class="mdui-grid-tile-text">
+                            <div class="mdui-grid-tile-title mdui-text-center">{$son.name}</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {/volist}
+    </div>
+    {/volist}
+    <!--
     {volist name="listss" id="vo"}
     <div class="mdui-row mdui-m-t-2">
         <div class="mdui-col-sm-12 mdui-col-md-12">
@@ -25,7 +53,6 @@
                         <div class="mdui-card-primary-title">
                             <a href="{:url('index/forum/index',array('fid'=>$vo.fid))}">{$vo.name}</a>
                         </div>
-                        <!--<div class="mdui-card-primary-subtitle">Subtitle</div>-->
                     </div>
                     <div class="mdui-card-content mdui-hidden-xs">{$vo.introduce}</div>
                     <div class="mdui-card-actions">
@@ -38,7 +65,7 @@
         </div>
     </div>
     {/volist}
-    <!--
+
     <ul class="mdui-list">
         {volist name="listss" id="vo"}
         <li class="mdui-subheader">

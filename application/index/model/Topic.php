@@ -54,7 +54,7 @@ class Topic extends Model
      */
     public function getTops()
     {
-        $topic = topic::where('tops', 'in', '1')->order('create_time DESC')->select();
+        $topic = $this->where('tops', 'in', '1')->order('create_time DESC')->select();
         foreach ($topic as $key => $value) {
             $value['content'] = strip_tags(htmlspecialchars_decode($value['content']));
             $value['time_format'] = time_format($value['create_time']);
@@ -150,6 +150,7 @@ class Topic extends Model
         $topic = new Topic;
         $data['uid'] = $uid;
         $data['userip'] = '';
+        $data['content'] = htmlentities($data['content']);
         $topic->allowField(true)->save($data);
         $tid = $topic->tid;
         $user = User::get($uid);

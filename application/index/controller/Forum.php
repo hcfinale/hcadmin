@@ -10,7 +10,7 @@ class Forum extends Base
     public function index($fid = 1)
     {
         $forum = new \app\admin\model\Forum();
-        $data = $forum->where('fid',$fid)->find();
+        $data = $forum->where(['fid'=>$fid,'status'=>1])->find();
         $column = $forum->getColumn($fid);
         $option = [
             'siteDes' => $data['seoDes'],
@@ -31,7 +31,7 @@ class Forum extends Base
             $this->redirect('index/forum/index',array('fid'=>$fid));
         }
         $column = $forum->getColumn($fid);
-        $data = $forum->where('fid',$fid)->find();
+        $data = $forum->where(['fid'=>$fid,'status'=>1])->find();
         $option = [
             'siteDes' => $data['seoDes'],
             'siteKeywords' => $data['seoKeywords'],

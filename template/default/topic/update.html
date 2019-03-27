@@ -47,7 +47,7 @@
             <input name="subject" class="mdui-textfield-input" type="text" placeholder="title" max="60" value="{$topicData.subject|raw}" required/>
         </div>
         <!--style给定宽度可以影响编辑器的最终宽度-->
-        <script type="text/plain" id="editor" name="content" style="width:100%;height: 300px;">{$topicData.content|raw}</script>{:token()}
+        <script type="text/plain" id="editor" name="content" style="width:100%;height: 400px;">{$topicData.content|raw}</script>{:token()}
         <input type="hidden" name="sign" value="{$topicData.sign}">
     </form>
     <div>
@@ -65,9 +65,9 @@
     let option = {
         uid: "{:session('uid')}",
         url: '{:url("index/topic/update",["uid"=>session("uid"),"tid"=>$topicData.tid])}',
-    }
+    };
     // var editor = new MLTeditor(option);
-     var editor = UE.getEditor('editor');
+    var editor = UE.getEditor('editor',{ initialFrameWidth: null , autoHeightEnabled: false});
     var $$ = mdui.JQ;
     layui.use('layer', function() {
         let layer = layui.layer;
@@ -85,7 +85,7 @@
                         message: res.message,
                         position: 'top',
                         onClosed: function() {
-                            $$('#editor').text('');
+                            $$('#editor').text("");
                             window.location.href = res.url;
                         }
                     })

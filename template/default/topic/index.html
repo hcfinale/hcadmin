@@ -1,5 +1,5 @@
 {extend name="common/forum_public"} {block name="content"}
-<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-m-y-1 mdui-typo">
+<div class="mdui-col-xs-12 mdui-col-sm-9 mdui-m-y-1 mdui-typo">
     <div class="mf-panel mdui-shadow-2">
         <header class="mf-panel-hd">
             <h3>{$topicData.subject}
@@ -14,7 +14,7 @@
         </header>
         <div class="mf-panel-bd">
             <!-- <div class="content" id="mf-content">{$topicData.content|raw|markdownEncode}</div> -->
-            <div class="content" id="mf-content">{$topicData.content|raw|html_entity_decode}</div>
+            <div class="content" id="mf-content">{$topicData.content|raw}</div>
 
             {if !empty($attaList)}
             <div class="attaList">
@@ -56,7 +56,7 @@
 
     </div>
 </div>
-<div class="mdui-col-xs-0 mdui-col-md-4 mdui-m-y-1 mdui-hidden-xs">
+<div class="mdui-col-xs-0 mdui-col-md-3 mdui-m-y-1 mdui-hidden-xs">
     <div class="mf-panel mdui-text-center">
         <header class="mf-panel-hd mdui-color-theme">
             <img src="{$topicUser.avatar}" alt="{$topicUser.username}" class="mdui-img-circle" width="64">

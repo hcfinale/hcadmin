@@ -1,0 +1,25 @@
+<!DOCTYPE html>    
+<html lang="zh-CN">    
+<head>    
+	<meta charset="UTF-8">    
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">    
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">    
+	<title>万和学院</title>    
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>    
+	<link rel="stylesheet" type="text/css" href="css/swiper-3.4.1.min.css"/>    
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">    
+</head>    
+<body>    
+<div class="container-fluid visible-sm-block visible-xs-block">    
+	<ul class="nav nav-pills nav-stacked hc-mnav">    
+		<li class="active"><a href="/">在线首页</a></li>    
+		<li><a href="http://www.wanho.net/">万和官网1</a></li>    
+		<li><a href="http://www.wanho.org/">万和官网2</a></li>    
+		<li><a href="http://bbs.wh1993.net/">万和论坛</a></li>    
+		<li><a href="http://v.wh1993.net/">万和视频</a></li>    
+		<li><a href="http://www.wanho.net/zyszi/">师资团队</a></li>    
+		<li><a href="http://tb.53kf.com/code/client/10134569/1">联系我们</a></li>    
+	</ul>    
+</div>
+</body>
+</html>

@@ -77,7 +77,7 @@ function get_runtime()
 }
 
 function mOutTopabr(){
-    $data = Db::name('forum')->where('pid',0)->select();
+    $data = Db::name('forum')->where(['pid'=>0,'status'=>1])->select();
     $html = '';
     foreach ($data as $key => $value) {
         $html .= '<a href="'.url('index/forum/lists', ['fid'=>$value['fid']]).'" title="'.$value['name'].'"><li class="mdui-list-item mdui-ripple">'.$value['name'].'</li></a>';
@@ -87,7 +87,7 @@ function mOutTopabr(){
 
 function outTopbar()
 {
-    $data = Db::name('forum')->where('pid',0)->select();
+    $data = Db::name('forum')->where(['pid'=>0,'status'=>1])->select();
         $html = '';
         foreach ($data as $key => $value) {
             $html .= '<a href="'.url('index/forum/lists', ['fid'=>$value['fid']]).'" class="mdui-hidden-xs" title="'.$value['name'].'">'.$value['name'].'</a>';

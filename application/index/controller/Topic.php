@@ -52,7 +52,7 @@ class Topic extends Base
         }
         if (request()->isPost()) {
             $topic = new TopicModel;
-            $res = $topic->found(session('uid'), input('post.', '', 'htmlspecialchars'));
+            $res = $topic->found(session('uid'), input('post.'));
             if ($res[0]) {
                 return json([
                 'code'=>'1',
@@ -64,7 +64,6 @@ class Topic extends Base
             }
         }
 
-//        $forumData = Db::name('forum')->field('fid,name,cgroup')->select();
         $modlist = new \app\admin\model\Forum();
         $forumData = $modlist->listTree();
         return view('create', [
@@ -101,8 +100,8 @@ class Topic extends Base
                 } else {
                     $topic = new topicModel;
                     $data = [
-                    'subject' => input('post.subject', '', 'htmlspecialchars'),
-                    'content' => input('post.content', '', 'htmlspecialchars'),
+                    'subject' => input('post.subject','','htmlentities'),
+                    'content' => input('post.content','','htmlentities'),
                     'tops'    => input('post.tops'),
                     'essence'    => input('post.essence'),
                     'closed'    => input('post.closed'),

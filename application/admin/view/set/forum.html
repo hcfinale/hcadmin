@@ -23,7 +23,8 @@
         <tbody>
             {volist name="forumData" id="vo"}
             <tr id="{$vo.fid}">
-                <td>{$vo.sort}</td>
+                <input type="hidden" name="fid" id="hcfid" value="{$vo.fid}">
+                <td><input type="text" name="sort" id="hcSort" value="{$vo.sort}" style="width: 35px;text-align: center;" onchange="columnSort()"></td>
                 <td>{$vo.fid}</td>
                 <td>
                     {if condition ="$vo['pid'] neq '0'"}|
@@ -218,6 +219,14 @@
             }
         });
     });
+    // 栏目排序
+    function columnSort(){
+        var fid = document.getElementById('hcfid').value;
+        var sort = document.getElementById('hcSort').value;
+        alert(fid);
+        alert(sort);
+    }
+
     $$('#edit').on('click', function () {
         data = $$('#editForm').serialize();
         $$.ajax({

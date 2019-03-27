@@ -1,4 +1,4 @@
-<?php /*a:7:{s:36:"./template/default/topic\create.html";i:1552633046;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:7:{s:36:"./template/default/topic\create.html";i:1553588038;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -213,7 +213,7 @@
             <input name="subject" class="mdui-textfield-input" type="text" placeholder="title" max="60" required/>
         </div>
         <!--style给定宽度可以影响编辑器的最终宽度-->
-        <script type="text/plain" id="editor" name="content" style="width:100%;height:240px;"></script><?php echo token(); ?>
+        <script type="text/plain" id="editor" name="content" style="width:100%;height:400px;"></script><?php echo token(); ?>
         <!-- <textarea class="OwO-text" id="editor" name="content" required></textarea> <?php echo token(); ?> -->
         <input type="hidden" name="sign" value="<?php echo htmlentities($attaSign); ?>">
     </form>
@@ -294,7 +294,7 @@
         uid: "<?php echo session('uid'); ?>",
         url: '<?php echo url("index/topic/create"); ?>',
     }
-    var editor = UE.getEditor('editor');
+    var editor = UE.getEditor('editor', { initialFrameWidth: null , autoHeightEnabled: false});
     
     layui.use('layer', function() {
         let layer = layui.layer;
@@ -312,7 +312,7 @@
                         message: res.message,
                         position: 'top',
                         onClosed: function() {
-                            $$('#editor').text('');
+                            $$('#editor').text("");
                             window.location.href = res.url;
                         }
                     })

@@ -1,6 +1,6 @@
 {extend name="common/forum_public"} {block name="content"}
 <!-- 置顶的内容 -->
-<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-shadow-1">
+<div class="mdui-col-xs-12 mdui-col-sm-9 mdui-shadow-1">
     <ul class="mdui-list">
         <!--
         <li class="mdui-subheader">置顶</li>
@@ -27,7 +27,35 @@
         -->
         <li class="mdui-subheader">所有帖子</li>
     </ul>
+    <!--
+    <ul class="mdui-list">
+        <li class="mdui-list-item">
+            <span>课程分类：</span>
+            {volist name="categorys" id="cate"}
+            <a href="{:url('index/index/index',['fid'=>$cate.fid])}">{$cate.name}</a>
+            {/volist}
+        </li>
+        <li class="mdui-list-item">
+            <span>二级栏目：</span>
+            {volist name="sedcategorys" id="cate"}
+            <a href="{:url('index/index/index',['fid'=>$cate.fid])}">{$cate.name}</a>
+            {/volist}
+        </li>
+        <li class="mdui-list-item">
+            <span>二级栏目：</span>
+            {volist name="threecategory" id="cate"}
+            <a href="{:url('index/index/lists',['fid'=>$cate.fid])}">{$cate.name}</a>
+            {/volist}
+        </li>
+    </ul>
+    <ul class="mdui-list">
+        {if condition="$topsData neq ''"}
+        里面有数据{else /}
+        里面没有数据
+        {/if}
 
+    </ul>
+     -->
     <div class="mdui-tab mdui-tab-centered" mdui-tab>
         <a href="#topic-all" class="mdui-ripple">综合</a>
         <a href="#topic-essence" class="mdui-ripple">精华</a>
@@ -48,9 +76,10 @@
 
     <div id="topic-book">
         <div class="mdui-row" id="topic-ebook">
-            
+
         </div>
     </div>
+
 </div>
 {include file="common/right_tool"} {/block}{block name="js"}
 <script src="__JS__/mltree-flow.js"></script>

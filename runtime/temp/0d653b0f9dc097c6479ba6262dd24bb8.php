@@ -1,4 +1,4 @@
-<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1552984170;s:49:"./application/admin/view/public/admin_public.html";i:1546402501;s:43:"./application/admin/view/public/header.html";i:1547689121;s:43:"./application/admin/view/public/topbar.html";i:1546402672;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
+<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1553499379;s:49:"./application/admin/view/public/admin_public.html";i:1546402501;s:43:"./application/admin/view/public/header.html";i:1547689121;s:43:"./application/admin/view/public/topbar.html";i:1546402672;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -154,7 +154,8 @@
         <tbody>
             <?php if(is_array($forumData) || $forumData instanceof \think\Collection || $forumData instanceof \think\Paginator): $i = 0; $__LIST__ = $forumData;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
             <tr id="<?php echo htmlentities($vo['fid']); ?>">
-                <td><?php echo htmlentities($vo['sort']); ?></td>
+                <input type="hidden" name="fid" id="hcfid" value="<?php echo htmlentities($vo['fid']); ?>">
+                <td><input type="text" name="sort" id="hcSort" value="<?php echo htmlentities($vo['sort']); ?>" style="width: 35px;text-align: center;" onchange="columnSort()"></td>
                 <td><?php echo htmlentities($vo['fid']); ?></td>
                 <td>
                     <?php if($vo['pid'] != '0'): ?>|
@@ -353,6 +354,14 @@
             }
         });
     });
+    // 栏目排序
+    function columnSort(){
+        var fid = document.getElementById('hcfid').value;
+        var sort = document.getElementById('hcSort').value;
+        alert(fid);
+        alert(sort);
+    }
+
     $$('#edit').on('click', function () {
         data = $$('#editForm').serialize();
         $$.ajax({

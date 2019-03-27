@@ -1444,7 +1444,7 @@ body.mdui-locked{overflow:hidden}
 .mdui-typo ol{padding-left:2em;list-style:decimal}
 .mdui-typo li ol,.mdui-typo li ul{margin:.8em 0}
 .mdui-typo li ul{list-style:circle}
-.mdui-typo img{max-width:100%}
+.mdui-typo img{max-width:100%;height: auto;}
 .mdui-theme-accent-amber .mdui-typo a{color:#ffd740}
 .mdui-theme-accent-amber .mdui-typo a:before{background-color:#ffd740}
 .mdui-theme-accent-blue .mdui-typo a{color:#448aff}

@@ -24,7 +24,7 @@
             <input name="subject" class="mdui-textfield-input" type="text" placeholder="title" max="60" required/>
         </div>
         <!--style给定宽度可以影响编辑器的最终宽度-->
-        <script type="text/plain" id="editor" name="content" style="width:100%;height:240px;"></script>{:token()}
+        <script type="text/plain" id="editor" name="content" style="width:100%;height:400px;"></script>{:token()}
         <!-- <textarea class="OwO-text" id="editor" name="content" required></textarea> {:token()} -->
         <input type="hidden" name="sign" value="{$attaSign}">
     </form>
@@ -46,7 +46,7 @@
         uid: "{:session('uid')}",
         url: '{:url("index/topic/create")}',
     }
-    var editor = UE.getEditor('editor');
+    var editor = UE.getEditor('editor', { initialFrameWidth: null , autoHeightEnabled: false});
     
     layui.use('layer', function() {
         let layer = layui.layer;
@@ -64,7 +64,7 @@
                         message: res.message,
                         position: 'top',
                         onClosed: function() {
-                            $$('#editor').text('');
+                            $$('#editor').text("");
                             window.location.href = res.url;
                         }
                     })
