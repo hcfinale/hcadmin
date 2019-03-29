@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/index\index.html";i:1553237933;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1553237251;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/index\index.html";i:1553839336;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1553237251;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -216,59 +216,77 @@
         -->
         <li class="mdui-subheader">所有帖子</li>
     </ul>
-    <!--
-    <ul class="mdui-list">
-        <li class="mdui-list-item">
+    <style>
+        .column-list li{display: block;width: 100%;min-height: 2rem; line-height: 2rem;}
+        .column-list li span{font-weight: bold;margin-right: 1rem;}
+        .column-list li a{display: inline-block;padding: 0rem 0.5rem;margin: 0.5rem auto;}
+        .column-list li a.active{background: #3f51b5; color: #ffffff;border-radius: 10%; }
+    </style>
+    <ul class="mdui-list column-list">
+        <li class="mdui-list-item first-column">
             <span>课程分类：</span>
             <?php if(is_array($categorys) || $categorys instanceof \think\Collection || $categorys instanceof \think\Paginator): $i = 0; $__LIST__ = $categorys;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;?>
-            <a href="<?php echo url('index/index/index',['fid'=>$cate['fid']]); ?>"><?php echo htmlentities($cate['name']); ?></a>
+            <a title="<?php echo htmlentities($cate['0']); ?>" href="<?php echo url('index/index/index',['fid'=>$cate[0]]); ?>" <?php if(app('request')->param('fid') == $cate[0]): ?> class="active" <?php endif; ?>><?php echo htmlentities($cate['2']); ?></a>
             <?php endforeach; endif; else: echo "" ;endif; ?>
         </li>
-        <li class="mdui-list-item">
+        <?php if(count($sedcategorys)>0): ?>
+        <li class="mdui-list-item second-column">
             <span>二级栏目：</span>
             <?php if(is_array($sedcategorys) || $sedcategorys instanceof \think\Collection || $sedcategorys instanceof \think\Paginator): $i = 0; $__LIST__ = $sedcategorys;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;?>
-            <a href="<?php echo url('index/index/index',['fid'=>$cate['fid']]); ?>"><?php echo htmlentities($cate['name']); ?></a>
+            <a title="<?php echo htmlentities($cate['fid']); ?>"><?php echo htmlentities($cate['name']); ?></a>
             <?php endforeach; endif; else: echo "" ;endif; ?>
-        </li>
-        <li class="mdui-list-item">
+        </li><?php else: ?>
+        <li class="mdui-list-item second-column">
             <span>二级栏目：</span>
-            <?php if(is_array($threecategory) || $threecategory instanceof \think\Collection || $threecategory instanceof \think\Paginator): $i = 0; $__LIST__ = $threecategory;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;?>
-            <a href="<?php echo url('index/index/lists',['fid'=>$cate['fid']]); ?>"><?php echo htmlentities($cate['name']); ?></a>
+            <?php if(is_array($categorys) || $categorys instanceof \think\Collection || $categorys instanceof \think\Paginator): $i = 0; $__LIST__ = $categorys;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;if(is_array($cate['child']) || $cate['child'] instanceof \think\Collection || $cate['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $cate['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?>
+            <a title="<?php echo htmlentities($v['fid']); ?>"><?php echo htmlentities($v['name']); ?></a>
+            <?php endforeach; endif; else: echo "" ;endif; ?>
             <?php endforeach; endif; else: echo "" ;endif; ?>
         </li>
-    </ul>
-    <ul class="mdui-list">
-        <?php if($topsData != ''): ?>
-        里面有数据<?php else: ?>
-        里面没有数据
         <?php endif; ?>
-
     </ul>
-     -->
-    <div class="mdui-tab mdui-tab-centered" mdui-tab>
-        <a href="#topic-all" class="mdui-ripple">综合</a>
-        <a href="#topic-essence" class="mdui-ripple">精华</a>
-        <a href="#topic-book" class="mdui-ripple">电子书</a>
-    </div>
-    <div class="mdui-divider mdui-m-y-0"></div>
-    <div id="topic-all">
-        <ul class="mdui-list" id="topic-cps">
-
-        </ul>
-    </div>
-
-    <div id="topic-essence">
-        <ul class="mdui-list" id="topic-ess">
-
-        </ul>
-    </div>
-
-    <div id="topic-book">
-        <div class="mdui-row" id="topic-ebook">
-
+    <ul class="mdui-list part-list">
+        <?php if(is_array($categorys) || $categorys instanceof \think\Collection || $categorys instanceof \think\Paginator): $i = 0; $__LIST__ = $categorys;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;if(is_array($cate['child']) || $cate['child'] instanceof \think\Collection || $cate['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $cate['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?>
+        <div class="mdui-col-sm-4">
+            <div class="mdui-grid-tile">
+                <a href="<?php echo url('index/forum/index',array('fid'=>$v['fid'])); ?>">
+                    <img src="<?php echo htmlentities($v['img']); ?>"/>
+                    <div class="mdui-grid-tile-actions">
+                        <div class="mdui-grid-tile-text">
+                            <div class="mdui-grid-tile-title mdui-text-center"><?php echo htmlentities($v['name']); ?></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
-    </div>
+        <?php endforeach; endif; else: echo "" ;endif; ?>
+        <?php endforeach; endif; else: echo "" ;endif; ?>
+    </ul>
+    <!--
+   <div class="mdui-tab mdui-tab-centered" mdui-tab>
+       <a href="#topic-all" class="mdui-ripple">综合</a>
+       <a href="#topic-essence" class="mdui-ripple">精华</a>
+       <a href="#topic-book" class="mdui-ripple">电子书</a>
+   </div>
+   <div class="mdui-divider mdui-m-y-0"></div>
+   <div id="topic-all">
+       <ul class="mdui-list" id="topic-cps">
 
+       </ul>
+   </div>
+
+   <div id="topic-essence">
+       <ul class="mdui-list" id="topic-ess">
+
+       </ul>
+   </div>
+
+   <div id="topic-book">
+       <div class="mdui-row" id="topic-ebook">
+
+       </div>
+   </div>
+-->
 </div>
 <!-- 论坛右侧各类信息展示 -->
 <div class="mdui-hidden-xs mdui-col-sm-3 mdui-typo mdui-float-right">
@@ -398,11 +416,21 @@
     }
 </script>
 <script src="/public/static/js/mltree-message.js"></script> 
-<script src="/public/static/js/mltree-flow.js"></script>
 <script>
-    //调用flow加载
-    var flow = new mfFlow('index');
-    flow.flow();
+    $('.second-column a').each(function () {
+        $(this).click(function () {
+            var forumName = $(this).text();
+            var forumId = $(this).attr('title');
+            $.post("<?php echo url('index/ajaxList'); ?>",{forumName:forumName,forumId:forumId},function(result){
+                $(".part-list").html(result);
+            });
+        })
+    });
+    $('.second-column a').each(function () {
+        $(this).click(function () {
+            $(this).addClass('active').siblings('a').removeClass('active');
+        });
+    });
 </script>
  <?php echo $option['siteFooterJs']; ?>
 </body>

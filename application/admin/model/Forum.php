@@ -47,6 +47,7 @@ class Forum extends Model
     public function getNormalCategoryByParentId($ids = 0){
         $data = [
             'pid'   =>  $ids,
+            'status'=> 1,
         ];
         $order = [
             'sort'  => 'desc',

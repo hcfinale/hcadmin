@@ -205,6 +205,8 @@ class Set extends Base
 
     public function topic()
     {
+        $forumList = new \app\admin\model\Forum();
+        $column = $forumList->listTree();
         $topic = Db::name('topic')->order('tid desc')->paginate(10);
         $page = $topic->render();
         $forum = Db::name('forum')->field('fid,name,cgroup')->select();
@@ -222,6 +224,17 @@ class Set extends Base
                     'topicData' => $res,
                     'page'      => $page,
                     'forumData' => $forum,
+                    'column'    => $column,
+                ]);
+            }elseif (input('post.type')=='submit'){
+                $topic = new Topic;
+                $res = $topic->where('fid',input('columnSearch'))->paginate(10);
+                $page = $res->render();
+                return view('admin@set/topic', [
+                    'topicData' => $res,
+                    'page'      => $page,
+                    'forumData' => $forum,
+                    'column'    => $column,
                 ]);
             }
             $topic = new Topic;
@@ -237,8 +250,10 @@ class Set extends Base
             'topicData' => $topic,
             'page'      => $page,
             'forumData' => $forum,
+            'column'    => $column,
         ]);
     }
+
 
     public function forumsetting()
     {

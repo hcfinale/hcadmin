@@ -97,9 +97,9 @@ class Topic extends Model
         switch ($type) {
             case 'essence':
                 if ($fid == 0) {
-                    $topicData = topic::page('topic')->where('essence', 1)->page($page, $max)->order('create_Time DESC')->select();
+                    $topicData = topic::page('topic')->where('essence', 1)->page($page, $max)->order('create_Time ESC')->select();
                 } else {
-                    $topicData = topic::page('topic')->where('essence', 1)->where('fid', $fid)->page($page, $max)->order('create_Time DESC')->select();
+                    $topicData = topic::page('topic')->where('essence', 1)->where('fid', $fid)->page($page, $max)->order('create_Time ESC')->select();
                 }
                 $count = topic::page('topic')->where('essence', 1)->count('tid');
                 $pages = ceil($count / $max);
@@ -107,9 +107,9 @@ class Topic extends Model
 
             default:
                 if ($fid == 0) {
-                    $topicData = topic::page($page, $max)->order('create_Time DESC')->select();
+                    $topicData = topic::page($page, $max)->order('create_Time ESC')->select();
                 } else {
-                    $topicData = topic::page($page, $max)->where('fid', $fid)->order('create_Time DESC')->select();
+                    $topicData = topic::page($page, $max)->where('fid', $fid)->order('create_Time ESC')->select();
                 }
                 $count = topic::count('tid');
                 $pages = ceil($count / $max);

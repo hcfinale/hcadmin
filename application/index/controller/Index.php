@@ -18,57 +18,66 @@ class Index extends Base
     }
 
     public function index(){
-        $data = $firstCatIds = $sedcategorys = $threecategory = $secendCatIds = [];
-        // 首先获取一级栏目的id
-        $categorys = $this->forum->getNormalCategoryByParentId($pid=0);
-        foreach($categorys as $key => $category) {
-            $firstCatIds[] = $category->fid;
-            $data[$key][] = $category->fid;
-            $data[$key][] = $category->name;
-        }
+        $data  = $sedcategorys = $threecategory = $secendCatIds = [];
         $fid = input('fid', 0, 'intval');
-        if(in_array($fid, $firstCatIds)) { // 一级分类
-            $categoryParentId = $fid;
-        }elseif($fid) {
-            $category = $this->forum->get($fid);
-            if(!$category) {
-                $this->error('数据不合法');
-            }
-            if (in_array($category->pid,$firstCatIds)){
-                $categoryParentId = $category->pid;
-            }else{
-                $categoryParentId = $fid;
+        // 首先获取一级栏目的id
+        $cateGorys = $this->forum->getNormalCategoryByParentId($pid=0);
+        if ($fid != 0){
+            $sedcategorys = [];
+            foreach($cateGorys as $key => $cate) {
+                $firstCatIds[$key][] = $cate->fid;
+                $firstCatIds[$key][] = $cate->pid;
+                $firstCatIds[$key][] = $cate->name;
+                $firstCatIds[$key][] = $cate->img;
+                if ($child = $this->forum->getNormalCategoryByParentId($fid)){
+                    $sedcategorys = $child;
+                    $firstCatIds[$key]['child'] = [];
+                }
             }
         }else{
-            $categoryParentId = 0;
-        }
-        //获取父类下的所有 子分类
-        if($categoryParentId) {
-            $sedcategorys = $this->forum->getNormalCategoryByParentId($categoryParentId);
-            foreach ($sedcategorys as $threecate){
-                $secendCatIds[] = $threecate->fid;
+            $sedcategorys = [];
+            foreach($cateGorys as $key => $cate) {
+                $firstCatIds[$key][] = $cate->fid;
+                $firstCatIds[$key][] = $cate->pid;
+                $firstCatIds[$key][] = $cate->name;
+                $firstCatIds[$key][] = $cate->img;
+                if ($child = $this->forum->getNormalCategoryByParentId($cate->fid)){
+                    $sedcategorys = $child;
+                    $firstCatIds[$key]['child'] = $child;
+                }
             }
-            $threecategory = $this->forum->getNormalCategoryByParentId($fid);
-        }
-        if ($sedcategorys == $threecategory){
-            $threecategory = [];
         }
         $topsData = $this->topic->where('fid',$fid)->order('tid esc')->paginate();
         $tops = $this->topic->getTops();
         return view('index',[
-            'categorys'  =>  $categorys,
-            'sedcategorys'  =>  $sedcategorys,
+            'categorys'  =>  $firstCatIds,
+            'sedcategorys' =>  $sedcategorys,
             'threecategory'    =>  $threecategory,
             'tops'  =>  $tops,
             'topsData'  =>  $topsData,
         ]);
     }
-
-    public function lists(){
-        $request = request();
-        print_r($request->param('fid'));
-
+    public function ajaxList(){
+        $forumId=$this->request->param('forumId');
+        $data = $this->forum->getNormalCategoryByParentId($forumId);
+        $html = '';
+        foreach ($data as $value){
+            $html .= "<div class=\"mdui-col-sm-4\">
+            <div class=\"mdui-grid-tile\">
+                <a href=\"/forum/$value[fid]\">
+                    <img src=\"$value[img]\"/>
+                    <div class=\"mdui-grid-tile-actions\">
+                        <div class=\"mdui-grid-tile-text\">
+                            <div class=\"mdui-grid-tile-title mdui-text-center\">$value[name]</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>";
+        }
+        return json($html);
     }
+
     public function Search($keyword = '', $type='topic')
     {
         $this->assign('option', $this->siteOption('搜索 - '.$keyword));

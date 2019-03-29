@@ -6,7 +6,19 @@
 </style>
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
     <h1 class="mdui-m-l-3">Topic 管理</h1>
-    <div class="mdui-textfield mdui-textfield-expandable mdui-m-l-3" style="max-width: 30%">
+    <div class="mdui-textfield mdui-textfield-expandable mdui-m-l-3 mdui-col-xs-6">
+        <form action="" method="post" id="columnForm">
+            <select name="columnSearch" class="mdui-select" id="column">
+                {volist name="column" id="forum"}
+                <option value="{$forum.fid}">
+                    {if condition ="$forum['pid'] neq '0'"}|<?php echo str_repeat("___",$forum['level']); ?>{/if}{$forum.name}
+                </option>
+                {/volist}
+            </select>
+            <input type="submit" class="mdui-btn mdui-color-theme mdui-ripple" name="type" value="submit" />
+        </form>
+    </div>
+    <div class="mdui-textfield mdui-textfield-expandable mdui-m-l-5 mdui-col-xs-3">
         <button class="mdui-textfield-icon mdui-btn mdui-btn-icon">
             <i class="mdui-icon material-icons">search</i>
         </button>
@@ -89,7 +101,7 @@
             data: data,
             dataType: 'json',
             success: function (res) {
-                if (res.code == 0) {
+                if (res.code == 1) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
                         position: 'top',
