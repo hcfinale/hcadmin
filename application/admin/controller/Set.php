@@ -422,8 +422,16 @@ class Set extends Base
         }
         return view('admin@set/expand');
     }
+    // 栏目排序ajax
     public function sort(){
-
-        dump(request()->param());
+        $fid = $this->request->param('fid');
+        $sort = $this->request->param('sort');
+        $result = db('forum')->where('fid',$fid)->find();
+        if ($result){
+            // 用db数据库方法进行更新，如果传来的数据中有id主建，可以这样写，如果没有的话可以用where条件更新
+            db('forum')->update(['sort'=>$sort,'fid'=>$fid]);
+            return json(\outResult(200, '修改成功'));
+        }
+        return json(\outResult(0, '修改失败'));
     }
 }

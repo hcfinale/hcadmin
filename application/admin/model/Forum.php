@@ -11,7 +11,8 @@ class Forum extends Model
     protected $autoWriteTimestamp = true;
     protected $updateTime = false;
     public function listTree(){
-        $data = $this->where('status',1)->select();
+        $data = $this->where('status',1)
+            ->select();
         return $this->sortTree($data);
     }
     public function sortTree($data,$pid = 0,$level = 0){
@@ -27,10 +28,14 @@ class Forum extends Model
     }
 
     public function getListss($fid = 1){
-        $datas = $this->where(['pid'=>$fid,'status'=>1])->order('sort desc')->select();
+        $datas = $this->where(['pid'=>$fid,'status'=>1])
+            ->order('sort desc')
+            ->select();
         foreach ($datas as $sk => $sv){
             $datas[$sk]['child'] = array();
-            $datasan = $this->where(['pid'=>$sv['fid'],'status'=>1])->order('sort desc')->select();
+            $datasan = $this->where(['pid'=>$sv['fid'],'status'=>1])
+                ->order('sort desc')
+                ->select();
             if ($datasan){
                 $datas[$sk]['child'] = $datasan;
             }
@@ -39,7 +44,9 @@ class Forum extends Model
     }
     // 获取子集栏目
     public function getColumn($fid = 1){
-        $columnnow = $this->where(['fid'=>$fid,'status'=>1])->field('fid,pid,name')->find();
+        $columnnow = $this->where(['fid'=>$fid,'status'=>1])
+            ->field('fid,pid,name')
+            ->find();
         return $columnnow;
     }
 

@@ -1,0 +1,4 @@
+<?php
+//000000000000
+ exit();?>
+think_serialize:a:2:{i:0;a:14:{s:3:"fid";i:50;s:3:"pid";i:35;s:4:"name";s:27:"集成开发工具的使用";s:6:"cgroup";s:1:"1";s:6:"topics";i:10;s:9:"introduce";s:27:"集成开发工具的使用";s:6:"notice";s:0:"";s:4:"sort";i:0;s:11:"create_time";i:1553247194;s:4:"icon";s:0:"";s:6:"seoDes";s:0:"";s:11:"seoKeywords";s:0:"";s:3:"img";s:61:"/public/uploads/20190322/892bfd94cdb5e78f027a515482b2dd9b.jpg";s:6:"status";i:1;}i:1;a:14:{s:3:"fid";i:49;s:3:"pid";i:35;s:4:"name";s:31:"java常用工具和服务入门";s:6:"cgroup";s:1:"1";s:6:"topics";i:11;s:9:"introduce";s:31:"java常用工具和服务入门";s:6:"notice";s:0:"";s:4:"sort";i:0;s:11:"create_time";i:1553140693;s:4:"icon";s:0:"";s:6:"seoDes";s:0:"";s:11:"seoKeywords";s:0:"";s:3:"img";s:43:"/public/uploads/20190319/20190322163925.jpg";s:6:"status";i:1;}}
