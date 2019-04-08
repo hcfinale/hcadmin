@@ -24,19 +24,20 @@ function mfFlow(type, _Id) {
                         var list = [];
                         $.get(`/api/api/topiclist/page/${ page }/type/common/fid/${ _Id }`, function(res) {
                             layui.each(res.data, function(index, item) {
-                                var html = `<li data-tid="${item.tid}" class="mdui-list-item mdui-ripple mtf-Jump"><div class="mdui-list-item-avatar">
+                                var html = `<li data-tid="${item.tid}" class="mdui-list-item mdui-ripple mtf-Jump"><!--<div class="mdui-list-item-avatar">
                                 <img src="${item.userData.avatar}" alt="${item.userData.username}" title="${item.userData.username}">
-                                </div><div class="mdui-list-item-content">
+                                </div>--><div class="mdui-list-item-content">
                                 <a class="mdui-list-item-title" href="/topic/${item.tid}.html">${item.subject + item.Badge}</a>
+                                <br /><br />
                                 <div class="mdui-list-item-text mdui-list-item-one-line">${item.content}</div>
-                                <div class="mdui-list-item-text">
+                                <!--<div class="mdui-list-item-text">
                                 <a href="/forum/${item.fid}" class="layui-badge layui-bg-blue" title="${item.forumName}">${item.forumName}</a> <a href="/user/${item.uid}.html">${item.userData.username}</a> 发表于
                                 <span title="${item.create_time}">   ${item.time_format}</span>
                                 <span class="mdui-float-right" >
                                 <i class="mdui-icon material-icons">remove_red_eye</i>${item.views}</span>
                                 <span class="mdui-float-right">
                                 <i class="mdui-icon material-icons">comment</i>${item.comment}</span>
-                                </div></div></li><li class="mdui-divider-inset mdui-m-y-0"></li>`
+                                </div>--></div></li><li class="mdui-divider-inset mdui-m-y-0"></li><br /><br />`
                                 list.push(html);
                             })
                             next(list.join(''), page < res.pages);

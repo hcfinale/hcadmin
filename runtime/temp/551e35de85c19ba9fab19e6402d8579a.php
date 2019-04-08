@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/index\index.html";i:1553839336;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1553237251;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/index\index.html";i:1554716643;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1553237251;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -217,37 +217,36 @@
         <li class="mdui-subheader">所有帖子</li>
     </ul>
     <style>
-        .column-list li{display: block;width: 100%;min-height: 2rem; line-height: 2rem;}
-        .column-list li span{font-weight: bold;margin-right: 1rem;}
-        .column-list li a{display: inline-block;padding: 0rem 0.5rem;margin: 0.5rem auto;}
-        .column-list li a.active{background: #3f51b5; color: #ffffff;border-radius: 10%; }
+        .menu{display: block; height: 9rem; position: relative; margin: 0; padding: 0;}
+        .menu li{display: block; float: left;height: 3rem;line-height: 3rem;font-size: 1rem;}
+        .menu li a{text-decoration: none;color: #000000;padding: 0 1rem;cursor: pointer;}
+        .menu>li.active>ul{display: block; position: absolute; left: 0px; top: 3rem; width: 100%; padding: 0px;}
+        .menu>li>ul{display: none; position: absolute; left: 0px; top: 3rem; width: 100%; padding: 0px;}
+        .menu li:first-child{font-size: 1.2rem;font-weight: bold;}
+        .menu .on{background: #dedede;border-radius:45px; padding: 0.5rem 1rem;color: #ff0000;}
     </style>
-    <ul class="mdui-list column-list">
-        <li class="mdui-list-item first-column">
-            <span>课程分类：</span>
-            <?php if(is_array($categorys) || $categorys instanceof \think\Collection || $categorys instanceof \think\Paginator): $i = 0; $__LIST__ = $categorys;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;?>
-            <a title="<?php echo htmlentities($cate['0']); ?>" href="<?php echo url('index/index/index',['fid'=>$cate[0]]); ?>" <?php if(app('request')->param('fid') == $cate[0]): ?> class="active" <?php endif; ?>><?php echo htmlentities($cate['2']); ?></a>
-            <?php endforeach; endif; else: echo "" ;endif; ?>
+
+    <ul class="menu">
+        <li>课程分类：</li>
+        <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): $i = 0; $__LIST__ = $result;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+        <li>
+            <a title="<?php echo htmlentities($vo['fid']); ?>"><?php echo htmlentities($vo['name']); ?></a>
+            <ul>
+                <li>二级栏目：</li>
+                <?php if(is_array($vo['childs']) || $vo['childs'] instanceof \think\Collection || $vo['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;?>
+                <li>
+                    <a title="<?php echo htmlentities($cate['fid']); ?>"><?php echo htmlentities($cate['name']); ?></a>
+                </li>
+                <?php endforeach; endif; else: echo "" ;endif; ?>
+            </ul>
         </li>
-        <?php if(count($sedcategorys)>0): ?>
-        <li class="mdui-list-item second-column">
-            <span>二级栏目：</span>
-            <?php if(is_array($sedcategorys) || $sedcategorys instanceof \think\Collection || $sedcategorys instanceof \think\Paginator): $i = 0; $__LIST__ = $sedcategorys;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;?>
-            <a title="<?php echo htmlentities($cate['fid']); ?>"><?php echo htmlentities($cate['name']); ?></a>
-            <?php endforeach; endif; else: echo "" ;endif; ?>
-        </li><?php else: ?>
-        <li class="mdui-list-item second-column">
-            <span>二级栏目：</span>
-            <?php if(is_array($categorys) || $categorys instanceof \think\Collection || $categorys instanceof \think\Paginator): $i = 0; $__LIST__ = $categorys;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;if(is_array($cate['child']) || $cate['child'] instanceof \think\Collection || $cate['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $cate['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?>
-            <a title="<?php echo htmlentities($v['fid']); ?>"><?php echo htmlentities($v['name']); ?></a>
-            <?php endforeach; endif; else: echo "" ;endif; ?>
-            <?php endforeach; endif; else: echo "" ;endif; ?>
-        </li>
-        <?php endif; ?>
+        <?php endforeach; endif; else: echo "" ;endif; ?>
     </ul>
+    <div style="clear: both;overflow: hidden;"></div>
+
     <ul class="mdui-list part-list">
-        <?php if(is_array($categorys) || $categorys instanceof \think\Collection || $categorys instanceof \think\Paginator): $i = 0; $__LIST__ = $categorys;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;if(is_array($cate['child']) || $cate['child'] instanceof \think\Collection || $cate['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $cate['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?>
-        <div class="mdui-col-sm-4">
+        <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): $i = 0; $__LIST__ = $result;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$res): $mod = ($i % 2 );++$i;if(is_array($res['childs']) || $res['childs'] instanceof \think\Collection || $res['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $res['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;if(is_array($vo['childs']) || $vo['childs'] instanceof \think\Collection || $vo['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?>
+        <div class="mdui-col-sm-4" style="height: 12rem">
             <div class="mdui-grid-tile">
                 <a href="<?php echo url('index/forum/index',array('fid'=>$v['fid'])); ?>">
                     <img src="<?php echo htmlentities($v['img']); ?>"/>
@@ -259,6 +258,7 @@
                 </a>
             </div>
         </div>
+        <?php endforeach; endif; else: echo "" ;endif; ?>
         <?php endforeach; endif; else: echo "" ;endif; ?>
         <?php endforeach; endif; else: echo "" ;endif; ?>
     </ul>
@@ -417,7 +417,13 @@
 </script>
 <script src="/public/static/js/mltree-message.js"></script> 
 <script>
-    $('.second-column a').each(function () {
+    $('.menu li:nth-child(3)').addClass('active');
+    $('.menu>li:nth-child(3)>a').addClass('on');
+    $('.menu li a').click(function () {
+        $(this).addClass('on').parents('li').siblings().children('a').removeClass('on');
+        $(this).parents('li').addClass('active').siblings().removeClass('active');
+    });
+    $('.menu li.active ul li a').each(function () {
         $(this).click(function () {
             var forumName = $(this).text();
             var forumId = $(this).attr('title');
@@ -425,11 +431,6 @@
                 $(".part-list").html(result);
             });
         })
-    });
-    $('.second-column a').each(function () {
-        $(this).click(function () {
-            $(this).addClass('active').siblings('a').removeClass('active');
-        });
     });
 </script>
  <?php echo $option['siteFooterJs']; ?>

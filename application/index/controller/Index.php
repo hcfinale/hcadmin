@@ -18,6 +18,7 @@ class Index extends Base
     }
 
     public function index(){
+        $res = $this->forum->groupCategory();
         $data  = $sedcategorys = $threecategory = $secendCatIds = [];
         $fid = input('fid', 0, 'intval');
         // 首先获取一级栏目的id
@@ -53,6 +54,7 @@ class Index extends Base
             'categorys'  =>  $firstCatIds,
             'sedcategorys' =>  $sedcategorys,
             'threecategory'    =>  $threecategory,
+            'result'    =>  $res,
             'tops'  =>  $tops,
             'topsData'  =>  $topsData,
         ]);
@@ -62,7 +64,7 @@ class Index extends Base
         $data = $this->forum->getNormalCategoryByParentId($forumId);
         $html = '';
         foreach ($data as $value){
-            $html .= "<div class=\"mdui-col-sm-4\">
+            $html .= "<div class=\"mdui-col-sm-4\" style=\"height: 12rem\">
             <div class=\"mdui-grid-tile\">
                 <a href=\"/forum/$value[fid]\">
                     <img src=\"$value[img]\"/>

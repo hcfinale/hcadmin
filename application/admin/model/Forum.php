@@ -65,4 +65,18 @@ class Forum extends Model
             ->select();
         return $result;
     }
+    // 前台首页导航
+    public function groupCategory($id = 0){
+        $list=$this->where(['pid'=>$id,'status'=>'1'])->order('sort desc')->select();
+        $arr = array();
+        if (!empty($list)){
+            foreach($list as $v){
+                if($v['pid'] == $id){
+                    $v['childs'] = self::groupCategory($v['fid']);
+                    $arr[] = $v;
+                }
+            }
+        }
+        return $arr;
+    }
 }
