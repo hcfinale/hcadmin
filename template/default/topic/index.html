@@ -1,8 +1,11 @@
 {extend name="common/forum_public"} {block name="content"}
+<style>
+    #mycode {background: #2d2d2d;color: #ffffff;}
+</style>
 <div class="mdui-col-xs-12 mdui-col-sm-9 mdui-m-y-1 mdui-typo">
     <div class="mf-panel mdui-shadow-2">
         <header class="mf-panel-hd">
-            <h3>{$topicData.subject}
+            <h3 style="text-align: center">{$topicData.subject}
                 <br/> {:outBadge($topicData)}
             </h3>
             <a class="mdui-text-color-grey-400" href="{:url('index/user/index',['uid'=>$topicData.uid])}">
@@ -96,6 +99,20 @@
 {/block} {block name="js"}
 <script src="__JS__/simplemde.min.js"></script>
 <script src="__JS__/mltree-flow.js"></script>
+<!-- 代码高亮引入下面三条 -->
+<link rel="stylesheet" type="text/css" href="__STATIC__/highlight/styles/tomorrow-night-eighties.css">
+<script type="text/javascript" src="__STATIC__/highlight/highlight.pack.js"></script>
+<script>
+    // 实现代码高亮的函数。
+    hljs.initHighlightingOnLoad();
+    // 由于UEditor的代码中都是<pre>标签包裹的代码，所以执行下面的操作为其添加<code>标签。
+    var allpre = document.getElementsByTagName("pre");
+    for(i = 0; i < allpre.length; i++) {
+        var onepre = document.getElementsByTagName("pre")[i];
+        var mycode = document.getElementsByTagName("pre")[i].innerHTML;
+        onepre.innerHTML = '<code id="mycode">'+mycode+'</code>';
+    }
+</script>
 <script>
     var option = {
             commentUrl: "{:url('index/topic/comment',['tid'=>$topicData.tid])}",

@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/index\index.html";i:1554716643;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1553237251;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/index\index.html";i:1554788862;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1553237251;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -223,21 +223,25 @@
         .menu>li.active>ul{display: block; position: absolute; left: 0px; top: 3rem; width: 100%; padding: 0px;}
         .menu>li>ul{display: none; position: absolute; left: 0px; top: 3rem; width: 100%; padding: 0px;}
         .menu li:first-child{font-size: 1.2rem;font-weight: bold;}
-        .menu .on{background: #dedede;border-radius:45px; padding: 0.5rem 1rem;color: #ff0000;}
+        .menu .on{background: #dedede;border-radius:45px; padding: 0.5rem 1rem;color: #ff0000}
     </style>
 
     <ul class="menu">
-        <li>课程分类：</li>
+        <li>图文分类：</li>
+        <li><a href="/">全部</a></li>
         <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): $i = 0; $__LIST__ = $result;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
         <li>
             <a title="<?php echo htmlentities($vo['fid']); ?>"><?php echo htmlentities($vo['name']); ?></a>
             <ul>
-                <li>二级栏目：</li>
-                <?php if(is_array($vo['childs']) || $vo['childs'] instanceof \think\Collection || $vo['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;?>
+                <li>子集栏目：</li>
+                <?php if(empty($vo['childs'])): ?>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;暂无子集分类，请添加。</li>
+                <?php else: if(is_array($vo['childs']) || $vo['childs'] instanceof \think\Collection || $vo['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;?>
                 <li>
                     <a title="<?php echo htmlentities($cate['fid']); ?>"><?php echo htmlentities($cate['name']); ?></a>
                 </li>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
+                <?php endif; ?>
             </ul>
         </li>
         <?php endforeach; endif; else: echo "" ;endif; ?>
@@ -417,21 +421,34 @@
 </script>
 <script src="/public/static/js/mltree-message.js"></script> 
 <script>
-    $('.menu li:nth-child(3)').addClass('active');
-    $('.menu>li:nth-child(3)>a').addClass('on');
-    $('.menu li a').click(function () {
-        $(this).addClass('on').parents('li').siblings().children('a').removeClass('on');
+$(window).on('load',function () {
+    $('.menu>li:nth-child(2)').addClass('active');
+    $('.menu>li:nth-child(2)>a').addClass('on');
+    $('.menu>li>a').click(function () {
+        // 这是一级栏目点击出现对应子集栏目
+        $(".part-list").html();
+        var pName = $(this).text();
+        var pId = $(this).attr('title');
+        $.post("<?php echo url('index/ajaxIndex'); ?>",{forumName:pName,forumId:pId},function(result){
+            $(".part-list").html(result);
+        });
+
+        $('.menu li a').removeClass('on');
+        $(this).addClass('on').parents('li').siblings('li').children('a').removeClass('on');
         $(this).parents('li').addClass('active').siblings().removeClass('active');
+        $('.menu li.active ul li a').each(function () {
+            $(this).click(function () {
+                $(this).addClass('on').parents('li').siblings().children('a').removeClass('on');
+                $(".part-list").html();
+                var forumName = $(this).text();
+                var forumId = $(this).attr('title');
+                $.post("<?php echo url('index/ajaxList'); ?>",{forumName:forumName,forumId:forumId},function(result){
+                    $(".part-list").html(result);
+                });
+            })
+        });
     });
-    $('.menu li.active ul li a').each(function () {
-        $(this).click(function () {
-            var forumName = $(this).text();
-            var forumId = $(this).attr('title');
-            $.post("<?php echo url('index/ajaxList'); ?>",{forumName:forumName,forumId:forumId},function(result){
-                $(".part-list").html(result);
-            });
-        })
-    });
+});
 </script>
  <?php echo $option['siteFooterJs']; ?>
 </body>

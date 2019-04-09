@@ -73,7 +73,8 @@ class Forum extends Model
             foreach($list as $v){
                 if($v['pid'] == $id){
                     $v['childs'] = self::groupCategory($v['fid']);
-                    $arr[] = $v;
+                    @$data = &$arr;
+                    $data[] = $v;
                 }
             }
         }

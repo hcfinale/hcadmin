@@ -19,46 +19,36 @@ class Index extends Base
 
     public function index(){
         $res = $this->forum->groupCategory();
-        $data  = $sedcategorys = $threecategory = $secendCatIds = [];
-        $fid = input('fid', 0, 'intval');
-        // 首先获取一级栏目的id
-        $cateGorys = $this->forum->getNormalCategoryByParentId($pid=0);
-        if ($fid != 0){
-            $sedcategorys = [];
-            foreach($cateGorys as $key => $cate) {
-                $firstCatIds[$key][] = $cate->fid;
-                $firstCatIds[$key][] = $cate->pid;
-                $firstCatIds[$key][] = $cate->name;
-                $firstCatIds[$key][] = $cate->img;
-                if ($child = $this->forum->getNormalCategoryByParentId($fid)){
-                    $sedcategorys = $child;
-                    $firstCatIds[$key]['child'] = [];
-                }
-            }
-        }else{
-            $sedcategorys = [];
-            foreach($cateGorys as $key => $cate) {
-                $firstCatIds[$key][] = $cate->fid;
-                $firstCatIds[$key][] = $cate->pid;
-                $firstCatIds[$key][] = $cate->name;
-                $firstCatIds[$key][] = $cate->img;
-                if ($child = $this->forum->getNormalCategoryByParentId($cate->fid)){
-                    $sedcategorys = $child;
-                    $firstCatIds[$key]['child'] = $child;
-                }
-            }
-        }
-        $topsData = $this->topic->where('fid',$fid)->order('tid esc')->paginate();
         $tops = $this->topic->getTops();
         return view('index',[
-            'categorys'  =>  $firstCatIds,
-            'sedcategorys' =>  $sedcategorys,
-            'threecategory'    =>  $threecategory,
             'result'    =>  $res,
             'tops'  =>  $tops,
-            'topsData'  =>  $topsData,
         ]);
     }
+    // 首页一级栏目点击出现对应的所有子集栏目
+    public function ajaxIndex(){
+        $forumId=$this->request->param('forumId');
+        $data = $this->forum->groupCategory($forumId);
+        $html = '';
+        foreach ($data as $v){
+            foreach ($v['childs'] as $value){
+                $html .= "<div class=\"mdui-col-sm-4\" style=\"height: 12rem\">
+                <div class=\"mdui-grid-tile\">
+                    <a href=\"/forum/$value[fid]\">
+                        <img src=\"$value[img]\"/>
+                        <div class=\"mdui-grid-tile-actions\">
+                            <div class=\"mdui-grid-tile-text\">
+                                <div class=\"mdui-grid-tile-title mdui-text-center\">$value[name]</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>";
+            }
+        }
+        return json($html);
+    }
+
     public function ajaxList(){
         $forumId=$this->request->param('forumId');
         $data = $this->forum->getNormalCategoryByParentId($forumId);
