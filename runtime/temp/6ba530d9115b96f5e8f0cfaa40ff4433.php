@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/forum\index.html";i:1553237321;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1553237251;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/forum\index.html";i:1555061099;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:41:"./template/default/common\right_tool.html";i:1553237251;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -188,20 +188,43 @@
     <div class="mdui-container">
         <div class="mdui-row">
             
-
+<style>
+    .fl{float: left;}
+    .fr{float: right;}
+    .text-index{text-indent: 2em;}
+    .lab-item{position: relative;margin: 12px 0;border: 1px solid #eee;}
+    .lab-item .lab-item-header{display: inline-flex; background: #f7f7f7;border-bottom: 1px solid #eee;padding-right: 10px;height: 55px;}
+    .lab-item .lab-item-header>div{display: inline-flex;margin: 0 12px;padding: 14px 0;font-size: 16px;vertical-align: middle;}
+    .lab-item .lab-item-header .lab-item-status span{background: green;width: 2rem;height: 2rem;display: inline-block;text-align: center;color: #ffffff;line-height: 2rem;border-radius: 45px;}
+    .lab-item-index{color: #999;}
+    .lab-item-title{max-width: 330px;white-space: normal;text-overflow: ellipsis;overflow: hidden;}
+    .lab-item-column{display: inline;width: 100%; margin: 0 auto;clear: both;}
+    .lab-item .lab-item-content{padding: 0 20px;}
+    .lab-item .lab-item-content .course-details{margin: 10px 0;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;font-size: 14px;color: #a4a4a4;}
+</style>
 <!-- 论坛最新内容列表页 -->
 <div class="mdui-col-xs-12 mdui-col-sm-9 mdui-shadow-1">
-
     <!-- 最新内容 -->
+    <p class="mdui-m-t-3"></p>
     <div class="mdui-typo">
-        <h4 class="doc-article-title">当前位置：<?php echo htmlentities($column['name']); ?> <a class="doc-anchor" id="divider"></a></h4>
+        <h8 class="doc-article-title">当前位置：<?php echo htmlentities($column['name']); ?> <a class="doc-anchor" id="divider"></a></h8>
     </div>
-    <div class="mdui-tab mdui-tab-centered" mdui-tab>
+    <div class="mdui-row ml-friend-panel">
+        <div class="lab-item ">
+            <div class="mdui-row mdui-m-l-3 mdui-m-r-3 mdui-m-t-2 mdui-m-b-2">
+                <div class="mdui-float-left"><h3><?php echo htmlentities($column['name']); ?></h3></div>
+                <div class="mdui-float-right" onclick="collect(<?php echo htmlentities($column['fid']); ?>)"><i class="mdui-icon material-icons">&#xe838;</i><i class="mdui-icon material-icons">&#xe83a;</i></div>
+            </div>
+            <div class="lab-item-content">
+                <div class="course-details"><?php echo htmlentities($column['introduce']); ?></div>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-tab mdui-tab-centered mdui-hidden" mdui-tab>
         <a href="#topic-all" class="mdui-ripple">综合</a>
         <a href="#topic-essence" class="mdui-ripple">精华</a>
         <a href="#topic-book" class="mdui-ripple">电子书</a>
     </div>
-
     <div id="topic-all">
         <ul class="mdui-list" id="topic-cps">
 
@@ -350,9 +373,36 @@
 <script src="/public/static/js/mltree-message.js"></script> 
 <script src="/public/static/js/mltree-flow.js"></script>
 <script>
+
     //调用flow加载
     var flow = new mfFlow('index','<?php echo htmlentities($fid); ?>');
     flow.flow();
+
+    function collect(fid) {
+        $.ajax({
+            method:'post',
+            url:"<?php echo url('index/forum/collect'); ?>",
+            data:{fid:fid},
+            dataType:'json',
+            success:function (res) {
+                mdui.snackbar({
+                    message: res.msg,
+                    position: 'top',
+                    onClosed: function() {
+                        location.reload();
+                    }
+                })
+            },error:function (e) {
+                mdui.snackbar({
+                    message: res.msg,
+                    position: 'top',
+                    onClosed: function() {
+                        location.reload();
+                    }
+                })
+            }
+        });
+    }
 </script>
  <?php echo $option['siteFooterJs']; ?>
 </body>

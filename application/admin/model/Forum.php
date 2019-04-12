@@ -45,7 +45,7 @@ class Forum extends Model
     // 获取子集栏目
     public function getColumn($fid = 1){
         $columnnow = $this->where(['fid'=>$fid,'status'=>1])
-            ->field('fid,pid,name')
+            ->field('fid,pid,name,introduce')
             ->find();
         return $columnnow;
     }

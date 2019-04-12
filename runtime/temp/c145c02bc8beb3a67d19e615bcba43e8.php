@@ -1,4 +1,4 @@
-<?php /*a:7:{s:35:"./template/default/topic\index.html";i:1554791614;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:7:{s:35:"./template/default/topic\index.html";i:1554792863;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -194,7 +194,7 @@
 <div class="mdui-col-xs-12 mdui-col-sm-9 mdui-m-y-1 mdui-typo">
     <div class="mf-panel mdui-shadow-2">
         <header class="mf-panel-hd">
-            <h3><?php echo htmlentities($topicData['subject']); ?>
+            <h3 style="text-align: center"><?php echo htmlentities($topicData['subject']); ?>
                 <br/> <?php echo outBadge($topicData); ?>
             </h3>
             <a class="mdui-text-color-grey-400" href="<?php echo url('index/user/index',['uid'=>$topicData['uid']]); ?>">
@@ -351,7 +351,9 @@
 <link rel="stylesheet" type="text/css" href="/public/static/highlight/styles/tomorrow-night-eighties.css">
 <script type="text/javascript" src="/public/static/highlight/highlight.pack.js"></script>
 <script>
+    // 实现代码高亮的函数。
     hljs.initHighlightingOnLoad();
+    // 由于UEditor的代码中都是<pre>标签包裹的代码，所以执行下面的操作为其添加<code>标签。
     var allpre = document.getElementsByTagName("pre");
     for(i = 0; i < allpre.length; i++) {
         var onepre = document.getElementsByTagName("pre")[i];

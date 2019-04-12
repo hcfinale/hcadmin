@@ -18,10 +18,11 @@
             {/volist}
         </div>
     </div>
+    <p class="mdui-m-t-3"></p>
     {volist name="listss" id="vo"}
     <div class="mdui-row" id="example2-tab{$vo.fid}">
         {volist name="$vo['child']" id="son"}
-        <div class="mdui-col-sm-4">
+        <div class="mdui-col-sm-4" style="height: 13rem;">
             <div class="mdui-grid-tile">
                 <a href="{:url('index/forum/index',array('fid'=>$son.fid))}">
                     <img src="{$son.img}"/>

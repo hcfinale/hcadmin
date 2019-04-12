@@ -1,4 +1,4 @@
-<?php /*a:7:{s:36:"./template/default/topic\create.html";i:1554790703;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:7:{s:36:"./template/default/topic\create.html";i:1554949181;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1546413419;s:37:"./template/default/common\topbar.html";i:1551150421;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -214,7 +214,6 @@
         </div>
         <!--style给定宽度可以影响编辑器的最终宽度-->
         <script type="text/plain" id="editor" name="content" style="width:100%;height:400px;"></script><?php echo token(); ?>
-        <!-- <textarea class="OwO-text" id="editor" name="content" required></textarea> <?php echo token(); ?> -->
         <input type="hidden" name="sign" value="<?php echo htmlentities($attaSign); ?>">
     </form>
     <div>
@@ -289,10 +288,6 @@
 <script src="/public/static/editor/ueditor.config.js"></script>
 <script src="/public/static/editor/ueditor.all.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="/public/static/editor/lang/zh-cn/zh-cn.js"></script>
-<!-- 代码高亮引入下面三条 -->
-<link rel="stylesheet" type="text/css" href="/public/static/highlight/styles/tomorrow-night-eighties.css">
-<script type="text/javascript" src="/public/static/highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
 <script>
     let option = {
         uid: "<?php echo session('uid'); ?>",

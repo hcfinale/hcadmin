@@ -39,14 +39,13 @@
 
     <ul class="menu">
         <li>图文分类：</li>
-        <li><a href="/">全部</a></li>
         {volist name="result" id="vo"}
         <li>
             <a title="{$vo.fid}">{$vo['name']}</a>
             <ul>
                 <li>子集栏目：</li>
                 {if empty($vo['childs'])}
-                <li>&nbsp;&nbsp;&nbsp;&nbsp;暂无子集分类，请添加。</li>
+                <li><a href="/" class="on">全部</a></li>
                 {else /}
                 {volist name="$vo['childs']" id="cate" }
                 <li>
@@ -64,7 +63,7 @@
         {volist name="result" id="res"}
         {volist name="res['childs']" id="vo"}
         {volist name="vo['childs']" id="v"}
-        <div class="mdui-col-sm-4" style="height: 12rem">
+        <div class="mdui-col-sm-4" style="height: 13rem">
             <div class="mdui-grid-tile">
                 <a href="{:url('index/forum/index',array('fid'=>$v.fid))}">
                     <img src="{$v.img}"/>
