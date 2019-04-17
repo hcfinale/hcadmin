@@ -1,109 +1,79 @@
 {extend name="common/forum_public"} {block name="content"}
 <!-- 置顶的内容 -->
 <div class="mdui-col-xs-12 mdui-col-sm-9 mdui-shadow-1">
-    <ul class="mdui-list">
-        <!--
-        <li class="mdui-subheader">置顶</li>
-        {volist name="tops" id="vo"}
-        <li class="mdui-divider-inset mdui-m-y-0"></li>
-        <li data-tid="{$vo.tid}" class="mdui-list-item mdui-ripple mtf-Jump">
-            <div class="mdui-list-item-avatar">
-                <img src="{$vo.userData.avatar}" alt="{$vo.userData.username}" title="{$vo.userData.username}">
-            </div>
-            <div class="mdui-list-item-content">
-                <a class="mdui-list-item-title" href="{:url('index/topic/index',['tid'=>$vo.tid])}">{$vo.subject} {:outBadge($vo)}</a>
-                <div class="mdui-list-item-text mdui-list-item-one-line">{$vo.content|raw}</div>
-                <div class="mdui-list-item-text">
-                    <a href="{:url('index/forum/index',['fid'=>$vo.fid])}" class="layui-badge layui-bg-blue" title="{$vo.forumName}">{$vo.forumName}</a> <a href="{:url('index/user/inde',['uid'=>$vo.uid])}">{$vo.userData.username}</a>
-                    <span title="{$vo.create_time}"> {$vo.time_format}</span>
-                    <span class="mdui-float-right">
-                                <i class="mdui-icon material-icons">remove_red_eye</i>{$vo.views}</span>
-                    <span class="mdui-float-right">
-                                <i class="mdui-icon material-icons">comment</i>{$vo.comment}</span>
-                </div>
-            </div>
-        </li>
-        {/volist}
-        -->
-        <li class="mdui-subheader">所有帖子</li>
-    </ul>
     <style>
-        .menu{display: block; height: 9rem; position: relative; margin: 0; padding: 0;}
+        .menu{display: block; height: auto; position: relative; margin: 0; padding: 0;}
         .menu li{display: block; float: left;height: 3rem;line-height: 3rem;font-size: 1rem;}
         .menu li a{text-decoration: none;color: #000000;padding: 0 1rem;cursor: pointer;}
-        .menu>li.active>ul{display: block; position: absolute; left: 0px; top: 3rem; width: 100%; padding: 0px;}
-        .menu>li>ul{display: none; position: absolute; left: 0px; top: 3rem; width: 100%; padding: 0px;}
         .menu li:first-child{font-size: 1.2rem;font-weight: bold;}
-        .menu .on{background: #dedede;border-radius:45px; padding: 0.5rem 1rem;color: #ff0000}
+        .menu  li a.on{background: #dedede;border-radius:45px; padding: 0.5rem 1rem;color: #ff0000}
     </style>
-
+    <p class="mdui-m-t-5"></p>
     <ul class="menu">
-        <li>图文分类：</li>
+        <li>类别：</li>
+        <li>
+            <a href="{:url('ebook/showres')}">全部</a>
+        </li>
         {volist name="result" id="vo"}
         <li>
             <a title="{$vo.fid}">{$vo['name']}</a>
-            <ul>
-                <li>子集栏目：</li>
-                {if empty($vo['childs'])}
-                <li><a href="/" class="on">全部</a></li>
-                {else /}
-                {volist name="$vo['childs']" id="cate" }
-                <li>
-                    <a title="{$cate.fid}">{$cate.name}</a>
-                </li>
-                {/volist}
-                {/if}
-            </ul>
         </li>
         {/volist}
     </ul>
     <div style="clear: both;overflow: hidden;"></div>
-
-    <ul class="mdui-list part-list">
-        {volist name="result" id="res"}
-        {volist name="res['childs']" id="vo"}
-        {volist name="vo['childs']" id="v"}
-        <div class="mdui-col-sm-4" style="height: 13rem">
-            <div class="mdui-grid-tile">
-                <a href="{:url('index/forum/index',array('fid'=>$v.fid))}">
-                    <img src="{$v.img}"/>
-                    <div class="mdui-grid-tile-actions">
-                        <div class="mdui-grid-tile-text">
-                            <div class="mdui-grid-tile-title mdui-text-center">{$v.name}</div>
+    <p class="mdui-m-t-5"></p>
+    <div class="mdui-tab mdui-tab-centered" mdui-tab>
+        <a href="#tool-all" class="mdui-ripple">工具</a>
+        <a href="#resource-all" class="mdui-ripple">资料</a>
+    </div>
+    <div class="mdui-divider mdui-m-y-0"></div>
+    <div id="tool-all">
+        <ul class="mdui-list part-list">
+            {volist name="toolRes" id="res"}
+            {if condition="$res.pid eq '1'"}
+            <div class="mdui-col-xs-3" style="min-height: 13rem;">
+                <div class="mdui-card">
+                    <div class="mdui-card-media">
+                        <img src="{$res.img}"/>
+                        <div class="mdui-card-media-covered">
+                            <div class="mdui-card-primary">
+                                <div class="mdui-card-primary-title">{$res.title}</div>
+                            </div>
                         </div>
                     </div>
-                </a>
+                    <div class="mdui-card-actions">
+                        <a class="mdui-btn mdui-ripple" href="{:url('index/ebook/downloadIt',array('id'=>$res['id']))}">下载</a>
+                    </div>
+                </div>
             </div>
-        </div>
-        {/volist}
-        {/volist}
-        {/volist}
-    </ul>
-    <!--
-   <div class="mdui-tab mdui-tab-centered" mdui-tab>
-       <a href="#topic-all" class="mdui-ripple">综合</a>
-       <a href="#topic-essence" class="mdui-ripple">精华</a>
-       <a href="#topic-book" class="mdui-ripple">电子书</a>
-   </div>
-   <div class="mdui-divider mdui-m-y-0"></div>
-   <div id="topic-all">
-       <ul class="mdui-list" id="topic-cps">
+            {/if}
+            {/volist}
+        </ul>
+    </div>
 
-       </ul>
-   </div>
-
-   <div id="topic-essence">
-       <ul class="mdui-list" id="topic-ess">
-
-       </ul>
-   </div>
-
-   <div id="topic-book">
-       <div class="mdui-row" id="topic-ebook">
-
-       </div>
-   </div>
--->
+    <div id="resource-all">
+        <ul class="mdui-list part-list">
+            {volist name="toolRes" id="res"}
+            {if condition="$res.pid eq '2'"}
+            <div class="mdui-col-xs-3" style="min-height: 13rem;">
+                <div class="mdui-card">
+                    <div class="mdui-card-media">
+                        <img src="{$res.img}"/>
+                        <div class="mdui-card-media-covered">
+                            <div class="mdui-card-primary">
+                                <div class="mdui-card-primary-title">{$res.title}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdui-card-actions">
+                        <a class="mdui-btn mdui-ripple" href="{:url('index/ebook/downloadIt',array('id'=>$res['id']))}">下载</a>
+                    </div>
+                </div>
+            </div>
+            {/if}
+            {/volist}
+        </ul>
+    </div>
 </div>
 {include file="common/right_tool"} {/block}{block name="js"}
 <script>
@@ -115,24 +85,11 @@ $(window).on('load',function () {
         $(".part-list").html();
         var pName = $(this).text();
         var pId = $(this).attr('title');
-        $.post("{:url('index/ajaxIndex')}",{forumName:pName,forumId:pId},function(result){
-            $(".part-list").html(result);
+        $.post("{:url('ebook/ajaxRes')}",{forumName:pName,forumId:pId},function(result){
+            $(".part-list").eq(0).html(result[0]);
+            $(".part-list").eq(1).html(result[1]);
         });
-
-        $('.menu li a').removeClass('on');
         $(this).addClass('on').parents('li').siblings('li').children('a').removeClass('on');
-        $(this).parents('li').addClass('active').siblings().removeClass('active');
-        $('.menu li.active ul li a').each(function () {
-            $(this).click(function () {
-                $(this).addClass('on').parents('li').siblings().children('a').removeClass('on');
-                $(".part-list").html();
-                var forumName = $(this).text();
-                var forumId = $(this).attr('title');
-                $.post("{:url('index/ajaxList')}",{forumName:forumName,forumId:forumId},function(result){
-                    $(".part-list").html(result);
-                });
-            })
-        });
     });
 });
 </script>

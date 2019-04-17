@@ -118,7 +118,7 @@ class Topic extends Model
         //数据处理（content等去除标签)
         $user = new User;
         foreach ($topicData as $key => $value) {
-            $value['content'] = strip_tags(htmlspecialchars_decode($value['content']));
+            $value['content'] = strip_tags(htmlspecialchars_decode(mb_substr($value['content'],0,350)));
             $value['time_format'] = time_format($value['create_time']);
             $value['userData'] = $user->where('uid', $value['uid'])->field('username,avatar')->find();
             $value['forumName'] = Db::name('forum')->where('fid', $value['fid'])->field('name')->find()['name'];

@@ -50,6 +50,9 @@ class Topic extends Base
         if (!User::isLogin()) {
             return redirect('index\user\login');
         }
+        if (!$this->userAuth(session('uid'))) {
+            $this->error('你没有权限，请联系管理员开通。','index/index/index');
+        }
         if (request()->isPost()) {
             $topic = new TopicModel;
             $res = $topic->found(session('uid'), input('post.'));

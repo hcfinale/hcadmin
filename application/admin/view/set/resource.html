@@ -1,109 +1,95 @@
 {extend name="./application/admin/view/public/admin_public.html"} {block name="content"}
-<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
-
-    <h1 class="mdui-m-l-3">Forum 管理</h1>
-
-    <div class="mdui-btn-group mdui-m-l-3">
-        <button type="button" class="mdui-btn" mdui-dialog="{target: '#addForum'}">
-            <i class="mdui-icon material-icons">add</i>
-        </button>
+<div class="mdui-container-fluid">
+    <h1 class="mdui-m-l-3">资源 管理</h1>
+    <div class="mdui-tab" mdui-tab>
+        <a href="#mail-showResource" class="mdui-btn mdui-ripple">所有资源</a>
+        <a href="#mail-addResource" class="mdui-btn mdui-ripple">添加资源</a>
     </div>
-
-    <table class="mdui-table mdui-textfield mdui-table-hoverable">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Fid</th>
-                <th>板块名称</th>
-                <th style="display: none;">板块描述</th>
-                <th>权限用户祖</th>
-                <th>板块管理</th>
-            </tr>
-        </thead>
-        <tbody>
-            {volist name="forumData" id="vo"}
-            <tr id="{$vo.fid}">
-                <input type="hidden" name="fid" id="hcfid" value="{$vo.fid}">
-                <td><input type="text" name="sort" id="hcSort" value="{$vo.sort}" style="width: 35px;text-align: center;" /></td>
-                <td>{$vo.fid}</td>
-                <td>
-                    {if condition ="$vo['pid'] neq '0'"}|
-                    <?php echo str_repeat("_",$vo['level']*4); ?>
-                    {/if}
-                    {$vo.name}
-                </td>
-                <td style="display: none;">{$vo.introduce}</td>
-                <td>{$vo.cgroup}</td>
-                <td>
-                    <div class="layui-btn-group">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="editorForum('#{$vo.fid}')">编辑</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del('{$vo.fid}')">删除</button>
+    <div id="mail-showResource" class="mdui-p-a-2 mdui-table-fluid mdui-typo">
+        <div class="mdui-container-fluid">
+            {volist name="toolRes" id="res"}
+            {if condition="$res.pid neq '0'"}
+            <div class="mdui-col-xs-3" style="min-height: 13rem;">
+                <div class="mdui-card">
+                    <div class="mdui-card-media">
+                        <img src="{$res.img}"/>
+                        <div class="mdui-card-media-covered">
+                            <div class="mdui-card-primary">
+                                <div class="mdui-card-primary-title">{$res.title}</div>
+                                <!--<div class="mdui-card-primary-subtitle">Subtitle</div>-->
+                            </div>
+                        </div>
                     </div>
-                </td>
-            </tr>
+                    <div class="mdui-card-actions">
+                        <a class="mdui-btn mdui-ripple" href="{:url('admin/set/downloadIt',array('id'=>$res['id']))}">下载</a>
+                        <a class="mdui-btn mdui-ripple" href="javascript:;"  onclick="editorForum('#{$res.id}')">编辑</a>
+                        <a class="mdui-btn mdui-ripple" href="javascript:;" onclick="del('{$res.id}')">删除</a>
+                    </div>
+                </div>
+            </div>
+            {/if}
             {/volist}
-        </tbody>
-    </table>
-
-    <div class="mdui-dialog mdui-typo" id="addForum">
-        <div class="mdui-dialog-content">
-            <div class="mdui-dialog-title">添加板块</div>
-            <form id="addForm" class="layui-form layui-form-pane mdui-m-y-1">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">选择框</label>
-                    <div class="layui-input-block">
-                        <select name="pid" lay-verify="required">
-                            <option value="0">顶级栏目</option>
-                            {volist name="forumData" id="forum"}
-                            <option value="{$forum.fid}">
-                                {if condition ="$forum['pid'] neq '0'"}|<?php echo str_repeat("___",$forum['level']); ?>{/if}{$forum.name}
-                            </option>
-                            {/volist}
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">板块名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">板块描述</label>
-                    <div class="layui-input-block">
-                        <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">栏目图片</label>
-                    <button id="upebookimg" title="上传图片" class="layui-btn layui-btn-primary">
-                        <i class="layui-icon layui-icon-read" style="font-size: 30px; color: #1E9FFF;"></i>
-                        点击上传图片
-                    </button>
-                    <input id="eimgurl" type="hidden" name="img" required lay-verify="required" autocomplete="off" >
-                    <img src="" alt="" id="preview" width="30%" height="auto" />
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">权限用户组</label>
-                    <div class="layui-input-block">
-                        <select name="cgroup" lay-verify="required">
-                            {volist name="group" id="guser"}
-                            <option value="{$guser.gid}">
-                                {$guser.groupName}
-                            </option>
-                            {/volist}
-                        </select>
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
-                </div>
-                 {:token()}
-            </form>
-        </div>
-        <div class="mdui-dialog-actions">
-            <button class="mdui-btn mdui-ripple" id="submit">添加</button>
         </div>
     </div>
+    <div id="mail-addResource" class="mdui-p-a-2 mdui-table-fluid mdui-typo">
+        <div class="mdui-col-xs-8 mdui-col-offset-xs-2">
+            <h2>{$option.siteTitle}</h2>
+            <div class="mdui-divider"></div>
+            <form enctype='multipart/form-data' id="addresource">
+                <div class="mdui-row mdui-m-y-3">
+                    <div class="mdui-col-xs-6">
+                        <label class="mdui-textfield-label">所属分类</label>
+                        <select lay-ignore name="pid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
+                            {volist name="toolRes" id="vo"}
+                            {if condition="$vo.pid eq '0'"}
+                            <option value="{$vo.id}">{$vo.title}</option>
+                            {/if}
+                            {/volist}
+                        </select>
+                    </div>
+                    <div class="mdui-col-xs-6">
+                        <label class="mdui-textfield-label">具体分类</label>
+                        <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
+                            {volist name="forum" id="vo"}
+                            <option value="{$vo.fid}">{$vo.name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
 
+                <div class="mdui-row mdui-m-y-3">
+                    <label class="mdui-textfield-label">资源名称</label>
+                    <input name="title" class="mdui-textfield-input" type="text" placeholder="title" max="60" required/>
+                </div>
+                <div class="mdui-row mdui-textfield mdui-m-y-3">
+                    <label class="mdui-textfield-label">描述</label>
+                    <textarea name="description" class="mdui-textfield-input"></textarea>{:token()}
+                </div>
+                <input id="resurl" type="hidden" name="resource_url" value="">
+                <input id="resimgurl" type="hidden" name="img" value="/public/static/images/ebook_default.jpg">
+            </form>
+            <div class="mdui-row">
+                <div class="mdui-col-xs-12">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"></label>
+                        <button id="upres" title="上传资源" class="layui-btn layui-btn-primary">
+                            <i class="layui-icon layui-icon-read" style="font-size: 30px; color: #1E9FFF;"></i>
+                            点击上传上传资源
+                        </button>
+                    </div>
+                    <div class="layui-form-item">
+                        <a id="upresimg" class="mdui-hidden">
+                            <img src="/public/static/images/ebook_default.jpg" alt="" id="preview" width="30%" height="auto" />
+                        </a>
+                        <p>文件上传大小不得超过32M，如有需要请联系管理员QQ：3127176962</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button id="create" class="mdui-btn mdui-color-theme mdui-float-right">发布资料</button>
+            </div>
+        </div>
+    </div>
     <div class="mdui-dialog mdui-typo" id="editorForum">
         <div class="mdui-dialog-content">
             <div class="mdui-dialog-title">编辑板块</div>
@@ -114,11 +100,7 @@
                     <div class="layui-input-block">
                         <select name="pid" lay-verify="required">
                             <option value="0">顶级栏目</option>
-                            {volist name="forumData" id="forum"}
-                            <option value="{$forum.fid}">
-                                {if condition ="$forum['pid'] neq '0'"}|<?php echo str_repeat("___",$forum['level']); ?>{/if}{$forum.name}
-                            </option>
-                            {/volist}
+
                         </select>
                     </div>
                 </div>
@@ -138,11 +120,7 @@
                     <label class="layui-form-label">权限用户组</label>
                     <div class="layui-input-block">
                         <select name="cgroup" lay-verify="required">
-                            {volist name="group" id="guser"}
-                            <option value="{$guser.gid}">
-                                {$guser.groupName}
-                            </option>
-                            {/volist}
+
                         </select>
                     </div>
                     <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
@@ -158,62 +136,35 @@
 
 {/block} {block name="js"}
 <script>
-    var option = {
-        columnImgUrl: "{:url('admin/set/upcolumnimg')}",
-    };
     var $$ = mdui.JQ,
         data = '',
-        inst = new mdui.Dialog('#editorForum');//注册对话框
-        layui.use(['upload', 'form','layer'], function() {
+        inst = new mdui.Dialog('#editorForum');//注册对话
+
+    var option = {
+        uid: "{:session('uid')}",
+        url: '{:url("admin/set/addResource")}',
+        resUrl: "{:url('admin/set/upRes')}",
+        upResImg: "{:url('admin/set/upResImg')}",
+    };
+    $$('#forum').addClass('mdui-collapse-item-open');
+    $$('#resourceAll').addClass('mdui-list-item-active');
+    layui.use(['upload', 'form','layer'], function() {
         var upload = layui.upload,
             form = layui.form,
             layer = layui.layer;
-
-        $$('#forum').addClass('mdui-collapse-item-open');
-        $$('#setForum').addClass('mdui-list-item-active');
-
-        $$('#submit').on('click', function () {
-            data = $$('#addForm').serialize();
-            $$.ajax({
-                method: 'post',
-                url: '',
-                data: data,
-                dataType: 'json',
-                success: function (res) {
-                    if (res.code == 0) {
-                        mdui.snackbar(res.message, {
-                            timeout: 2000,
-                            position: 'top',
-                            onClosed: function () {
-                                location.reload();
-                            }
-                        })
-                    } else {
-                        mdui.snackbar(res.message, {
-                            timeout: 2000,
-                            position: 'top'
-                        })
-                    }
-
-                }
-            });
-
-            return false;
-        });
-
-        //上传图片
+        //图片上传
         var uploadInst = upload.render({
-            elem: '#upebookimg'
+            elem: '#upresimg'
             , accept: 'images'
             ,acceptMime: 'image/*'
-            , field: 'columnimg' //后台控制器中接受的参数，必须
+            , field: 'resimg' //后台控制器中接受的参数，必须
             ,auto:true // 自动上传
-            ,url: option.columnImgUrl //上传接口
+            ,url: option.upResImg //上传接口
             ,before:function (obj) {
                 console.log(obj);
                 // 预览
                 obj.preview(function(index,file,result) {
-                    $('#preview').attr('src',result); //图片链接 base64
+                    $$('#preview').attr('src',result); //图片链接 base64
                 });
             }
             ,done: function (res) {
@@ -221,17 +172,78 @@
                     layer.msg('上传成功！', {
                         icon: 1,
                         end: function () {
-                            $$('#preview').attr('src', res.url);
+                            $$('#preview').attr('src', res.resurl);
                         }
                     });
-                    $$('#eimgurl').val(res.ebookurl);
+                    $$('#resimgurl').val(res.resurl);
                 }
             }
-            ,error: function () {
-
+            ,error: function (e) {
+                layer.msg('上传失败！');
             }
         });
+        //电子书上传
+        var uploadebook = upload.render({
+            elem: '#upres'
+            , accept: 'file'
+            , field: 'resource' //后台控制器中接受的参数，必须
+            ,auto:true // 自动上传
+            ,url: option.resUrl //上传接口
+            ,before: function(obj){
+                layer.load();//上传loading
+            }
+            ,done: function (res,index,upload) {
+                if (res.code == 0) {
+                    layer.msg('上传成功！');
+                    $$('#upresimg').toggleClass('mdui-hidden');
+                    $$('#resurl').val(res.resourceUrl);
+                    layer.closeAll('loading');
+                }
+            }
+            ,error: function (index, upload) {
+                layer.msg('上传文件太大');
+                layer.closeAll('loading');
+            }
+        });
+        //绑定上传更新事件
+        $$('#create').on('click', function() {
+            //获取表单内容
+            var submitData = $$('#addresource').serialize();
+            console.log(submitData);
+            $$.ajax({
+                method: 'post',
+                url: option.url,
+                data: submitData,
+                dataType: 'json',
+                success: function(res) {
+                    if (res.code == 1) {
+                        mdui.snackbar({
+                            message: res.message,
+                            position: 'top',
+                            onClosed: function() {
+                                location.reload();
+                            }
+                        })
+                    } else {
+                        mdui.snackbar({
+                            message: res.message,
+                            position: 'top',
+                            onClosed: function() {
+                                location.reload();
+                            }
+                        })
+                    }
+                }
+            });
+            return false;
+        });
+
+        layer.photos({
+            photos: '#mf-content,#mf-comments',
+            anim: 5
+        });
     });
+
     // 栏目排序 fid
     $$("input[name='sort']").each(function () {
         $$(this).on('change',function () {
@@ -304,13 +316,10 @@
     });
 
     function editorForum(id) {
-        var data = $$(id).find('td');
-        $$('#editorForum [name="fid"]').val(data[1].innerText);
-        $$('#editorForum [name="name"]').val(data[2].innerText);
-        $$('#editorForum textarea').val(data[3].innerText);
+
         inst.open();
     }
-    function del(fid) {
+    function del(id) {
         mdui.dialog({
             title: '你确定吗？',
             content: '此操作将删除此版块分区，同时将版块下的所有Topic移动到Fid=1的板块下',
@@ -325,8 +334,8 @@
                             method: 'post',
                             url: '{:url("admin/api/del")}',
                             data: {
-                                type: 'forum',
-                                id: fid,
+                                type: 'resource',
+                                id: id,
                             },
                             dataType: 'json',
                             success: function (res) {

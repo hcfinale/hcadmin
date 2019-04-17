@@ -1,14 +1,15 @@
 <?php
-namespace app\index\model;
+namespace app\admin\model;
 
 use think\Model;
 use think\Db;
 use app\index\model\User;
-use app\admin\validate\Resource as ResValidate;
+use app\admin\validate\Res as ResValidate;
 
-class Resource extends Model
+class Res extends Model
 {
     protected $pk = 'id';
+    protected $name = 'resource';
     protected $autoWriteTimestamp = true;
 
     /**
@@ -45,9 +46,33 @@ class Resource extends Model
             return [false,$validate->getError()];
         }
         $data['uid'] = $uid;
-        $data['userip'] = '';
         $this->allowField(true)->save($data);
         $resid = $this->id;
         return [true,$resid];
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * 无限极分类
+     */
+    public function getResTool($id = 0){
+        $list = $this->where(['fid'=>$id,'pid'=>'1','status'=>'1'])->order('sort desc')->select();
+        return $list;
+    }
+
+    /**
+     * @param int $id
+     * @return array|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getRes($id = 0){
+        $list = $this->where(['fid'=>$id,'pid'=>'2','status'=>'1'])->order('sort desc')->select();
+        return $list;
     }
 }

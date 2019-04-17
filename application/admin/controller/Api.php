@@ -24,6 +24,18 @@ class Api extends Base
                 } else {
                     return json(['code'=>'4033','message'=>'删除失败！','time'=>time()]);
                 }
+            }elseif (input('post.type') == 'resource') {
+                $res = Db::transaction(function () {
+                    $res = Db::name('resource')->find(input('post.id'));
+                    @unlink(str_replace('/index.php','',$_SERVER['SCRIPT_FILENAME']).$res['resource_url']);
+                    @unlink(str_replace('/index.php','',$_SERVER['SCRIPT_FILENAME']).$res['img']);
+                    Db::name('resource')->delete(input('post.id'));
+                });
+                if (empty($res)) {
+                    return json(['code'=>0,'message'=>'删除成功！','time'=>time()]);
+                } else {
+                    return json(['code'=>'4033','message'=>'删除失败！','time'=>time()]);
+                }
             } elseif (input('post.type') == 'forum') {
                 if (input('post.id') == 1) {
                     return json(\outResult(-1, '不能删除fid为1的板块'));

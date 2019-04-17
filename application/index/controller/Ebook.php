@@ -4,6 +4,8 @@ namespace app\index\controller;
 use think\Db;
 use app\index\controller\Base;
 use app\index\model\Ebook as EbookModel;
+use app\admin\model\Res;
+use app\admin\model\Forum;
 use app\index\model\User;
 use app\index\model\Group;
 use app\index\model\Comment;
@@ -176,4 +178,92 @@ class Ebook extends Base
         }
     }
     **/
+    // 资料展示
+    public function showRes()
+    {
+        if (!User::isLogin()) {
+            return redirect('index\user\login');
+        }
+        if (!$this->userAuth(session('uid'))) {
+            $this->error('你没有权限，请联系管理员开通。','index/index/index');
+        }
+        $forum = new Forum();
+        $res = $forum->groupCategory();
+        $toolRes = db('resource')->where(['status'=>'1'])->field('id,pid,fid,title,img,resource_url')->select();
+        return $this->fetch('showres',[
+            'result'    =>  $res,
+            'toolRes' => $toolRes,
+        ]);
+    }
+    // 栏目点击出现对应的所有工具
+    public function ajaxres(){
+        $forumId=$this->request->param('forumId');
+        $resAll = new Res();
+        $data1 = $resAll->getRes($forumId);
+        $html1 = '';
+        foreach ($data1 as $value){
+            $html1 .="<div class=\"mdui-col-xs-3\" style=\"min-height: 13rem;\">
+                <div class=\"mdui-card\">
+                    <div class=\"mdui-card-media\">
+                        <img src=\"$value[img]\"/>
+                        <div class=\"mdui-card-media-covered\">
+                            <div class=\"mdui-card-primary\">
+                                <div class=\"mdui-card-primary-title\">$value[title]</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=\"mdui-card-actions\">
+                        <a class=\"mdui-btn mdui-ripple\" href=\"/ebook/downloadIt/id/$value[id]\">下载</a>
+                    </div>
+                </div>
+            </div>";
+        }
+        $data2 = $resAll->getResTool($forumId);
+        $html2 = '';
+        foreach ($data2 as $value){
+            $html2 .="<div class=\"mdui-col-xs-3\" style=\"min-height: 13rem;\">
+                <div class=\"mdui-card\">
+                    <div class=\"mdui-card-media\">
+                        <img src=\"$value[img]\"/>
+                        <div class=\"mdui-card-media-covered\">
+                            <div class=\"mdui-card-primary\">
+                                <div class=\"mdui-card-primary-title\">$value[title]</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=\"mdui-card-actions\">
+                        <a class=\"mdui-btn mdui-ripple\" href=\"/ebook/downloadIt/id/$value[id]\">下载</a>
+                    </div>
+                </div>
+            </div>";
+        }
+        $html = [$html2,$html1];
+        return json($html);
+    }
+    // 下载资源方法
+    public function downloadIt($id){
+        $tool_url = db('resource')->where(['status'=>'1','id'=>$id])->field('id,title,img,resource_url')->find();
+        $file_url = str_replace('/index.php','',$_SERVER['SCRIPT_FILENAME']).$tool_url['resource_url'];
+        $suffix = substr(trim(strrchr($file_url, '/'),'/'),strpos(trim(strrchr($file_url, '/'),'/'),'.'));
+        $out_filename = $tool_url['title'].$suffix;
+        if(!file_exists($file_url)){
+            return $this->error('文件不存在','index/index');
+        } else {
+            // We'll be outputting a file
+            header('Accept-Ranges: bytes');
+            header('Accept-Length: ' . filesize($file_url));
+            // It will be called
+            header('Content-Transfer-Encoding: binary');
+            header('Content-type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . $out_filename);
+            header('Content-Type: application/octet-stream; name=' . $out_filename);
+            // The source is in filename
+            if(is_file($file_url) && is_readable($file_url)){
+                $file = fopen($file_url, "r");
+                echo fread($file, filesize($file_url));
+                fclose($file);
+            }
+            exit;
+        }
+    }
 }

@@ -1,17 +1,18 @@
 <?php
-namespace app\index\validate;
+namespace app\admin\validate;
 
 use think\Validate;
 
-class Resource extends Validate
+class Res extends Validate
 {
     protected $rule = [
-        'id'   => 'require',
+        'pid'   => 'require',
+        'fid'   => 'require',
         'title' => 'require',
         'resource_url'	=> 'require',
     ];
 
     protected $scene = [
-        'create' => ['id','title','resource_url'],
+        'create' => ['pid','fid','title','resource_url'],
     ];
 }

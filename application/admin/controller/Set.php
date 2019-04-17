@@ -1,7 +1,9 @@
 <?php
 namespace app\admin\controller;
 
+use app\admin\model\Res;
 use think\Db;
+use think\db\Where;
 use think\facade\Request;
 use app\admin\controller\Base;
 use app\index\model\Option;
@@ -286,6 +288,95 @@ class Set extends Base
             'forum' => $fourm,
         ]);
     }
+
+
+    // 资源原理&工具和源代码下载
+    public function resourceAll(){
+        $forumData = db('forum')->where(['pid'=>'0'])->field('fid,name,cgroup')->select();
+        $toolRes = db('resource')->field('id,pid,fid,title,img,resource_url')->select();
+        return $this->fetch('admin@set/resource',[
+            'option' => $this->siteOption('发布工具资料'),
+            'forum' => $forumData,
+            'toolRes' => $toolRes,
+            'attaSign' => createStr(30),
+        ]);
+    }
+
+    // 添加资源代码
+    public function addResource(){
+        if (request()->isPost()) {
+            $resource = new Res();
+            $res = $resource->found(session('uid'), input('post.'));
+            if ($res[0]) {
+                return json([
+                    'code'=>'1',
+                    'message'=>'发布成功，正在跳转……',
+                    'url'=>url('admin/index/index', ['id'=>$res[1]]),
+                ]);
+            } else {
+                return json(\outResult(-1, $res[1]));
+            }
+        }
+        return $this->error('非法操作','admin@index/index');
+    }
+    // 上传文件
+    public function upRes(){
+        $file = request()->file('resource');
+        if (empty($file)) {
+            return json(array('code'=>1,'errmsg'=>'上传失败,文件为空.'));
+        }
+        $info = $file->validate(['ext'=>'chm,txt,zip,tar,tar.gz,rar'])->move('./public/uploads');
+        // $info = $file->move('.\public\uploads');
+        if ($info) {
+            $path = $info->getSaveName();
+            $data['resource_url'] = '/public/uploads/'.$path;
+            return json(array('code'=>0,'url'=>'/public/uploads/'.$path,'msg'=>'上传成功！','resourceUrl'=>$data['resource_url']));
+        } else {
+            return json(array('code'=>1,'errmsg'=>'上传失败'));
+        }
+    }
+    // 上传图片
+    public function upResImg(){
+        $file = request()->file('resimg');
+        if (empty($file)) {
+            return json(array('code'=>1,'errmsg'=>'上传失败,文件为空.'));
+        }
+        $info = $file->move('./public/uploads');
+        if ($info) {
+            $path = $info->getSaveName();
+            $data['img'] = '/public/uploads/'.$path;
+            return json(array('code'=>0,'url'=>'/public/uploads/'.$path,'msg'=>'上传成功！','resurl'=>$data['img']));
+        } else {
+            return json(array('code'=>1,'errmsg'=>'上传失败'));
+        }
+    }
+    // 下载资源方法
+    public function downloadIt($id){
+        $tool_url = db('resource')->where(['status'=>'1','id'=>$id])->field('id,title,img,resource_url')->find();
+        $file_url = str_replace('/index.php','',$_SERVER['SCRIPT_FILENAME']).$tool_url['resource_url'];
+        $suffix = substr(trim(strrchr($file_url, '/'),'/'),strpos(trim(strrchr($file_url, '/'),'/'),'.'));
+        $out_filename = $tool_url['title'].$suffix;
+        if(!file_exists($file_url)){
+            return $this->error('文件不存在','index/index');
+        } else {
+            // We'll be outputting a file
+            header('Accept-Ranges: bytes');
+            header('Accept-Length: ' . filesize($file_url));
+            // It will be called
+            header('Content-Transfer-Encoding: binary');
+            header('Content-type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . $out_filename);
+            header('Content-Type: application/octet-stream; name=' . $out_filename);
+            // The source is in filename
+           if(is_file($file_url) && is_readable($file_url)){
+               $file = fopen($file_url, "r");
+                echo fread($file, filesize($file_url));
+                fclose($file);
+           }
+            exit;
+        }
+    }
+
 
     public function user()
     {

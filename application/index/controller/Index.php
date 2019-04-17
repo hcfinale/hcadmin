@@ -32,7 +32,7 @@ class Index extends Base
         $html = '';
         foreach ($data as $v){
             foreach ($v['childs'] as $value){
-                $html .= "<div class=\"mdui-col-sm-4\" style=\"height: 13rem\">
+                $html .= "<div class=\"mdui-col-sm-3\" style=\"height: 9.5rem\">
                 <div class=\"mdui-grid-tile\">
                     <a href=\"/forum/$value[fid]\">
                         <img src=\"$value[img]\"/>
@@ -54,7 +54,7 @@ class Index extends Base
         $data = $this->forum->getNormalCategoryByParentId($forumId);
         $html = '';
         foreach ($data as $value){
-            $html .= "<div class=\"mdui-col-sm-4\" style=\"height: 12rem\">
+            $html .= "<div class=\"mdui-col-sm-3\" style=\"height: 9.5rem\">
             <div class=\"mdui-grid-tile\">
                 <a href=\"/forum/$value[fid]\">
                     <img src=\"$value[img]\"/>

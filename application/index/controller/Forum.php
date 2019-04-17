@@ -53,27 +53,30 @@ class Forum extends Base
     // 收藏功能
     public function collect(){
         if (!User::isLogin()) {
-            return redirect('index\user\login');
+            return json(['code'=>'200','msg'=>'收藏此栏目，请先登录','url'=>'index/user/login']);
         }
-        $arr = [];
-        $fid = request()->param('fid');
-        $collect = new \app\index\model\User();
-        $res = $collect->where('uid',session('uid'))->field('collect')->find();
-        $arr = explode(',',$res);
-        if (in_array($fid,$arr)){
-            foreach( $arr as $k=>$v) {
-                if($fid == $v){
-                    unset($arr[$k]);
+        if (request()->isPost()){
+            $arr = [];
+            $fid = request()->param('fid');
+            $collect = new \app\index\model\User();
+            $res = $collect->where('uid',session('uid'))->field('collect')->find();
+            (string)$result = $res['collect'];
+            $arr = explode(',',$result);
+            if (in_array($fid,$arr)){
+                foreach( $arr as $k=>$v) {
+                    if($fid == $v){
+                        unset($arr[$k]);
+                    }
                 }
+                $arr = array_merge($arr);
+                $result = implode(',',$arr);
+            }else{
+                $result = $fid.','.$result;
             }
-            $arr = array_merge($arr);
-            $res['collect'] = implode(',',$arr);
-
-        }else{
-            $res['collect'] = $fid.','.$res['collect'];
+            $collect->save(['collect'=>$result],['uid'=>session('uid')]);
+            return json(['code'=>'200','msg'=>'操作成功']);
         }
-        $collect->save(['collect'=>$res['collect']],['uid'=>session('uid')]);
-        return json(['code'=>'200','msg'=>'操作成功']);
+        return json(['code'=>'200','msg'=>'非法操作']);
     }
 
 }
