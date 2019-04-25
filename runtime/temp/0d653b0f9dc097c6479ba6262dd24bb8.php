@@ -1,4 +1,4 @@
-<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1554097401;s:49:"./application/admin/view/public/admin_public.html";i:1555311750;s:43:"./application/admin/view/public/header.html";i:1547689121;s:43:"./application/admin/view/public/topbar.html";i:1555385383;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
+<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1555565903;s:49:"./application/admin/view/public/admin_public.html";i:1555565903;s:43:"./application/admin/view/public/header.html";i:1555565903;s:43:"./application/admin/view/public/topbar.html";i:1555566042;s:43:"./application/admin/view/public/footer.html";i:1555565903;}*/ ?>
 <!DOCTYPE html>
 <html>
 

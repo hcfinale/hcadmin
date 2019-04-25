@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/index\index.html";i:1555491229;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:42:"./template/default/common\topbar_user.html";i:1555491906;s:37:"./template/default/common\topbar.html";i:1555491913;s:41:"./template/default/common\right_tool.html";i:1553237251;s:37:"./template/default/common\footer.html";i:1552289231;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/index\index.html";i:1555640519;s:43:"./template/default/common\forum_public.html";i:1555565920;s:37:"./template/default/common\header.html";i:1555565920;s:24:"template/fullscreen.html";i:1555565920;s:42:"./template/default/common\topbar_user.html";i:1555566042;s:37:"./template/default/common\topbar.html";i:1555566042;s:41:"./template/default/common\right_tool.html";i:1555565920;s:37:"./template/default/common\footer.html";i:1555565920;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -218,7 +218,7 @@
         </li>
         <?php endforeach; endif; else: echo "" ;endif; ?>
         -->
-        <li class="mdui-subheader">所有帖子</li>
+        <li class="mdui-subheader">所有板块</li>
     </ul>
     <style>
         .menu{display: block; height: 9rem; position: relative; margin: 0; padding: 0;}
@@ -230,7 +230,7 @@
         .menu .on{background: #dedede;border-radius:45px; padding: 0.5rem 1rem;color: #ff0000}
     </style>
 
-    <ul class="menu">
+    <ul class="menu mdui-hidden-xs">
         <li>图文分类：</li>
         <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): $i = 0; $__LIST__ = $result;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
         <li>
@@ -253,7 +253,7 @@
 
     <ul class="mdui-list part-list">
         <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): $i = 0; $__LIST__ = $result;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$res): $mod = ($i % 2 );++$i;if(is_array($res['childs']) || $res['childs'] instanceof \think\Collection || $res['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $res['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;if(is_array($vo['childs']) || $vo['childs'] instanceof \think\Collection || $vo['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?>
-        <div class="mdui-col-sm-3" style="height: 9.5rem">
+        <div class="mdui-col-lg-3 mdui-col-md-4 mdui-col-sm-12 mdui-col-xs-12 mdui-m-t-2 mdui-m-b-2" style="min-height: 8rem;">
             <div class="mdui-grid-tile">
                 <a href="<?php echo url('index/forum/index',array('fid'=>$v['fid'])); ?>">
                     <img src="<?php echo htmlentities($v['img']); ?>"/>

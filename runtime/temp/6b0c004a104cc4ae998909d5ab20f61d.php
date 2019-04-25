@@ -1,4 +1,4 @@
-<?php /*a:7:{s:34:"./template/default/user\index.html";i:1555565920;s:43:"./template/default/common\forum_public.html";i:1555565920;s:37:"./template/default/common\header.html";i:1555565920;s:24:"template/fullscreen.html";i:1555565920;s:42:"./template/default/common\topbar_user.html";i:1555566042;s:37:"./template/default/common\topbar.html";i:1555566042;s:37:"./template/default/common\footer.html";i:1555565920;}*/ ?>
+<?php /*a:7:{s:35:"./template/default/user\forget.html";i:1555565920;s:43:"./template/default/common\forum_public.html";i:1555565920;s:37:"./template/default/common\header.html";i:1555565920;s:24:"template/fullscreen.html";i:1555565920;s:42:"./template/default/common\topbar_user.html";i:1555566042;s:37:"./template/default/common\topbar.html";i:1555566042;s:37:"./template/default/common\footer.html";i:1555565920;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -193,99 +193,54 @@
         <div class="mdui-row">
             
 
-<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
-    <div class="mdui-card">
+<div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-offset-sm-3 mdui-m-y-1">
+
+    <div class="mdui-card mdui-m-t-1">
         <div class="mdui-card-media">
-            <img src="/public/static/images/snake.jpg" width="100%" />
-            <div class="mlt-user-info">
-              <div class="mlt-avatar-box">
-                <div class="mlt-avatar-upload">
-                  <button id="avatar_new" title="上传新头像" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">photo_camera</i></button>
-                </div>
-                <img src="<?php echo htmlentities($userData['avatar']); ?>" alt="<?php echo htmlentities($userData['username']); ?>的头像" id="avatar_preview" />
-              </div>
-              <div class="mlt-user-username">
-                <?php echo htmlentities($userData['username']); ?>
-              </div>
-              <div class="mlt-user-data">
-                <a href><?php echo htmlentities((isset($userData['motto']) && ($userData['motto'] !== '')?$userData['motto']:"这家伙很懒，什么也没留下")); ?></a>
-              </div>
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">重置密码</div>
+                <div class="mdui-card-primary-subtitle">Reset Password</div>
             </div>
         </div>
 
         <div class="mdui-card-content">
-            <div class="mdui-tab" mdui-tab>
-                <a href="#topic" class="mdui-ripple">主题</a>
-                <a href="#information" class="mdui-ripple">资料</a>
-                <a href="#password" class="mdui-ripple">安全</a>
-            </div>
-            <div id="topic">
-                <ul class="mdui-list">
-                    <?php if(is_array($userTopic) || $userTopic instanceof \think\Collection || $userTopic instanceof \think\Paginator): $i = 0; $__LIST__ = $userTopic;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-                    <li class="mdui-list-item mdui-ripple">
-                        <div class="mdui-list-item-avatar">
-                            <img src="<?php echo htmlentities($vo['userData']['avatar']); ?>" alt="<?php echo htmlentities($vo['userData']['username']); ?>" title="<?php echo htmlentities($vo['userData']['username']); ?>">
-                        </div>
-                        <div class="mdui-list-item-content">
-                            <a class="mdui-list-item-title" href="<?php echo url('index/topic/index',['tid'=>$vo['tid']]); ?>"><?php echo htmlentities($vo['subject']); ?></a>
-                            <div class="mdui-list-item-text mdui-list-item-one-line"><?php echo $vo['content']; ?></div>
-                            <div class="mdui-list-item-text">
-                                <a class="mdui-list-item-title" href="<?php echo url('index/user/inde',['uid'=>$vo['uid']]); ?>"><?php echo htmlentities($vo['userData']['username']); ?></a>
-                                <span title="<?php echo htmlentities($vo['create_time']); ?>"> <?php echo htmlentities($vo['time_format']); ?></span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="mdui-divider-inset mdui-m-y-0"></li>
-                    <?php endforeach; endif; else: echo "" ;endif; ?>
-                </ul>
-            </div>
-            <div id="information">
-                <form action="" method="post" class="layui-form">
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <i class="mdui-icon material-icons">info</i>
-                        <label class="mdui-textfield-label">签名</label>
-                        <input name="motto" class="mdui-textfield-input" type="text" value="<?php echo htmlentities($userData['motto']); ?>"/>
-                    </div>
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <button lay-submit lay-filter="info" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">发布签名</button>
-                    </div>
-                </form>
-
-            </div>
-            <div id="password">
-                <form action="" class="layui-form" method="post">
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <i class="mdui-icon material-icons">https</i>
-                        <label class="mdui-textfield-label">旧密码</label>
-                        <input name="oldpassword" class="mdui-textfield-input" type="password" required/>
-                        <div class="mdui-textfield-error">旧密码不能为空</div>
-                    </div>
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <i class="mdui-icon material-icons">https</i>
-                        <label class="mdui-textfield-label">新密码</label>
-                        <input name="password" class="mdui-textfield-input" type="password" required/>
-                        <div class="mdui-textfield-error">新密码不能为空</div>
-                    </div>
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <i class="mdui-icon material-icons">https</i>
-                        <label class="mdui-textfield-label">确认新密码</label>
-                        <input name="repassword" class="mdui-textfield-input" type="password" required/> <?php echo token(); ?>
-                        <div class="mdui-textfield-error">和新密码不同</div>
-                    </div>
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <button lay-submit lay-filter="pass" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
-                    </div>
-                </form>
-
-                <hr/>
-                <div class="mdui-typo">
-                    <h4>QQ互联状态:</h4>
-                    <code><?php echo htmlentities($userData['qqconnectStatus']); ?></code>
-                    <blockquote>Tips: 登录时选择QQ登录即可绑定</blockquote>
+            <form action="" method="post" class="layui-form">
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">邮箱</label>
+                    <input id="email" name="email" class="mdui-textfield-input" type="email" />
                 </div>
-            </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">邮箱验证码</label>
+                    <input name="code" class="mdui-textfield-input" type="text" />
+                    <button type="button" class="mdui-btn mdui-m-t-1 mdui-color-theme mdui-ripple" id="getResetCode">获取验证码</button>
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">重置密码</label>
+                    <input name="password" class="mdui-textfield-input" type="password" />
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">确认重置密码</label>
+                    <input name="repassword" class="mdui-textfield-input" type="password" />
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">验证码</label>
+                    <input style="max-width: 60%;" name="captcha" class="mdui-textfield-input" type="text" required/>
+                    <img style="margin-top:4px;" alt="captcha" src="<?php echo captcha_src(); ?>" width="200" height="" onclick="this.src=this.src+'?'" />
+                    <div class="mdui-textfield-error">验证码不能为空</div>
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <button class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple" lay-submit type="submit" lay-filter="reset">确认修改</button>
+                    <a href="<?php echo url('user/login'); ?>" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">用户登录</a>
+                </div>
+            </form>
         </div>
     </div>
+
 </div>
 
 
@@ -349,75 +304,35 @@
 </script>
 <script src="/public/static/js/mltree-message.js"></script> 
 <script>
-    layui.use(['upload', 'form'], function () {
-        var upload = layui.upload,
-            form = layui.form;
+    layui.use(['form'], function () {
+        var form = layui.form;
         var $$ = mdui.JQ;
 
-        form.on('submit(pass)', function (data) {
+        form.on('submit(reset)', function (data) {
+
             $$.ajax({
                 method: 'post',
-                url: '<?php echo url("ResetPas"); ?>',
+                url: '<?php echo url("Reset"); ?>',
                 data: data.field,
                 dataType: 'json',
-                success: function (res) {
-                    if (res.code == 0) {
-                        mdui.snackbar({
-                            message: res.message,
-                            position: 'top',
-                            onClosed: function () {
-                               window.location.href = res.url;
-                            },
-                        })
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg(data.message, {
+                            icon: 1,
+                            end: function () {
+                                window.location.href = data.url;
+                            }
+                        });
                     } else {
-                        layer.msg(res.message, { icon: 5 });
+                        layer.msg(data.message, { icon: 5 });
                     }
+
                 },
-            });
+            })
+
             return false;
-        });
-
-        form.on('submit(info)', function (data) {
-            $$.ajax({
-                method: 'post',
-                url: '<?php echo url("set"); ?>',
-                data: data.field,
-                dataType: 'json',
-                success: function (res) {
-                    if (res.code == 0) {
-                        mdui.snackbar({
-                            message: res.message,
-                            position: 'top',
-                        })
-                    } else {
-                        layer.msg(res.message, { icon: 5 });
-                    }
-                },
-            });
-            return false;
-        });
-
-        var uploadInst = upload.render({
-            elem: '#avatar_new'
-            , accept: 'images'
-            , field: 'avatar'
-            , data: { uid: '<?php echo htmlentities($userData['uid']); ?>' }
-            , url: '<?php echo url("index/expand/avatarUpload"); ?>'
-            , done: function (res) {
-                if (res.code == 0) {
-                    layer.msg('上传成功！', {
-                        icon: 1,
-                        end: function () {
-                            $$('#avatar_preview').attr('src', res.url);
-                        }
-                    });
-                }
-            }
-            , error: function () {
-
-            }
-        });
-    })
+        })
+    });
 </script>  <?php echo $option['siteFooterJs']; ?>
 </body>
 

@@ -56,9 +56,10 @@ class User extends Base
                 return json(['code'=>'-1','message'=>$res[1],'time'=>time()]);
             }
         }
-
+        $forum = db('forum')->where(['pid'=>'0','status'=>1])->select();
         return view('reg', [
             'option' => $this->siteOption('注册'),
+            'forum' =>  $forum,
         ]);
     }
 
