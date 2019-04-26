@@ -1,41 +1,19 @@
 <!DOCTYPE html>
+<!--
+@link http://blog.kunx.org/.
+@copyright Copyright (c) 2016-11-23
+@license kunx-edu@qq.com.
+-->
 <html>
 <head>
-    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-    <title>微信安全支付</title>
-    <script type="text/javascript">
-        //调用微信JS api 支付
-        function jsApiCall()
-        {
-            WeixinJSBridge.invoke(
-                'getBrandWCPayRequest',
-            <?php echo $jsApiParameters; ?>,
-            function(res){
-                WeixinJSBridge.log(res.err_msg);
-                alert(res.err_code+res.err_desc+res.err_msg);
-                //alert("{$jsApiParameters}");
-            }
-        );
-        }
-        function callpay()
-        {
-            if (typeof WeixinJSBridge == "undefined"){
-                if( document.addEventListener ){
-                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                }else if (document.attachEvent){
-                    document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                }
-            }else{
-                jsApiCall();
-            }
-        }
-    </script>
+    <title>扫描二维码付款</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-</br></br></br></br>
-<div align="center">
-    <button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >贡献一下</button>
+<div>微信扫描二维码</div>
+<div>
+    <img src="{:url('qrcode',['text'=>$text])}"/>
 </div>
 </body>
 </html>

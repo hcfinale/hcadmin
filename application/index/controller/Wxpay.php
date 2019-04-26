@@ -32,78 +32,79 @@ namespace app\index\controller;
  */
 
 use think\Controller;
-use think\Db;
-use think\Session;
-use pay\wxpay\UnifiedOrder_pub as UnifiedOrder;
-use pay\wxpay\JsApi_pub as JaApi;
 
 class Wxpay extends Controller{
-    protected $wx_config=[
-        'wechat_appid'=>'wx35757b8dde0f2a78',//微信公众号身份的唯一标识。审核通过后，在微信发送的邮件中查看  ||wx35757b8dde0f2a78
-        'wechat_mchid'=>'1533074101',//受理商ID，身份标识 商户号  ||1533074101
-        'wechat_appkey'=>'yr0YOqr9sOJnK9Hpe9i7Gk2H7XOqlibd',//商户支付密钥Key。审核通过后，在微信发送的邮件中查看  就是刚才这个
-        'wechat_appsecret'=>'fd2989c0e2b697ae1bf1abc864e9e4e0',//JSAPI接口中获取openid，审核后在公众平台开启开发模式后可查看 ||自己获取
-
-        //证书路径,注意应该填写绝对路径  不用证书也是能支付的
-        'sslcert_path'=>'pay/wxpay/cert/apiclient_cert.pem',              //你下载下下来存放你服务器的地址
-        'sslkey_path'=> 'pay/wxpay/cert/apiclient_key.pem',              //你下载下下来存放你服务器的地址
-    ];
-//    protected $this->notify_url="";   //自己定义
-    protected $order_table_param=[
-        'table'=>'my_orders',      //订单表名称
-        'no_field'=>'order_no',     //订单号 字段名字
-        'state_field'=> 'is_pay',//订单支付状态值字段名
-        'amount_field'=>'amount',//订单金额值字段名
-        'pay_ok'=> '1', //订单已支付状态值
-        'pay_no'=> '0',  // 订单未支付状态值
-        'map' => [['status' => 1] ,[ 'order_state'=>0]],  //其他订单是否可以支付的参数值
-    ];
     /**
-     * #User: Mikkle
-     * #Email:776329498@qq.com
-     * #Date:
+     * 用户可以看到的订单支付表单页面，目前只有一个二维码而已。
+     * @return type
      */
-    public function _initialize(){
-        ini_set('date.timezone','Asia/Shanghai');
-        config($this->wx_config);
-        //已登陆的设置openid  本人微信登录是在控制器里完成
-        if (Session::has('open_id','html5')) $this->open_id=Session::get('open_id','html5');
+    public function index() {
+        ini_set('date.timezone', 'Asia/Shanghai');
+        require_once('./extend/wxpay/Autoloader.php');
+        $notify = new \NativePay();
+        //模式二
+        /**
+         * 流程：
+         * 1、调用统一下单，取得code_url，生成二维码
+         * 2、用户扫描二维码，进行支付
+         * 3、支付完成之后，微信服务器会通知支付成功
+         * 4、在支付成功通知中需要查单确认是否真正支付成功（见：wxpayNotify方法）
+         */
+        $input  = new \WxPayUnifiedOrder();
+        $input->SetBody("啊咿呀哟商城订单");
+        $input->SetOut_trade_no(\WxPayConfig::$appid . mt_rand(1000, 9999));
+        $input->SetTotal_fee("1");
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 300));//有效期最少5分钟
+        $input->SetGoods_tag("blog.kunx.org");
+
+        $url    = \think\Url::build('wxpayNotify', '', true, true);
+        $input->SetNotify_url($url);
+
+        $input->SetTrade_type("NATIVE");
+        $input->SetProduct_id("100");
+        $result = $notify->GetPayUrl($input);
+        $url2   = $result["code_url"];
+        $url2   = base64_encode($url2);
+
+        //渲染一个视图，参数用于获取验证码。
+        return $this->fetch('', ['text' => $url2]);
     }
 
-    public function index(){
-
-    }
     /**
-     * 统一下单方法
-     * #User: Mikkle
-     * #Email:776329498@qq.com
-     * #Date:
-     * @param array $data
-     * @return bool
+     * 二维码。
+     * @param string $text
+     * @return png
      */
-    protected function unifiedOrder($data=[]){
-        $unifiedOrder = new UnifiedOrder();
-        $unifiedOrder->setParameter("openid",$this->open_id); 			// 用户openid，自己通过接口获取，正常是在用户访问页面就获取的 openid
-        $unifiedOrder->setParameter("body",'商品订单号'+$data['order_no']); 		// 商品描术  表单里面添加的
-        $unifiedOrder->setParameter("out_trade_no",$data['order_no'].'_'.$unifiedOrder->createNoncestr(6));  // 商户订单号
-        $unifiedOrder->setParameter("total_fee",$data['amount']*100);    // 总金额   表单里面添加的
-        $unifiedOrder->setParameter("notify_url",$this->notify_url);  // 通知地址 $this->notify_url自己定义  回调地址，说白了 就是通知你是否支付或者是否支付成功
-        $unifiedOrder->setParameter("trade_type","JSAPI");      // 交易类型 这个不会giant
-        return $unifiedOrder->getPrepayId();
-    }
-    /**
-     * 获取JsApi$getParameters参数
-     * #User: Mikkle
-     * #Email:776329498@qq.com
-     * #Date:
-     * @param string $unified_order
-     * @return string
-     */
-    protected function getParameters($unified_order=''){
-        $jsApi= new JaApi();
-        $jsApi->setPrepayId($unified_order);
-        $jsApiParameters = $jsApi->getParameters();
-        return $jsApiParameters;
+    public function qrcode($text) {
+        \think\Loader::import('qrcode.qrcode');
+        $text = base64_decode($text);
+        return \QRcode::png($text);
+        exit;
     }
 
+    /**
+     * 微信通知页面。
+     */
+    public function wxpayNotify() {
+        ini_set('date.timezone', 'Asia/Shanghai');
+        \think\Loader::import('wxpay.Autoloader');
+        error_reporting(E_ERROR);
+
+        //初始化日志
+        $logHandler = new \CLogFileHandler("../logs/" . date('Y-m-d') . '.log');
+        \Log::Init($logHandler, 15);
+        \Log::DEBUG("begin notify");
+
+        //在PayNotifyCallBack中重写了NotifyProcess，会发起一个订单支付状态查询，其实也可以不去查询，因为从php://input中已经可以获取到订单状态。file_get_contents("php://input")
+        //$notify = new \WxPayNotify();
+        $notify = new \PayNotifyCallBack();
+        $notify->Handle(false);
+        $result = $notify->GetValues();
+        if ($result['return_code'] == 'SUCCESS') {
+            //订单支付完成，修改订单状态，发货。
+        }
+        \Log::DEBUG("end notify");
+        \Log::INFO(str_repeat("=", 20));
+    }
 }

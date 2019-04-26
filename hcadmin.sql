@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2019-04-17 17:26:29
+Date: 2019-04-26 17:53:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -314,6 +314,24 @@ INSERT INTO `pa_options` VALUES ('34', 'themeLayout', 'light', 'theme');
 INSERT INTO `pa_options` VALUES ('35', 'discolour', 'true', 'theme');
 
 -- ----------------------------
+-- Table structure for pa_order
+-- ----------------------------
+DROP TABLE IF EXISTS `pa_order`;
+CREATE TABLE `pa_order` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `ispay` int(5) NOT NULL DEFAULT '0' COMMENT '订单支付状态值字段名',
+  `amount` float(10,2) NOT NULL COMMENT '订单金额值字段名',
+  `status` int(5) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of pa_order
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for pa_resource
 -- ----------------------------
 DROP TABLE IF EXISTS `pa_resource`;
@@ -422,6 +440,7 @@ DROP TABLE IF EXISTS `pa_user`;
 CREATE TABLE `pa_user` (
   `uid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `gid` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT '用户组编号',
+  `course` int(5) NOT NULL COMMENT '学院所学课程',
   `email` char(40) NOT NULL DEFAULT '' COMMENT '邮箱',
   `username` char(32) NOT NULL DEFAULT '' COMMENT '用户名',
   `password` varchar(70) NOT NULL DEFAULT '' COMMENT '密码',
@@ -450,7 +469,7 @@ CREATE TABLE `pa_user` (
 -- ----------------------------
 -- Records of pa_user
 -- ----------------------------
-INSERT INTO `pa_user` VALUES ('1', '1', '3127176962@qq.com', 'admin', '$2y$10$cR/GPY7Fyipmb2ckyp3uPOqcjD4Y/dMR/RmUL9i2w9khx6PDSb7By', '/public/avatar/20181221\\dad97ebbb0a0d772f6afd02eaf1d3083.jpg', '不晓得这是啥', '', '', '9', '14', '0', '0', '0', '0', '0', '127.0.0.1', '1555486656', '60', '36,', '1', null);
-INSERT INTO `pa_user` VALUES ('2', '2', '691301630@qq.com', '小白', '$2y$10$cR/GPY7Fyipmb2ckyp3uPOqcjD4Y/dMR/RmUL9i2w9khx6PDSb7By', '\\public\\static\\images\\user_defaule.png', null, '', '', '0', '0', '0', '0', '0', '127.0.0.1', '0', '127.0.0.1', '1555471700', '9', '36,1,', '1', null);
-INSERT INTO `pa_user` VALUES ('3', '1', '3127176962@163.com', '小强', '$2y$10$kGsHxvs1ciaWxLsx9OqfwO.4cVie.yk1f.y3npYHLJyIk6XE8nele', '\\public\\static\\images\\user_defaule.png', null, '', '', '0', '0', '0', '0', '0', '127.0.0.1', '0', '127.0.0.1', '1546498946', '1', null, '1', null);
-INSERT INTO `pa_user` VALUES ('4', '1', '1531132763@qq.com', '小和老师', '$2y$10$kYy0EQSHFdBHWFgYAFZwcuMgqUpzuOJsdFiAKysCYkMeJVV.lkIFa', '/public/avatar/20190319/6f6f0e6b7a34cca95cc0b61df9a98e00.jpg', null, '', '', '42', '0', '0', '0', '0', '121.229.180.134', '0', '58.212.167.3', '1554280971', '17', null, '1', null);
+INSERT INTO `pa_user` VALUES ('1', '1', '0', '3127176962@qq.com', 'admin', '$2y$10$cR/GPY7Fyipmb2ckyp3uPOqcjD4Y/dMR/RmUL9i2w9khx6PDSb7By', '/public/avatar/20181221\\dad97ebbb0a0d772f6afd02eaf1d3083.jpg', '不晓得这是啥', '', '', '9', '14', '0', '0', '0', '0', '0', '127.0.0.1', '1556002097', '62', '36,', '1', null);
+INSERT INTO `pa_user` VALUES ('2', '2', '0', '691301630@qq.com', '小白', '$2y$10$cR/GPY7Fyipmb2ckyp3uPOqcjD4Y/dMR/RmUL9i2w9khx6PDSb7By', '\\public\\static\\images\\user_defaule.png', null, '', '', '0', '0', '0', '0', '0', '127.0.0.1', '0', '127.0.0.1', '1555471700', '9', '36,1,', '1', null);
+INSERT INTO `pa_user` VALUES ('3', '1', '0', '3127176962@163.com', '小强', '$2y$10$kGsHxvs1ciaWxLsx9OqfwO.4cVie.yk1f.y3npYHLJyIk6XE8nele', '\\public\\static\\images\\user_defaule.png', null, '', '', '0', '0', '0', '0', '0', '127.0.0.1', '0', '127.0.0.1', '1546498946', '1', null, '1', null);
+INSERT INTO `pa_user` VALUES ('4', '1', '0', '1531132763@qq.com', '小和老师', '$2y$10$kYy0EQSHFdBHWFgYAFZwcuMgqUpzuOJsdFiAKysCYkMeJVV.lkIFa', '/public/avatar/20190319/6f6f0e6b7a34cca95cc0b61df9a98e00.jpg', null, '', '', '42', '0', '0', '0', '0', '121.229.180.134', '0', '58.212.167.3', '1554280971', '17', null, '1', null);
