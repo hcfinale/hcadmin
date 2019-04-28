@@ -43,6 +43,5 @@ return [
         '__CSS__'=>'/public/static/css',
         '__IMG__'=>'/public/static/images',
         '__JQ__'=>'/public/static/js/jquery-3.3.1.min.js',
-        '__UPLOADS__'=>'/public/uploads',
     ]
 ];

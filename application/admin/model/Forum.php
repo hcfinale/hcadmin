@@ -50,7 +50,7 @@ class Forum extends Model
         return $columnnow;
     }
 
-    // 首页遍历全部栏目
+    // 首页遍历全部栏目,使用的是后面的那个，这个可能用不到了。
     public function getNormalCategoryByParentId($ids = 0){
         $data = [
             'pid'   =>  $ids,
@@ -73,8 +73,7 @@ class Forum extends Model
             foreach($list as $v){
                 if($v['pid'] == $id){
                     $v['childs'] = self::groupCategory($v['fid']);
-                    @$data = &$arr;
-                    $data[] = $v;
+                    $arr[] = $v;
                 }
             }
         }

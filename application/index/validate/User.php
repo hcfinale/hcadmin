@@ -12,11 +12,10 @@ class User extends Validate
         'repassword' => 'require|max:30|min:3',
         'email' => 'require|email',
         'captcha|验证码'=>'require|captcha',
-        'course'    =>  'require',
     ];
 
     protected $scene = [
-        'register' => ['username','password','repassword','email','course','captcha'],
+        'register' => ['username','password','repassword','email','captcha'],
         'login' => ['email','passwrd','captcha'],
         'valiEmail' => ['email'],
         'ResetPas' => ['oldpassword','password','repassword'],

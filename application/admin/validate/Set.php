@@ -85,8 +85,8 @@ class Set extends Validate
         ],
 
         'forum' => [
-            'fid',
             'name',
+            'fid',
         ],
 
         'link' => [

@@ -1,4 +1,4 @@
-<?php /*a:4:{s:36:"./template/default/common/error.html";i:1545200233;s:37:"./template/default/common\header.html";i:1552284354;s:24:"template/fullscreen.html";i:1545200233;s:37:"./template/default/common\topbar.html";i:1555480353;}*/ ?>
+<?php /*a:4:{s:36:"./template/default/common/error.html";i:1545200232;s:37:"./template/default/common/header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:37:"./template/default/common/topbar.html";i:1555491919;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -42,9 +42,10 @@
         <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu',overlay:true,swipe:true}">
             <i class="mdui-icon material-icons">menu</i>
         </a>
-        <a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">Python</a>
-         <?php echo outTopbar(); ?>
+	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
+	<a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
         <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
+         <?php echo outTopbar(); ?>
         <div class="mdui-toolbar-spacer"></div>
         <a href="javascript:;" mdui-dialog="{target: '#color-panel'}" class="mdui-btn mdui-btn-icon color-input" style="display: <?php echo $theme['discolour']=='true' ? 'inline-block'  :  'none'; ?>">
             <i class="mdui-icon material-icons">color_lens</i>
@@ -73,6 +74,7 @@
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
             </div>
             <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+		<a href="http://www.wh1993.net/" title="万和学院"><li class="mdui-list-item mdui-ripple">万和学院</li></a>
                 <?php echo mOutTopabr(); ?>
             </ul>
         </li>

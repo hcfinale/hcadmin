@@ -108,8 +108,8 @@
         <div class="mdui-dialog-content">
             <div class="mdui-dialog-title">编辑板块</div>
             <form id="editForm" class="layui-form layui-form-pane mdui-m-y-1">
-                <input type="hidden" name="fid" id="editfid">
-                <div class="layui-form-item">
+		<input type="hidden" name="fid" id="editfid">
+		<div class="layui-form-item">
                     <label class="layui-form-label">选择框</label>
                     <div class="layui-input-block">
                         <select name="pid" lay-verify="required">
@@ -125,13 +125,13 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">板块名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off" class="layui-input">
+                        <input type="text" name="name" required lay-verify="required" placeholder="请修改" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">板块描述</label>
                     <div class="layui-input-block">
-                        <textarea name="introduce" required lay-verify="required"  placeholder="请输入板块描述" class="layui-textarea"></textarea>
+                        <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -164,7 +164,7 @@
     var $$ = mdui.JQ,
         data = '',
         inst = new mdui.Dialog('#editorForum');//注册对话框
-        layui.use(['upload', 'form','layer'], function() {
+    layui.use(['upload', 'form','layer'], function() {
         var upload = layui.upload,
             form = layui.form,
             layer = layui.layer;

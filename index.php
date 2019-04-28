@@ -13,7 +13,6 @@
 namespace think;
 // 加载基础文件
 require __DIR__ . '/thinkphp/base.php';
-define('PAY_PATH',__DIR__.'/WXpay/');// 支付路径常量定义
 $GLOBALS['_beginTime'] = microtime(true);
 // 支持事先使用静态方法设置Request对象和Config对象
 

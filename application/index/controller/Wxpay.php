@@ -1,110 +1,101 @@
 <?php
 
 namespace app\index\controller;
-/**
- * 微信支付帮助库
- * ====================================================
- * 命名空间 com\wxpay\+类名+_pub
- * 接口分三种类型：
- * 【请求型接口】--Wxpay_client_
- * 		统一支付接口类--UnifiedOrder
- * 		订单查询接口--OrderQuery
- * 		退款申请接口--Refund
- * 		退款查询接口--RefundQuery
- * 		对账单接口--DownloadBill
- * 		短链接转换接口--ShortUrl
- * 【响应型接口】--Wxpay_server_
- * 		通用通知接口--Notify
- * 		Native支付——请求商家获取商品信息接口--NativeCall
- * 【其他】
- * 		静态链接二维码--NativeLink
- * 		JSAPI支付--JsApi
- * =====================================================
- * 【CommonUtil】常用工具：
- * 		trimString()，设置参数时需要用到的字符处理函数
- * 		createNoncestr()，产生随机字符串，不长于32位
- * 		formatBizQueryParaMap(),格式化参数，签名过程需要用到
- * 		getSign(),生成签名
- * 		arrayToXml(),array转xml
- * 		xmlToArray(),xml转 array
- * 		postXmlCurl(),以post方式提交xml到对应的接口url
- * 		postXmlSSLCurl(),使用证书，以post方式提交xml到对应的接口url
- */
 
 use think\Controller;
+use think\Db;
+use think\Session;
+use wxpay\database\WxPayResults;
+use wxpay\database\WxPayUnifiedOrder;
+use wxpay\NativePay;
+use wxpay\WxPayApi;
+use wxpay\WxPayConfig;
+use Predis;
 
 class Wxpay extends Controller{
-    /**
-     * 用户可以看到的订单支付表单页面，目前只有一个二维码而已。
-     * @return type
-     */
-    public function index() {
-        ini_set('date.timezone', 'Asia/Shanghai');
-        require_once('./extend/wxpay/Autoloader.php');
-        $notify = new \NativePay();
-        //模式二
-        /**
-         * 流程：
-         * 1、调用统一下单，取得code_url，生成二维码
-         * 2、用户扫描二维码，进行支付
-         * 3、支付完成之后，微信服务器会通知支付成功
-         * 4、在支付成功通知中需要查单确认是否真正支付成功（见：wxpayNotify方法）
-         */
-        $input  = new \WxPayUnifiedOrder();
-        $input->SetBody("啊咿呀哟商城订单");
-        $input->SetOut_trade_no(\WxPayConfig::$appid . mt_rand(1000, 9999));
-        $input->SetTotal_fee("1");
-        $input->SetTime_start(date("YmdHis"));
-        $input->SetTime_expire(date("YmdHis", time() + 300));//有效期最少5分钟
-        $input->SetGoods_tag("blog.kunx.org");
 
-        $url    = \think\Url::build('wxpayNotify', '', true, true);
-        $input->SetNotify_url($url);
+    public function index(){
+        $product_id = time()+1;
+        $notify = new NativePay();
+        $input = new WxPayUnifiedOrder();
+        $input->setBody("微信支付的东西");
+        $input->setAttach("xxx");
+        //$input->setOutTradeNo(WxPayConfig::MCHID.date("YmdHis"));
+        $input->setOutTradeNo($product_id);
+        $input->setTotalFee("1");//以分为单位,一般是要乘100的。
+        $input->setTimeStart(date("YmdHis"));
+        $input->setTimeExpire(date("YmdHis", time() + 600));
 
-        $input->SetTrade_type("NATIVE");
-        $input->SetProduct_id("100");
-        $result = $notify->GetPayUrl($input);
-        $url2   = $result["code_url"];
-        $url2   = base64_encode($url2);
+        $input->setGoodsTag("test");
 
-        //渲染一个视图，参数用于获取验证码。
-        return $this->fetch('', ['text' => $url2]);
-    }
-
-    /**
-     * 二维码。
-     * @param string $text
-     * @return png
-     */
-    public function qrcode($text) {
-        \think\Loader::import('qrcode.qrcode');
-        $text = base64_decode($text);
-        return \QRcode::png($text);
-        exit;
-    }
-
-    /**
-     * 微信通知页面。
-     */
-    public function wxpayNotify() {
-        ini_set('date.timezone', 'Asia/Shanghai');
-        \think\Loader::import('wxpay.Autoloader');
-        error_reporting(E_ERROR);
-
-        //初始化日志
-        $logHandler = new \CLogFileHandler("../logs/" . date('Y-m-d') . '.log');
-        \Log::Init($logHandler, 15);
-        \Log::DEBUG("begin notify");
-
-        //在PayNotifyCallBack中重写了NotifyProcess，会发起一个订单支付状态查询，其实也可以不去查询，因为从php://input中已经可以获取到订单状态。file_get_contents("php://input")
-        //$notify = new \WxPayNotify();
-        $notify = new \PayNotifyCallBack();
-        $notify->Handle(false);
-        $result = $notify->GetValues();
-        if ($result['return_code'] == 'SUCCESS') {
-            //订单支付完成，修改订单状态，发货。
+        $input->setNotifyUrl(wxPayConfig::NOTIFY_URL);
+        $input->setTradeType("NATIVE");
+        //$product_id 为商品自定义id 可用作订单ID
+        $input->setProductId($product_id);
+        $result = $notify->getPayUrl($input);
+        if (empty($result['code_url'])){
+            $qrCode_url = '';
+        }else{
+            $qrCode_url = $result["code_url"];
         }
-        \Log::DEBUG("end notify");
-        \Log::INFO(str_repeat("=", 20));
+        return $this->fetch('',[
+            'qrCode_url' => $qrCode_url,
+        ]);
     }
+
+    /**
+     * 微信支付 回调逻辑处理
+     * @return string
+     */
+    public function notify(){
+        $wxData = file_get_contents("php://input");
+        //file_put_contents('/tmp/2.txt',$wxData,FILE_APPEND);
+        try{
+            $resultObj = new WxPayResults();
+            $wxData = $resultObj->Init($wxData);
+        }catch (\Exception $e){
+            $resultObj ->setData('return_code','FAIL');
+            $resultObj ->setData('return_msg',$e->getMessage());
+            return $resultObj->toXml();
+        }
+
+        if ($wxData['return_code']==='FAIL'||
+            $wxData['return_code']!== 'SUCCESS'){
+            $resultObj ->setData('return_code','FAIL');
+            $resultObj ->setData('return_msg','error');
+            return $resultObj->toXml();
+        }
+        //TODO 根据订单号 out_trade_no 来查询订单数据
+        $out_trade_no = $wxData['out_trade_no'];
+        //此处为举例
+        $order = model('order')->get(['out_trade_no' => $out_trade_no]);
+
+        if (!$order || $order->pay_status == 1){
+            $resultObj ->setData('return_code','SUCCESS');
+            $resultObj ->setData('return_msg','OK');
+            return $resultObj->toXml();
+        }
+//        TODO 数据更新 业务逻辑处理 $order
+    }
+    // redis 的操作
+    public function myredis(){
+        $client =  new Predis\Client([
+            'scheme'    =>  'tcp',
+            'host'  =>  config('redis.REDIS_HOST'),
+            'port'  =>  config('redis.REDIS_PORT'),
+            'password'  =>  config('redis.REDIS_AUTH'),
+            'database'  =>  1,
+        ]);
+        $client->set('han','this is my name');
+        $client->rpush('mylist',['one']);
+        $client->rpush('mylist',['two']);
+        $client->rpush('mylist',['three']);
+        $client->rpush('mylist',['fore']);
+        // 查看mylist中所有的数据
+        $valueAll = $client->lrange('mylist','0','-1');
+        // 查找第二个push进去的数据
+        $value = $client->lindex('mylist','-2');
+        dump($valueAll);
+    }
+
 }

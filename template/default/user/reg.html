@@ -36,19 +36,7 @@
                     <button type="button" class="mdui-btn mdui-m-t-1 mdui-color-theme mdui-ripple mdui-float-right" id="getCode">获取验证码</button>
                 </div>
                 -->
-                <div class="mdui-m-t-2"></div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label mdui-float-left">课程选择：</label>
-                    <div class="layui-input-block">
-                        <select name="pid" lay-verify="required">
-                            <option value="" selected>请选择课程</option>
-                            {volist name="forum" id="fo"}
-                            <option value="{$fo.fid}">{$fo.name}</option>
-                            {/volist}
-                        </select>
-                    </div>
-                </div>
-
+                
                 <div class="mdui-textfield mdui-textfield-floating-label">
                     <label class="mdui-textfield-label">验证码</label>
                     <input name="captcha" class="mdui-textfield-input" type="text" required/>
@@ -74,7 +62,7 @@
         var $$ = mdui.JQ;
 
         form.on('submit(register)', function (data) {
-            console.log(data.field);
+
             $$.ajax({
                 method: 'post',
                 url: '{:url("reg")}',

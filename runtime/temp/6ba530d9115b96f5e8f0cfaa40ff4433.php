@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/forum\index.html";i:1555566042;s:43:"./template/default/common\forum_public.html";i:1555565920;s:37:"./template/default/common\header.html";i:1555565920;s:24:"template/fullscreen.html";i:1555565920;s:42:"./template/default/common\topbar_user.html";i:1555566042;s:37:"./template/default/common\topbar.html";i:1555566042;s:41:"./template/default/common\right_tool.html";i:1555565920;s:37:"./template/default/common\footer.html";i:1555565920;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/forum\index.html";i:1555377423;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common\topbar_user.html";i:1555491934;s:37:"./template/default/common\topbar.html";i:1555491919;s:41:"./template/default/common\right_tool.html";i:1553237427;s:37:"./template/default/common\footer.html";i:1545980648;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -43,7 +43,7 @@
         <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu'}">
             <i class="mdui-icon material-icons">menu</i>
         </a>
-        <a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
+	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
         <a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
         <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
          <?php echo outTopbar(); ?>
@@ -83,6 +83,7 @@
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
             </div>
             <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+		<a href="http://www.wh1993.net/" title="万和学院"><li class="mdui-list-item mdui-ripple">万和学院</li></a>
                 <?php echo mOutTopabr(); ?>
             </ul>
         </li>
@@ -116,14 +117,15 @@
             <button class="mdui-btn mdui-ripple" onclick="theme.reset()">初始化</button>
         </div>
     </div>
-</div> <?php else: ?> <!-- 站点导航部分 -->
+</div>
+ <?php else: ?> <!-- 站点导航部分 -->
 <header class="mdui-appbar mdui-appbar-fixed">
     <div class="mdui-toolbar mdui-color-theme">
         <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu',overlay:true,swipe:true}">
             <i class="mdui-icon material-icons">menu</i>
         </a>
-        <a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
-        <a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
+	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
+	<a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
         <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
          <?php echo outTopbar(); ?>
         <div class="mdui-toolbar-spacer"></div>
@@ -154,6 +156,7 @@
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
             </div>
             <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+		<a href="http://www.wh1993.net/" title="万和学院"><li class="mdui-list-item mdui-ripple">万和学院</li></a>
                 <?php echo mOutTopabr(); ?>
             </ul>
         </li>
@@ -218,7 +221,7 @@
         <div class="lab-item ">
             <div class="mdui-row mdui-m-l-3 mdui-m-r-3 mdui-m-t-2 mdui-m-b-2">
                 <div class="mdui-float-left"><h3><?php echo htmlentities($column['name']); ?></h3></div>
-                <div class="mdui-float-right cursor" onclick="collect(<?php echo htmlentities($column['fid']); ?>)">
+		<div class="mdui-float-right cursor" onclick="collect(<?php echo htmlentities($column['fid']); ?>)">
                     <?php if(isset($userData)): if(in_array($column['fid'],explode(',',$userData['collect']))): ?>
                         <i class="mdui-icon material-icons">&#xe838;</i>
                         <?php else: ?>
@@ -324,7 +327,8 @@
     </div>
 	 -->
 	 
-</div> 
+</div>
+ 
 
         </div>
     </div>

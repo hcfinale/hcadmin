@@ -20,12 +20,7 @@ return [
     // 应用调试模式
     'app_debug'              => true,
     // 应用Trace
-    'app_trace'              => true,
-    // 设置Trace显示方式
-    'trace'     =>  [
-        // 在当前Html页面显示Trace信息
-        'type'  =>  'html',
-    ],
+    'app_trace'              => false,
     // 是否支持多模块
     'app_multi_module'       => true,
     // 入口自动绑定模块

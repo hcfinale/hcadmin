@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/index/index.html";i:1555039784;s:43:"./template/default/common/forum_public.html";i:1545268338;s:37:"./template/default/common/header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common/topbar_user.html";i:1552445826;s:37:"./template/default/common/topbar.html";i:1552445915;s:41:"./template/default/common/right_tool.html";i:1553237427;s:37:"./template/default/common/footer.html";i:1545980648;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/index/index.html";i:1555640079;s:43:"./template/default/common/forum_public.html";i:1545268338;s:37:"./template/default/common/header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common/topbar_user.html";i:1555491934;s:37:"./template/default/common/topbar.html";i:1555491919;s:41:"./template/default/common/right_tool.html";i:1553237427;s:37:"./template/default/common/footer.html";i:1545980648;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -45,6 +45,7 @@
         </a>
 	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
         <a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
+        <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
          <?php echo outTopbar(); ?>
         <div class="mdui-toolbar-spacer"></div>
         <a href="<?php echo url('index/topic/create'); ?>" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up">
@@ -125,6 +126,7 @@
         </a>
 	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
 	<a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
+        <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
          <?php echo outTopbar(); ?>
         <div class="mdui-toolbar-spacer"></div>
         <a href="javascript:;" mdui-dialog="{target: '#color-panel'}" class="mdui-btn mdui-btn-icon color-input" style="display: <?php echo $theme['discolour']=='true' ? 'inline-block'  :  'none'; ?>">
@@ -219,7 +221,7 @@
         </li>
         <?php endforeach; endif; else: echo "" ;endif; ?>
         -->
-        <li class="mdui-subheader">所有帖子</li>
+        <li class="mdui-subheader">所有板块</li>
     </ul>
     <style>
         .menu{display: block; height: 9rem; position: relative; margin: 0; padding: 0;}
@@ -231,7 +233,7 @@
         .menu .on{background: #dedede;border-radius:45px; padding: 0.5rem 1rem;color:#ff0000;}
     </style>
 
-    <ul class="menu">
+    <ul class="menu mdui-hidden-xs mdui-hidden-sm">
         <li>图文分类：</li>
         <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): $i = 0; $__LIST__ = $result;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
         <li>
@@ -254,7 +256,7 @@
 
     <ul class="mdui-list part-list">
         <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): $i = 0; $__LIST__ = $result;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$res): $mod = ($i % 2 );++$i;if(is_array($res['childs']) || $res['childs'] instanceof \think\Collection || $res['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $res['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;if(is_array($vo['childs']) || $vo['childs'] instanceof \think\Collection || $vo['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?>
-        <div class="mdui-col-sm-4" style="height: 13rem">
+        <div class="mdui-col-lg-3 mdui-col-md-4 mdui-col-sm-12 mdui-col-xs-12 mdui-m-t-2 mdui-m-b-2" style="min-height: 8rem;">
             <div class="mdui-grid-tile">
                 <a href="<?php echo url('index/forum/index',array('fid'=>$v['fid'])); ?>">
                     <img src="<?php echo htmlentities($v['img']); ?>"/>

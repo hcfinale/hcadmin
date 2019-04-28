@@ -1,9 +1,7 @@
 <?php
 namespace app\admin\controller;
 
-use app\admin\model\Res;
 use think\Db;
-use think\db\Where;
 use think\facade\Request;
 use app\admin\controller\Base;
 use app\index\model\Option;
@@ -166,7 +164,7 @@ class Set extends Base
                 if(true !== $res){
                     return json(['code'=>-1,'message'=>$res]);
                 }
-                $data = input('post.');
+		$data = input('post.');
                 !empty($data['img']) ? $data['img'] : $data['img'] = '/public/static/images/tea_column_default.jpg';
                 $forumList->allowField(true)->save($data);
                 return json(['code'=>0,'message'=>'添加板块成功']);
@@ -189,7 +187,7 @@ class Set extends Base
             'group'     => $group,
         ]);
     }
-
+    // 栏目图片上传类
     public function upcolumnimg(){
         $file = request()->file('columnimg');
         if (empty($file)) {
@@ -207,7 +205,7 @@ class Set extends Base
 
     public function topic()
     {
-        $forumList = new \app\admin\model\Forum();
+	$forumList = new \app\admin\model\Forum();
         $column = $forumList->listTree();
         $topic = Db::name('topic')->order('tid desc')->paginate(10);
         $page = $topic->render();
@@ -226,7 +224,7 @@ class Set extends Base
                     'topicData' => $res,
                     'page'      => $page,
                     'forumData' => $forum,
-                    'column'    => $column,
+		    'column'    => $column,
                 ]);
             }elseif (input('post.type')=='submit'){
                 $topic = new Topic;
@@ -252,10 +250,9 @@ class Set extends Base
             'topicData' => $topic,
             'page'      => $page,
             'forumData' => $forum,
-            'column'    => $column,
+	    'column'    => $column,
         ]);
     }
-
 
     public function forumsetting()
     {
@@ -288,7 +285,6 @@ class Set extends Base
             'forum' => $fourm,
         ]);
     }
-
 
     // 资源原理&工具和源代码下载
     public function resourceAll(){
@@ -376,7 +372,6 @@ class Set extends Base
             exit;
         }
     }
-
 
     public function user()
     {
@@ -513,13 +508,12 @@ class Set extends Base
         }
         return view('admin@set/expand');
     }
-    // 栏目排序ajax
+    // 后台栏目排序(ajax)
     public function sort(){
         $fid = $this->request->param('fid');
         $sort = $this->request->param('sort');
         $result = db('forum')->where('fid',$fid)->find();
         if ($result){
-            // 用db数据库方法进行更新，如果传来的数据中有id主建，可以这样写，如果没有的话可以用where条件更新
             db('forum')->update(['sort'=>$sort,'fid'=>$fid]);
             return json(\outResult(200, '修改成功'));
         }

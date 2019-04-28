@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/forum/index.html";i:1555051948;s:43:"./template/default/common/forum_public.html";i:1545268338;s:37:"./template/default/common/header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common/topbar_user.html";i:1552445826;s:37:"./template/default/common/topbar.html";i:1552445915;s:41:"./template/default/common/right_tool.html";i:1553237427;s:37:"./template/default/common/footer.html";i:1545980648;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/forum/index.html";i:1555377423;s:43:"./template/default/common/forum_public.html";i:1545268338;s:37:"./template/default/common/header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common/topbar_user.html";i:1555491934;s:37:"./template/default/common/topbar.html";i:1555491919;s:41:"./template/default/common/right_tool.html";i:1553237427;s:37:"./template/default/common/footer.html";i:1545980648;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -45,6 +45,7 @@
         </a>
 	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
         <a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
+        <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
          <?php echo outTopbar(); ?>
         <div class="mdui-toolbar-spacer"></div>
         <a href="<?php echo url('index/topic/create'); ?>" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up">
@@ -125,6 +126,7 @@
         </a>
 	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
 	<a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
+        <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
          <?php echo outTopbar(); ?>
         <div class="mdui-toolbar-spacer"></div>
         <a href="javascript:;" mdui-dialog="{target: '#color-panel'}" class="mdui-btn mdui-btn-icon color-input" style="display: <?php echo $theme['discolour']=='true' ? 'inline-block'  :  'none'; ?>">
@@ -197,7 +199,8 @@
     .fl{float: left;}
     .fr{float: right;}
     .text-index{text-indent: 2em;}
-    .lab-item{position: relative;margin: 12px 0;border: 1px solid #eee;}
+    .cursor{cursor: pointer;}
+    .lab-item{position: relative;margin: 12px 0;border: 1px solid #eee; border-bottom: 1px solid #000000;}
     .lab-item .lab-item-header{display: inline-flex; background: #f7f7f7;border-bottom: 1px solid #eee;padding-right: 10px;height: 55px;}
     .lab-item .lab-item-header>div{display: inline-flex;margin: 0 12px;padding: 14px 0;font-size: 16px;vertical-align: middle;}
     .lab-item .lab-item-header .lab-item-status span{background: green;width: 2rem;height: 2rem;display: inline-block;text-align: center;color: #ffffff;line-height: 2rem;border-radius: 45px;}
@@ -218,7 +221,15 @@
         <div class="lab-item ">
             <div class="mdui-row mdui-m-l-3 mdui-m-r-3 mdui-m-t-2 mdui-m-b-2">
                 <div class="mdui-float-left"><h3><?php echo htmlentities($column['name']); ?></h3></div>
-                <div class="mdui-float-right" onclick="collect(<?php echo htmlentities($column['fid']); ?>)"><i class="mdui-icon material-icons">&#xe838;</i><i class="mdui-icon material-icons">&#xe83a;</i></div>
+		<div class="mdui-float-right cursor" onclick="collect(<?php echo htmlentities($column['fid']); ?>)">
+                    <?php if(isset($userData)): if(in_array($column['fid'],explode(',',$userData['collect']))): ?>
+                        <i class="mdui-icon material-icons">&#xe838;</i>
+                        <?php else: ?>
+                        <i class="mdui-icon material-icons">&#xe83a;</i>
+                        <?php endif; else: ?>
+                        <i class="mdui-icon material-icons">&#xe83a;</i>
+                    <?php endif; ?>
+                </div>
             </div>
             <div class="lab-item-content">
                 <div class="course-details"><?php echo htmlentities($column['introduce']); ?></div>
@@ -379,9 +390,36 @@
 <script src="/public/static/js/mltree-message.js"></script> 
 <script src="/public/static/js/mltree-flow.js"></script>
 <script>
+
     //调用flow加载
     var flow = new mfFlow('index','<?php echo htmlentities($fid); ?>');
     flow.flow();
+
+    function collect(fid) {
+        $.ajax({
+            method:'post',
+            url:"<?php echo url('index/forum/collect'); ?>",
+            data:{fid:fid},
+            dataType:'json',
+            success:function (res) {
+                mdui.snackbar({
+                    message: res.msg,
+                    position: 'top',
+                    onClosed: function() {
+                        location.reload();
+                    }
+                })
+            },error:function (e) {
+                mdui.snackbar({
+                    message: e.msg,
+                    position: 'top',
+                    onClosed: function() {
+                        location.reload();
+                    }
+                })
+            }
+        })
+    }
 </script>
  <?php echo $option['siteFooterJs']; ?>
 </body>

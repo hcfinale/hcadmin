@@ -1,4 +1,4 @@
-<?php /*a:5:{s:64:"/data/wwwroot/wh1993/tuwen/application/admin/view/set/topic.html";i:1553678821;s:49:"./application/admin/view/public/admin_public.html";i:1546402500;s:43:"./application/admin/view/public/header.html";i:1552446126;s:43:"./application/admin/view/public/topbar.html";i:1546402672;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
+<?php /*a:5:{s:64:"/data/wwwroot/wh1993/tuwen/application/admin/view/set/topic.html";i:1553678821;s:49:"./application/admin/view/public/admin_public.html";i:1546402500;s:43:"./application/admin/view/public/header.html";i:1552446126;s:43:"./application/admin/view/public/topbar.html";i:1555385384;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -99,6 +99,9 @@
                 </a>
                 <a href="<?php echo url('set/forumSetting'); ?>">
                     <li class="mdui-list-item mdui-ripple" id="forumSetting">论坛设置</li>
+                </a>
+                <a href="<?php echo url('set/resourceAll'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="resourceAll">资源管理</li>
                 </a>
             </ul>
         </li>

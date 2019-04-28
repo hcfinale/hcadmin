@@ -50,14 +50,13 @@ class Res extends Model
         $resid = $this->id;
         return [true,$resid];
     }
-
     /**
      * @param int $id
      * @return array
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
-     * 无限极分类
+     * 获取工具资源。
      */
     public function getResTool($id = 0){
         $list = $this->where(['fid'=>$id,'pid'=>'1','status'=>'1'])->order('sort desc')->select();
@@ -70,6 +69,7 @@ class Res extends Model
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
+     * 获取源代码资源。
      */
     public function getRes($id = 0){
         $list = $this->where(['fid'=>$id,'pid'=>'2','status'=>'1'])->order('sort desc')->select();

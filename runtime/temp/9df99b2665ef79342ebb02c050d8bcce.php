@@ -1,42 +1,35 @@
-<?php /*a:1:{s:35:"./template/default/wxpay\index.html";i:1556183710;}*/ ?>
-<!DOCTYPE html>
-<html>
+<?php /*a:1:{s:35:"./template/default/wxpay\index.html";i:1556418880;}*/ ?>
+<!doctype html>
+<html lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-    <title>微信安全支付</title>
-    <script type="text/javascript">
-        //调用微信JS api 支付
-        function jsApiCall()
-        {
-            WeixinJSBridge.invoke(
-                'getBrandWCPayRequest',
-            <?php echo $jsApiParameters; ?>,
-            function(res){
-                WeixinJSBridge.log(res.err_msg);
-                alert(res.err_code+res.err_desc+res.err_msg);
-                //alert("<?php echo htmlentities($jsApiParameters); ?>");
-            }
-        );
-        }
-        function callpay()
-        {
-            if (typeof WeixinJSBridge == "undefined"){
-                if( document.addEventListener ){
-                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                }else if (document.attachEvent){
-                    document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                }
-            }else{
-                jsApiCall();
-            }
-        }
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Javascript 二维码生成库：QRCode</title>
+    <script type="text/javascript" src="/public/static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/public/static/js/qrcode.min.js"></script>
 </head>
 <body>
-</br></br></br></br>
-<div align="center">
-    <button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >贡献一下</button>
-</div>
+<input id="text" type="hidden" value="<?php echo htmlentities($qrCode_url); ?>" style="width:80%" /><br />
+<div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
+
+<script type="text/javascript">
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        width : 100,
+        height : 100
+    });
+
+    function makeCode () {
+        var elText = document.getElementById("text");
+        if (!elText.value) {
+            alert("Input a text");
+            elText.focus();
+            return;
+        }
+        qrcode.makeCode(elText.value);
+    }
+    makeCode();
+</script>
 </body>
 </html>

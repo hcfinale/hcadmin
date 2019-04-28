@@ -25,7 +25,7 @@
         <div class="lab-item ">
             <div class="mdui-row mdui-m-l-3 mdui-m-r-3 mdui-m-t-2 mdui-m-b-2">
                 <div class="mdui-float-left"><h3>{$column.name}</h3></div>
-                <div class="mdui-float-right cursor" onclick="collect({$column['fid']})">
+		<div class="mdui-float-right cursor" onclick="collect({$column['fid']})">
                     {if condition="isset($userData)"}
                         {if condition="in_array($column.fid,explode(',',$userData.collect))"}
                         <i class="mdui-icon material-icons">&#xe838;</i>

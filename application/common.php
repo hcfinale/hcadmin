@@ -95,6 +95,7 @@ function outTopbar()
         return $html;
 }
 
+
 function outBadge($data){
     $value = '';
     if ($data['tops'] == 1) {

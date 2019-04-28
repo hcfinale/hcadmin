@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/index\index.html";i:1555640519;s:43:"./template/default/common\forum_public.html";i:1555565920;s:37:"./template/default/common\header.html";i:1555565920;s:24:"template/fullscreen.html";i:1555565920;s:42:"./template/default/common\topbar_user.html";i:1555566042;s:37:"./template/default/common\topbar.html";i:1555566042;s:41:"./template/default/common\right_tool.html";i:1555565920;s:37:"./template/default/common\footer.html";i:1555565920;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/index\index.html";i:1555640079;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common\topbar_user.html";i:1555491934;s:37:"./template/default/common\topbar.html";i:1555491919;s:41:"./template/default/common\right_tool.html";i:1553237427;s:37:"./template/default/common\footer.html";i:1545980648;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -43,7 +43,7 @@
         <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu'}">
             <i class="mdui-icon material-icons">menu</i>
         </a>
-        <a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
+	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
         <a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
         <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
          <?php echo outTopbar(); ?>
@@ -83,6 +83,7 @@
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
             </div>
             <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+		<a href="http://www.wh1993.net/" title="万和学院"><li class="mdui-list-item mdui-ripple">万和学院</li></a>
                 <?php echo mOutTopabr(); ?>
             </ul>
         </li>
@@ -116,14 +117,15 @@
             <button class="mdui-btn mdui-ripple" onclick="theme.reset()">初始化</button>
         </div>
     </div>
-</div> <?php else: ?> <!-- 站点导航部分 -->
+</div>
+ <?php else: ?> <!-- 站点导航部分 -->
 <header class="mdui-appbar mdui-appbar-fixed">
     <div class="mdui-toolbar mdui-color-theme">
         <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu',overlay:true,swipe:true}">
             <i class="mdui-icon material-icons">menu</i>
         </a>
-        <a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
-        <a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
+	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
+	<a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
         <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
          <?php echo outTopbar(); ?>
         <div class="mdui-toolbar-spacer"></div>
@@ -154,6 +156,7 @@
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
             </div>
             <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+		<a href="http://www.wh1993.net/" title="万和学院"><li class="mdui-list-item mdui-ripple">万和学院</li></a>
                 <?php echo mOutTopabr(); ?>
             </ul>
         </li>
@@ -227,10 +230,10 @@
         .menu>li.active>ul{display: block; position: absolute; left: 0px; top: 3rem; width: 100%; padding: 0px;}
         .menu>li>ul{display: none; position: absolute; left: 0px; top: 3rem; width: 100%; padding: 0px;}
         .menu li:first-child{font-size: 1.2rem;font-weight: bold;}
-        .menu .on{background: #dedede;border-radius:45px; padding: 0.5rem 1rem;color: #ff0000}
+        .menu .on{background: #dedede;border-radius:45px; padding: 0.5rem 1rem;color:#ff0000;}
     </style>
 
-    <ul class="menu mdui-hidden-xs">
+    <ul class="menu mdui-hidden-xs mdui-hidden-sm">
         <li>图文分类：</li>
         <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): $i = 0; $__LIST__ = $result;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
         <li>
@@ -238,7 +241,7 @@
             <ul>
                 <li>子集栏目：</li>
                 <?php if(empty($vo['childs'])): ?>
-                <li><a href="/" class="on">全部</a></li>
+		<li><a href="/" class="on">全部</a></li>
                 <?php else: if(is_array($vo['childs']) || $vo['childs'] instanceof \think\Collection || $vo['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;?>
                 <li>
                     <a title="<?php echo htmlentities($cate['fid']); ?>"><?php echo htmlentities($cate['name']); ?></a>
@@ -363,7 +366,8 @@
     </div>
 	 -->
 	 
-</div> 
+</div>
+ 
 
         </div>
     </div>
@@ -436,7 +440,8 @@ $(window).on('load',function () {
             $(".part-list").html(result);
         });
 
-        $('.menu li a').removeClass('on');
+
+	$('.menu li a').removeClass('on');
         $(this).addClass('on').parents('li').siblings('li').children('a').removeClass('on');
         $(this).parents('li').addClass('active').siblings().removeClass('active');
         $('.menu li.active ul li a').each(function () {

@@ -7,7 +7,6 @@ use app\index\model\Topic;
 use app\admin\model\Forum;
 use app\common\model\Message;
 use app\index\model\User;
-use think\Config;
 use think\Request;
 
 class Index extends Base
@@ -19,14 +18,14 @@ class Index extends Base
     }
 
     public function index(){
-        $res = $this->forum->groupCategory();
+	$res = $this->forum->groupCategory();
         $tops = $this->topic->getTops();
         return view('index',[
-            'result'    =>  $res,
+	    'result'	=>	$res,
             'tops'  =>  $tops,
         ]);
     }
-    // 首页一级栏目点击出现对应的所有子集栏目
+
     public function ajaxIndex(){
         $forumId=$this->request->param('forumId');
         $data = $this->forum->groupCategory($forumId);
@@ -49,7 +48,6 @@ class Index extends Base
         }
         return json($html);
     }
-
     public function ajaxList(){
         $forumId=$this->request->param('forumId');
         $data = $this->forum->getNormalCategoryByParentId($forumId);
@@ -70,16 +68,6 @@ class Index extends Base
         }
         return json($html);
     }
-    // 支付接口实现
-    public function wxpayindex(){
-        $WXpayApi = PAY_PATH.'lib/WxPay.Api.php';
-        require_once $WXpayApi;
-        $input = new \WxPayUnifiedOrder();
-        $input->SetBody('123');
-        $input->SetAppid(Config::get("pay.wx_appid"));//appid
-        $input->SetMch_id(Config::get("pay.wx_mch_id"));
-    }
-
 
     public function Search($keyword = '', $type='topic')
     {

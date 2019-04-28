@@ -24,13 +24,29 @@ function mfFlow(type, _Id) {
                         var list = [];
                         $.get(`/api/api/topiclist/page/${ page }/type/common/fid/${ _Id }`, function(res) {
                             layui.each(res.data, function(index, item) {
+/**
+                                var html = `<li data-tid="${item.tid}" class="mdui-list-item mdui-ripple mtf-Jump"><!--<div class="mdui-list-item-avatar">
+                                <img src="${item.userData.avatar}" alt="${item.userData.username}" title="${item.userData.username}">
+                                </div>--><div class="mdui-list-item-content">
+                                <a class="mdui-list-item-title" href="/topic/${item.tid}.html">${item.subject + item.Badge}</a>
+				<br /><br />
+                                <div class="mdui-list-item-text mdui-list-item-one-line">${item.content}</div>
+                                <!--<div class="mdui-list-item-text">
+                                <a href="/forum/${item.fid}" class="layui-badge layui-bg-blue" title="${item.forumName}">${item.forumName}</a> <a href="/user/${item.uid}.html">${item.userData.username}</a> 发表于
+                                <span title="${item.create_time}">   ${item.time_format}</span>
+                                <span class="mdui-float-right" >
+                                <i class="mdui-icon material-icons">remove_red_eye</i>${item.views}</span>
+                                <span class="mdui-float-right">
+                                <i class="mdui-icon material-icons">comment</i>${item.comment}</span>
+                                </div>--></div></li><li class="mdui-divider-inset mdui-m-y-0"></li><br /><br />`
+**/
                                 var html = `<div class="lab-item ">
                                                 <a href="/topic/${item.tid}.html">
                                                 <div class="lab-item-header">
                                                     <div class="lab-item-status">
                                                         <span>${index+1}</span>
                                                     </div>
-                                                    <div class="lab-item-index">实验${index+1}</div>
+                                                    <div class="lab-item-index">章节${index+1}</div>
                                                     <div class="lab-item-title" title="模版语法">${item.subject + item.Badge}</div>
                                                 </div>
                                                 <div class="lab-item-content">
@@ -39,7 +55,7 @@ function mfFlow(type, _Id) {
                                                 </a>
                                             </div>`;
                                 list.push(html);
-                            });
+                            })
                             next(list.join(''), page < res.pages);
                             $$('.mtf-Jump').on('click', function() {
                                 console.log(this);
@@ -87,15 +103,12 @@ function mfFlow(type, _Id) {
                         var list = [];
                         $.get(`/api/api/ebookList/page/${ page }/type/ebook/fid/${ _Id }`, function(res) {
                             layui.each(res.data, function(index, item) {
-                                var html = `<div class="mdui-col-xs-6 mdui-col-sm-4">
+                                var html = `<div class="mdui-col-xs-6 mdui-col-sm-3" style="height:450px;overflow:hidden;">
                                         <div class="mdui-card-media">
                                             <a href="/ebook/${item.eid}.html" target='_block'>
                                                 <img src="${item.images}" />
                                             </a>
                                             <h4 class="mdui-card-primary-title mdui-m-y-1" style="text-align: center;">${item.name + item.Badge}</h4>
-                                            <p class="mdui-card-content layui-text">
-                                                ${item.description}
-                                            </p>
                                             <div class="mdui-card-primary-subtitle mdui-list-item-text">
                                                 <a href="/forum/${item.fid}" class="layui-badge layui-bg-blue" title="${item.forumName}">${item.forumName}</a>
                                                 <span class="mdui-float-right" >

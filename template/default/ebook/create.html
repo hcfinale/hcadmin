@@ -55,7 +55,7 @@
         url: '{:url("index/ebook/create")}',
         ebookUrl: "{:url('index/ebook/upebook')}",
         ebookImgUrl: "{:url('index/ebook/upebookimg')}",
-    };
+    }
 
     layui.use(['upload', 'form','layer'], function() {
         var upload = layui.upload,
@@ -119,7 +119,7 @@
         $$('#create').on('click', function() {
             //获取表单内容
             var submitData = $$('form').serialize();
-            console.log(submitData);
+	    console.log(submitData);
             $$.ajax({
                     method: 'post',
                     url: option.url,

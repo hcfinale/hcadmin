@@ -24,11 +24,11 @@ class Api extends Base
                 } else {
                     return json(['code'=>'4033','message'=>'删除失败！','time'=>time()]);
                 }
-            }elseif (input('post.type') == 'resource') {
+            } elseif (input('post.type') == 'resource') {
                 $res = Db::transaction(function () {
-                    $res = Db::name('resource')->find(input('post.id'));
-                    @unlink(str_replace('/index.php','',$_SERVER['SCRIPT_FILENAME']).$res['resource_url']);
-                    @unlink(str_replace('/index.php','',$_SERVER['SCRIPT_FILENAME']).$res['img']);
+                    $data = Db::name('resource')->find(input('post.id'));
+                    @unlink(str_replace('/index.php','',$_SERVER['SCRIPT_FILENAME']).$data['resource_url']);
+                    @unlink(str_replace('/index.php','',$_SERVER['SCRIPT_FILENAME']).$data['img']);
                     Db::name('resource')->delete(input('post.id'));
                 });
                 if (empty($res)) {
