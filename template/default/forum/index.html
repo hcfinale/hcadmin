@@ -25,15 +25,18 @@
         <div class="lab-item ">
             <div class="mdui-row mdui-m-l-3 mdui-m-r-3 mdui-m-t-2 mdui-m-b-2">
                 <div class="mdui-float-left"><h3>{$column.name}</h3></div>
-		<div class="mdui-float-right cursor" onclick="collect({$column['fid']})">
+                <div class="mdui-float-right mdui-m-l-2 cursor" onclick="shopCart({$column['fid']})">
+                    <i class="mdui-icon material-icons">&#xe8cc;</i>
+                </div>
+		        <div class="mdui-float-right mdui-m-r-2 cursor" onclick="collect({$column['fid']})">
                     {if condition="isset($userData)"}
                         {if condition="in_array($column.fid,explode(',',$userData.collect))"}
-                        <i class="mdui-icon material-icons">&#xe838;</i>
+                        <i class="mdui-icon material-icons">&#xe87d;</i>
                         {else /}
-                        <i class="mdui-icon material-icons">&#xe83a;</i>
+                        <i class="mdui-icon material-icons">&#xe87e;</i>
                         {/if}
                     {else /}
-                        <i class="mdui-icon material-icons">&#xe83a;</i>
+                        <i class="mdui-icon material-icons">&#xe87e;</i>
                     {/if}
                 </div>
             </div>
@@ -69,10 +72,35 @@
 <script src="__JS__/mltree-flow.js"></script>
 <script>
 
-    //调用flow加载
+    // 调用flow加载
     var flow = new mfFlow('index','{$fid}');
     flow.flow();
-
+    // 加入购物车
+    function shopCart(fid) {
+        $.ajax({
+            method:'post',
+            url:"{:url('index/ShopCart/addCart')}",
+            data:{fid:fid},
+            dataType:'json',
+            success:function (res) {
+                mdui.snackbar({
+                    message: res.msg,
+                    position: 'top',
+                    onClosed: function() {
+                        location.reload();
+                    }
+                })
+            },error:function (e) {
+                mdui.snackbar({
+                    message: e.msg,
+                    position: 'top',
+                    onClosed: function() {
+                        location.reload();
+                    }
+                })
+            }
+        })
+    }
     function collect(fid) {
         $.ajax({
             method:'post',

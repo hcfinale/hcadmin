@@ -4,13 +4,16 @@
         <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu'}">
             <i class="mdui-icon material-icons">menu</i>
         </a>
-	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
-        <a href="{:url('index/index')}" class="mdui-typo-title">图文首页</a>
+	    <a href="http://www.wh1993.net/" class="mdui-typo-title mdui-hidden-xs">万和学院</a>
+        <a href="{:url('index/index')}" class="mdui-typo-title mdui-hidden-xs">图文首页</a>
         <a href="{:url('ebook/showres')}" class="mdui-hidden-xs">资源下载</a>
         {// 输出Forum导航} {:outTopbar()}
         <div class="mdui-toolbar-spacer"></div>
         <a href="{:url('index/topic/create')}" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up">
             <i class="mdui-icon material-icons">create</i>
+        </a>
+        <a href="{:url('index/ShopCart/index')}" class="mdui-btn mdui-btn-icon mdui-ripple">
+            <i class="mdui-icon material-icons">&#xe8cc;</i>
         </a>
         <a href="javascript:;" id="mf-msg" class="mdui-btn mdui-btn-icon">
             <i class="layui-icon layui-icon-notice mdui-icon"></i>{gt name="$msg.unread" value="0"}<span id="msg-hot" class="layui-badge-dot" style="margin:0 0 8px 24px"></span>{/gt}

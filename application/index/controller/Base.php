@@ -14,6 +14,8 @@ class Base extends Controller
         $data = Db::name('links')->order('sold')->select();
         if (User::isLogin(cookie('userKey'))) {
             $this->assign('userData', Db::name('user')->where('uid', session('uid'))->find());
+            // 购物车中的信息
+            $this->assign('myShopCart',Db::name('shop_cart')->where('uid',session('uid'))->select());
         }
 
         $msgObj = new Message;

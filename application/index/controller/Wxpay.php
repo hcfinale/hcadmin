@@ -2,20 +2,25 @@
 
 namespace app\index\controller;
 
-use think\Controller;
+use app\index\controller\Base;
+use app\index\model\User;
 use think\Db;
 use think\Session;
 use wxpay\database\WxPayResults;
 use wxpay\database\WxPayUnifiedOrder;
+use wxpay\database\WxPayOrderQuery;
 use wxpay\NativePay;
 use wxpay\WxPayApi;
 use wxpay\WxPayConfig;
 use Predis;
 
-class Wxpay extends Controller{
+class Wxpay extends Base{
 
     public function index(){
-        $product_id = time()+1;
+        if (!User::isLogin()) {
+            return redirect('index\user\login');
+        }
+        $product_id = (time()+1).createStr(22);
         $notify = new NativePay();
         $input = new WxPayUnifiedOrder();
         $input->setBody("微信支付的东西");
@@ -25,13 +30,18 @@ class Wxpay extends Controller{
         $input->setTotalFee("1");//以分为单位,一般是要乘100的。
         $input->setTimeStart(date("YmdHis"));
         $input->setTimeExpire(date("YmdHis", time() + 600));
-
         $input->setGoodsTag("test");
-
         $input->setNotifyUrl(wxPayConfig::NOTIFY_URL);
         $input->setTradeType("NATIVE");
         //$product_id 为商品自定义id 可用作订单ID
         $input->setProductId($product_id);
+
+        $data = [
+            'order_id'  =>  $input->getOutTradeNo(),
+            'uid'   =>  session('uid'),
+            'amount'    =>  $input->getTotalFee(),
+        ];
+        $res = db('order')->insert($data);
         $result = $notify->getPayUrl($input);
         if (empty($result['code_url'])){
             $qrCode_url = '';
@@ -40,7 +50,32 @@ class Wxpay extends Controller{
         }
         return $this->fetch('',[
             'qrCode_url' => $qrCode_url,
+            'product_id'    =>  $product_id,
         ]);
+    }
+
+    /**
+     * 查看订单的状态
+     */
+    public function orderstate(){
+        error_reporting(E_ERROR);
+        ini_set('date.timezone','Asia/Shanghai');
+
+        if(request()->param('transaction_id') != null && request()->param('transaction_id') != ""){
+            $transaction_id = request()->param('transaction_id');
+            $input = new WxPayOrderQuery();
+            $input->setTransactionId($transaction_id);
+            db('order')->where('order_id',$transaction_id)->update(['ispay'=>'1']);
+            return json(WxPayApi::orderQuery($input));
+        }
+
+        if(request()->param('out_trade_no') != null && request()->param('out_trade_no') != ""){
+            $out_trade_no = request()->param('out_trade_no');
+            $input = new WxPayOrderQuery();
+            $input->setOutTradeNo($out_trade_no);
+            db('order')->where('order_id',$out_trade_no)->update(['ispay'=>'1']);
+            return json(WxPayApi::orderQuery($input));
+        }
     }
 
     /**
@@ -68,14 +103,17 @@ class Wxpay extends Controller{
         //TODO 根据订单号 out_trade_no 来查询订单数据
         $out_trade_no = $wxData['out_trade_no'];
         //此处为举例
-        $order = model('order')->get(['out_trade_no' => $out_trade_no]);
+        $input = new WxPayUnifiedOrder();
+        db('order')->where('order_id',$input->getOutTradeNo())->update(['ispay'=>'1']);
+        db('order')->where('order_id',$out_trade_no)->update(['ispay'=>'2']);
+        $order = db('order')->where(['order_id' => $out_trade_no])->find();
 
-        if (!$order || $order->pay_status == 1){
+        if (!$order || $order->status == 1){
             $resultObj ->setData('return_code','SUCCESS');
             $resultObj ->setData('return_msg','OK');
             return $resultObj->toXml();
         }
-//        TODO 数据更新 业务逻辑处理 $order
+        //TODO 数据更新 业务逻辑处理 $order
     }
     // redis 的操作
     public function myredis(){

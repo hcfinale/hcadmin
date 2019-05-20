@@ -1,0 +1,77 @@
+{extend name="common/forum_public"} {block name="content"}
+<!-- 论坛最新内容列表页 -->
+<div class="mdui-col-xs-12 mdui-col-sm-9 mdui-shadow-1">
+    <!-- 最新内容 -->
+    <p class="mdui-m-t-3"></p>
+    <div class="mdui-typo">
+        <h8 class="doc-article-title">当前位置：{$column} <a class="doc-anchor" id="divider"></a></h8>
+    </div>
+    <p class="mdui-m-t-3"></p>
+    <table class="mdui-table">
+        <thead>
+        <tr>
+            <td></td>
+            <td><label class="am-inline-block"><input id="all" type="checkbox"><a class="am-link">全选</a></label></td>
+            <td><label class="am-inline-block"><button class="am-btn am-btn-danger hc-delect">批量删除</button></label></td>
+        </tr>
+        <tr><th width="15"></th><th>id</th><th>用户id</th><th>栏目名称</th><th>价格</th><th>操作</th></tr>
+        </thead>
+        <tbody id="hc-list">
+        {volist name="shopCartAll" id="vo"}
+            <tr>
+                <td><input type="checkbox" name="test[]" value="{$vo.sid}"></td>
+                <td>{$vo.sid}</td>
+                <td>{$vo.uid}</a></td>
+                <td>{$vo.name}</td>
+                <td>{$vo.money}</td>
+                <td>
+                    <a href="{:url('ShopCart/delCart/id/'.$vo['sid'])}" onclick="return confirm('确认要删除？');">删除</a>
+                </td>
+            </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+{include file="common/right_tool"} {/block}{block name="js"}
+<script>
+    //type 中的类型并没有什么限制  tp默认的ajax传输类型是json类型，可以在controller中指定要传输的类型。
+    $(document).ready(function () {
+        // 全选
+        $("#all").click(function(){
+            if(this.checked){
+                $("#hc-list :checkbox").prop("checked", true);
+            }else{
+                $("#hc-list :checkbox").prop("checked", false);
+            }
+        });
+        //删除
+        $(".hc-delect").click(function(){
+            var valArr = new Array;
+            $("#hc-list :checkbox[checked]").each(function(i){
+                valArr[i] = $(this).val();
+            });
+            var vals = valArr.join(',');
+            console.log(vals);
+            if(vals!="") {
+                if(confirm("确定要是这些吗？")){
+                    $.ajax({
+                        type:"POST",
+                        url:"{:url('ShopCart/delCart')}",
+                        data:{'id':vals},
+                        success:function(data){
+                            if(data){
+                                alert('修改成功');
+                                window.location.reload();
+                            }else {
+                                alert('修改失败');
+                            }
+                        }
+                    });
+                }
+            }else {
+                alert ("请给用户权限");
+            }
+        });
+    });
+</script>
+{/block}

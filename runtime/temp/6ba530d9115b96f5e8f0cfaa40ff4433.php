@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/forum\index.html";i:1555377423;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common\topbar_user.html";i:1555491934;s:37:"./template/default/common\topbar.html";i:1555491919;s:41:"./template/default/common\right_tool.html";i:1553237427;s:37:"./template/default/common\footer.html";i:1545980648;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/forum\index.html";i:1557450953;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common\topbar_user.html";i:1557451500;s:37:"./template/default/common\topbar.html";i:1557450469;s:41:"./template/default/common\right_tool.html";i:1553237427;s:37:"./template/default/common\footer.html";i:1545980648;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -43,13 +43,16 @@
         <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu'}">
             <i class="mdui-icon material-icons">menu</i>
         </a>
-	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
-        <a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
+	    <a href="http://www.wh1993.net/" class="mdui-typo-title mdui-hidden-xs">万和学院</a>
+        <a href="<?php echo url('index/index'); ?>" class="mdui-typo-title mdui-hidden-xs">图文首页</a>
         <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
          <?php echo outTopbar(); ?>
         <div class="mdui-toolbar-spacer"></div>
         <a href="<?php echo url('index/topic/create'); ?>" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up">
             <i class="mdui-icon material-icons">create</i>
+        </a>
+        <a href="<?php echo url('index/ShopCart/index'); ?>" class="mdui-btn mdui-btn-icon mdui-ripple">
+            <i class="mdui-icon material-icons">&#xe8cc;</i>
         </a>
         <a href="javascript:;" id="mf-msg" class="mdui-btn mdui-btn-icon">
             <i class="layui-icon layui-icon-notice mdui-icon"></i><?php if($msg['unread'] > '0'): ?><span id="msg-hot" class="layui-badge-dot" style="margin:0 0 8px 24px"></span><?php endif; ?>
@@ -124,8 +127,8 @@
         <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu',overlay:true,swipe:true}">
             <i class="mdui-icon material-icons">menu</i>
         </a>
-	<a href="http://www.wh1993.net/" class="mdui-typo-title">万和学院</a>
-	<a href="<?php echo url('index/index'); ?>" class="mdui-typo-title">图文首页</a>
+        <a href="http://www.wh1993.net/" class="mdui-typo-title mdui-hidden-xs">万和学院</a>
+        <a href="<?php echo url('index/index'); ?>" class="mdui-typo-title mdui-hidden-xs">图文首页</a>
         <a href="<?php echo url('ebook/showres'); ?>" class="mdui-hidden-xs">资源下载</a>
          <?php echo outTopbar(); ?>
         <div class="mdui-toolbar-spacer"></div>
@@ -221,13 +224,16 @@
         <div class="lab-item ">
             <div class="mdui-row mdui-m-l-3 mdui-m-r-3 mdui-m-t-2 mdui-m-b-2">
                 <div class="mdui-float-left"><h3><?php echo htmlentities($column['name']); ?></h3></div>
-		<div class="mdui-float-right cursor" onclick="collect(<?php echo htmlentities($column['fid']); ?>)">
+                <div class="mdui-float-right mdui-m-l-2 cursor" onclick="shopCart(<?php echo htmlentities($column['fid']); ?>)">
+                    <i class="mdui-icon material-icons">&#xe8cc;</i>
+                </div>
+		        <div class="mdui-float-right mdui-m-r-2 cursor" onclick="collect(<?php echo htmlentities($column['fid']); ?>)">
                     <?php if(isset($userData)): if(in_array($column['fid'],explode(',',$userData['collect']))): ?>
-                        <i class="mdui-icon material-icons">&#xe838;</i>
+                        <i class="mdui-icon material-icons">&#xe87d;</i>
                         <?php else: ?>
-                        <i class="mdui-icon material-icons">&#xe83a;</i>
+                        <i class="mdui-icon material-icons">&#xe87e;</i>
                         <?php endif; else: ?>
-                        <i class="mdui-icon material-icons">&#xe83a;</i>
+                        <i class="mdui-icon material-icons">&#xe87e;</i>
                     <?php endif; ?>
                 </div>
             </div>
@@ -391,10 +397,35 @@
 <script src="/public/static/js/mltree-flow.js"></script>
 <script>
 
-    //调用flow加载
+    // 调用flow加载
     var flow = new mfFlow('index','<?php echo htmlentities($fid); ?>');
     flow.flow();
-
+    // 加入购物车
+    function shopCart(fid) {
+        $.ajax({
+            method:'post',
+            url:"<?php echo url('index/ShopCart/addCart'); ?>",
+            data:{fid:fid},
+            dataType:'json',
+            success:function (res) {
+                mdui.snackbar({
+                    message: res.msg,
+                    position: 'top',
+                    onClosed: function() {
+                        location.reload();
+                    }
+                })
+            },error:function (e) {
+                mdui.snackbar({
+                    message: e.msg,
+                    position: 'top',
+                    onClosed: function() {
+                        location.reload();
+                    }
+                })
+            }
+        })
+    }
     function collect(fid) {
         $.ajax({
             method:'post',

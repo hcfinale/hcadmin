@@ -10,9 +10,15 @@
     <script type="text/javascript" src="__STATIC__/js/qrcode.min.js"></script>
 </head>
 <body>
-<input id="text" type="hidden" value="{$qrCode_url}" style="width:80%" /><br />
-<div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
-
+<div class="onqr">
+    <input type="hidden" id="out_trade_no" value="{$product_id}" >
+    <input id="text" type="hidden" value="{$qrCode_url}" style="width:80%" /><br />
+    <div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
+    {:token()}
+</div>
+<div class="liveqr">
+    <img id="img" src="" />
+</div>
 <script type="text/javascript">
     var qrcode = new QRCode(document.getElementById("qrcode"), {
         width : 100,
@@ -29,6 +35,27 @@
         qrcode.makeCode(elText.value);
     }
     makeCode();
+    // 产看订单状态
+    var time = setInterval("check()",3000);    //3秒查询一次是否支付成功
+    function check() {
+        var url = "{:url('/index/Wxpay/orderstate')}";
+        var out_trade_no = $("#out_trade_no").val();
+        var param = {'out_trade_no':out_trade_no};
+        console.log(param);
+        $.post(url,param,function(data){
+            data = JSON.parse(data);
+            if (data['trade_state'] == 'SUCCESS') {
+                time = window.clearInterval(time);
+                $('.onqr').hidden();
+                // 支付成功把二维码替换成支付成功图标
+                $("#img").attr('src','/public/wxpay/images/success.png');
+                console.log(data);
+                // window.location.href="{:url('/index/wxpay/notify')}";
+            }else{
+                console.log(data);
+            }
+        });
+    }
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<?php /*a:8:{s:35:"./template/default/index\index.html";i:1555640079;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common\topbar_user.html";i:1557451500;s:37:"./template/default/common\topbar.html";i:1557450469;s:41:"./template/default/common\right_tool.html";i:1553237427;s:37:"./template/default/common\footer.html";i:1545980648;}*/ ?>
+<?php /*a:8:{s:39:"./template/default/shop_cart\index.html";i:1557466672;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common\topbar_user.html";i:1557451500;s:37:"./template/default/common\topbar.html";i:1557450469;s:41:"./template/default/common\right_tool.html";i:1553237427;s:37:"./template/default/common\footer.html";i:1545980648;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -198,108 +198,38 @@
     <div class="mdui-container">
         <div class="mdui-row">
             
-<!-- 置顶的内容 -->
+<!-- 论坛最新内容列表页 -->
 <div class="mdui-col-xs-12 mdui-col-sm-9 mdui-shadow-1">
-    <ul class="mdui-list">
-        <!--
-        <li class="mdui-subheader">置顶</li>
-        <?php if(is_array($tops) || $tops instanceof \think\Collection || $tops instanceof \think\Paginator): $i = 0; $__LIST__ = $tops;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-        <li class="mdui-divider-inset mdui-m-y-0"></li>
-        <li data-tid="<?php echo htmlentities($vo['tid']); ?>" class="mdui-list-item mdui-ripple mtf-Jump">
-            <div class="mdui-list-item-avatar">
-                <img src="<?php echo htmlentities($vo['userData']['avatar']); ?>" alt="<?php echo htmlentities($vo['userData']['username']); ?>" title="<?php echo htmlentities($vo['userData']['username']); ?>">
-            </div>
-            <div class="mdui-list-item-content">
-                <a class="mdui-list-item-title" href="<?php echo url('index/topic/index',['tid'=>$vo['tid']]); ?>"><?php echo htmlentities($vo['subject']); ?> <?php echo outBadge($vo); ?></a>
-                <div class="mdui-list-item-text mdui-list-item-one-line"><?php echo $vo['content']; ?></div>
-                <div class="mdui-list-item-text">
-                    <a href="<?php echo url('index/forum/index',['fid'=>$vo['fid']]); ?>" class="layui-badge layui-bg-blue" title="<?php echo htmlentities($vo['forumName']); ?>"><?php echo htmlentities($vo['forumName']); ?></a> <a href="<?php echo url('index/user/inde',['uid'=>$vo['uid']]); ?>"><?php echo htmlentities($vo['userData']['username']); ?></a>
-                    <span title="<?php echo htmlentities($vo['create_time']); ?>"> <?php echo htmlentities($vo['time_format']); ?></span>
-                    <span class="mdui-float-right">
-                                <i class="mdui-icon material-icons">remove_red_eye</i><?php echo htmlentities($vo['views']); ?></span>
-                    <span class="mdui-float-right">
-                                <i class="mdui-icon material-icons">comment</i><?php echo htmlentities($vo['comment']); ?></span>
-                </div>
-            </div>
-        </li>
+    <!-- 最新内容 -->
+    <p class="mdui-m-t-3"></p>
+    <div class="mdui-typo">
+        <h8 class="doc-article-title">当前位置：<?php echo htmlentities($column); ?> <a class="doc-anchor" id="divider"></a></h8>
+    </div>
+    <p class="mdui-m-t-3"></p>
+    <table class="mdui-table">
+        <thead>
+        <tr>
+            <td></td>
+            <td><label class="am-inline-block"><input id="all" type="checkbox"><a class="am-link">全选</a></label></td>
+            <td><label class="am-inline-block"><button class="am-btn am-btn-danger hc-delect">批量删除</button></label></td>
+        </tr>
+        <tr><th width="15"></th><th>id</th><th>用户id</th><th>栏目名称</th><th>价格</th><th>操作</th></tr>
+        </thead>
+        <tbody id="hc-list">
+        <?php if(is_array($shopCartAll) || $shopCartAll instanceof \think\Collection || $shopCartAll instanceof \think\Paginator): $i = 0; $__LIST__ = $shopCartAll;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+            <tr>
+                <td><input type="checkbox" name="test[]" value="<?php echo htmlentities($vo['sid']); ?>"></td>
+                <td><?php echo htmlentities($vo['sid']); ?></td>
+                <td><?php echo htmlentities($vo['uid']); ?></a></td>
+                <td><?php echo htmlentities($vo['name']); ?></td>
+                <td><?php echo htmlentities($vo['money']); ?></td>
+                <td>
+                    <a href="<?php echo url('ShopCart/delCart/id/'.$vo['sid']); ?>" onclick="return confirm('确认要删除？');">删除</a>
+                </td>
+            </tr>
         <?php endforeach; endif; else: echo "" ;endif; ?>
-        -->
-        <li class="mdui-subheader">所有板块</li>
-    </ul>
-    <style>
-        .menu{display: block; height: 9rem; position: relative; margin: 0; padding: 0;}
-        .menu li{display: block; float: left;height: 3rem;line-height: 3rem;font-size: 1rem;}
-        .menu li a{text-decoration: none;color: #000000;padding: 0 1rem;cursor: pointer;}
-        .menu>li.active>ul{display: block; position: absolute; left: 0px; top: 3rem; width: 100%; padding: 0px;}
-        .menu>li>ul{display: none; position: absolute; left: 0px; top: 3rem; width: 100%; padding: 0px;}
-        .menu li:first-child{font-size: 1.2rem;font-weight: bold;}
-        .menu .on{background: #dedede;border-radius:45px; padding: 0.5rem 1rem;color:#ff0000;}
-    </style>
-
-    <ul class="menu mdui-hidden-xs mdui-hidden-sm">
-        <li>图文分类：</li>
-        <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): $i = 0; $__LIST__ = $result;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-        <li>
-            <a title="<?php echo htmlentities($vo['fid']); ?>"><?php echo htmlentities($vo['name']); ?></a>
-            <ul>
-                <li>子集栏目：</li>
-                <?php if(empty($vo['childs'])): ?>
-		<li><a href="/" class="on">全部</a></li>
-                <?php else: if(is_array($vo['childs']) || $vo['childs'] instanceof \think\Collection || $vo['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$cate): $mod = ($i % 2 );++$i;?>
-                <li>
-                    <a title="<?php echo htmlentities($cate['fid']); ?>"><?php echo htmlentities($cate['name']); ?></a>
-                </li>
-                <?php endforeach; endif; else: echo "" ;endif; ?>
-                <?php endif; ?>
-            </ul>
-        </li>
-        <?php endforeach; endif; else: echo "" ;endif; ?>
-    </ul>
-    <div style="clear: both;overflow: hidden;"></div>
-
-    <ul class="mdui-list part-list">
-        <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): $i = 0; $__LIST__ = $result;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$res): $mod = ($i % 2 );++$i;if(is_array($res['childs']) || $res['childs'] instanceof \think\Collection || $res['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $res['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;if(is_array($vo['childs']) || $vo['childs'] instanceof \think\Collection || $vo['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?>
-        <div class="mdui-col-lg-3 mdui-col-md-4 mdui-col-sm-12 mdui-col-xs-12 mdui-m-t-2 mdui-m-b-2" style="min-height: 8rem;">
-            <div class="mdui-grid-tile">
-                <a href="<?php echo url('index/forum/index',array('fid'=>$v['fid'])); ?>">
-                    <img src="<?php echo htmlentities($v['img']); ?>"/>
-                    <div class="mdui-grid-tile-actions">
-                        <div class="mdui-grid-tile-text">
-                            <div class="mdui-grid-tile-title mdui-text-center"><?php echo htmlentities($v['name']); ?></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <?php endforeach; endif; else: echo "" ;endif; ?>
-        <?php endforeach; endif; else: echo "" ;endif; ?>
-        <?php endforeach; endif; else: echo "" ;endif; ?>
-    </ul>
-    <!--
-   <div class="mdui-tab mdui-tab-centered" mdui-tab>
-       <a href="#topic-all" class="mdui-ripple">综合</a>
-       <a href="#topic-essence" class="mdui-ripple">精华</a>
-       <a href="#topic-book" class="mdui-ripple">电子书</a>
-   </div>
-   <div class="mdui-divider mdui-m-y-0"></div>
-   <div id="topic-all">
-       <ul class="mdui-list" id="topic-cps">
-
-       </ul>
-   </div>
-
-   <div id="topic-essence">
-       <ul class="mdui-list" id="topic-ess">
-
-       </ul>
-   </div>
-
-   <div id="topic-book">
-       <div class="mdui-row" id="topic-ebook">
-
-       </div>
-   </div>
--->
+        </tbody>
+    </table>
 </div>
 <!-- 论坛右侧各类信息展示 -->
 <div class="mdui-hidden-xs mdui-col-sm-3 mdui-typo mdui-float-right">
@@ -431,35 +361,45 @@
 </script>
 <script src="/public/static/js/mltree-message.js"></script> 
 <script>
-$(window).on('load',function () {
-    $('.menu>li:nth-child(2)').addClass('active');
-    $('.menu>li:nth-child(2)>a').addClass('on');
-    $('.menu>li>a').click(function () {
-        // 这是一级栏目点击出现对应子集栏目
-        $(".part-list").html();
-        var pName = $(this).text();
-        var pId = $(this).attr('title');
-        $.post("<?php echo url('index/ajaxIndex'); ?>",{forumName:pName,forumId:pId},function(result){
-            $(".part-list").html(result);
+    //type 中的类型并没有什么限制  tp默认的ajax传输类型是json类型，可以在controller中指定要传输的类型。
+    $(document).ready(function () {
+        // 全选
+        $("#all").click(function(){
+            if(this.checked){
+                $("#hc-list :checkbox").prop("checked", true);
+            }else{
+                $("#hc-list :checkbox").prop("checked", false);
+            }
         });
-
-
-	$('.menu li a').removeClass('on');
-        $(this).addClass('on').parents('li').siblings('li').children('a').removeClass('on');
-        $(this).parents('li').addClass('active').siblings().removeClass('active');
-        $('.menu li.active ul li a').each(function () {
-            $(this).click(function () {
-                $(this).addClass('on').parents('li').siblings().children('a').removeClass('on');
-                $(".part-list").html();
-                var forumName = $(this).text();
-                var forumId = $(this).attr('title');
-                $.post("<?php echo url('index/ajaxList'); ?>",{forumName:forumName,forumId:forumId},function(result){
-                    $(".part-list").html(result);
-                });
-            })
+        //删除
+        $(".hc-delect").click(function(){
+            var valArr = new Array;
+            $("#hc-list :checkbox[checked]").each(function(i){
+                valArr[i] = $(this).val();
+            });
+            var vals = valArr.join(',');
+            console.log(vals);
+            if(vals!="") {
+                if(confirm("确定要是这些吗？")){
+                    $.ajax({
+                        type:"POST",
+                        url:"<?php echo url('ShopCart/delCart'); ?>",
+                        data:{'id':vals},
+                        success:function(data){
+                            if(data){
+                                alert('修改成功');
+                                window.location.reload();
+                            }else {
+                                alert('修改失败');
+                            }
+                        }
+                    });
+                }
+            }else {
+                alert ("请给用户权限");
+            }
         });
     });
-});
 </script>
  <?php echo $option['siteFooterJs']; ?>
 </body>

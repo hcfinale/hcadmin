@@ -2,7 +2,6 @@
 namespace app\index\controller;
 
 use app\index\model\User;
-use app\index\controller\Base;
 use think\Db;
 use think\Request;
 
@@ -78,5 +77,4 @@ class Forum extends Base
         }
         return json(['code'=>'200','msg'=>'非法操作']);
     }
-
 }
