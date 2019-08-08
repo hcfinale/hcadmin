@@ -7,52 +7,37 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Javascript 二维码生成库：QRCode</title>
     <script type="text/javascript" src="__STATIC__/js/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="__STATIC__/js/qrcode.min.js"></script>
+    <!-- <script type="text/javascript" src="__STATIC__/js/qrcode.min.js"></script> -->
+    <style type="text/css">
+        .center{text-align: center;}
+    </style>
 </head>
 <body>
-<div class="onqr">
-    <input type="hidden" id="out_trade_no" value="{$product_id}" >
-    <input id="text" type="hidden" value="{$qrCode_url}" style="width:80%" /><br />
-    <div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
-    {:token()}
-</div>
-<div class="liveqr">
-    <img id="img" src="" />
+<h2 class="center">微信支付</h2>
+<div class="center">
+    <img id="img" src="/{$qrCode_url}" alt="" width="50%" />
+    <br />
+    <div class="onqr">
+        <input type="hidden" id="out_trade_no" value="{$product_id}" >
+    </div>
 </div>
 <script type="text/javascript">
-    var qrcode = new QRCode(document.getElementById("qrcode"), {
-        width : 100,
-        height : 100
-    });
-
-    function makeCode () {
-        var elText = document.getElementById("text");
-        if (!elText.value) {
-            alert("Input a text");
-            elText.focus();
-            return;
-        }
-        qrcode.makeCode(elText.value);
-    }
-    makeCode();
     // 产看订单状态
     var time = setInterval("check()",3000);    //3秒查询一次是否支付成功
     function check() {
         var url = "{:url('/index/Wxpay/orderstate')}";
         var out_trade_no = $("#out_trade_no").val();
         var param = {'out_trade_no':out_trade_no};
-        console.log(param);
         $.post(url,param,function(data){
-            data = JSON.parse(data);
-            if (data['trade_state'] == 'SUCCESS') {
+            var obj = eval(data);
+            if (obj.trade_state == 'SUCCESS') {
                 time = window.clearInterval(time);
-                $('.onqr').hidden();
+                $(".onqr").hide();
                 // 支付成功把二维码替换成支付成功图标
                 $("#img").attr('src','/public/wxpay/images/success.png');
-                console.log(data);
-                // window.location.href="{:url('/index/wxpay/notify')}";
             }else{
-                console.log(data);
+                // console.log(obj);
+                console.log('你还没付款，请支付！');
             }
         });
     }

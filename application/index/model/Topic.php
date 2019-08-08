@@ -150,7 +150,7 @@ class Topic extends Model
         $topic = new Topic;
         $data['uid'] = $uid;
         $data['userip'] = '';
-	$data['content'] = htmlentities($data['content']);
+	    $data['content'] = htmlentities($data['content']);
         $topic->allowField(true)->save($data);
         $tid = $topic->tid;
         $user = User::get($uid);

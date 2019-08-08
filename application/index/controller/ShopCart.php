@@ -31,17 +31,22 @@ class ShopCart extends Base
         if (request()->isPost()){
             $fid = input('post.fid/d'); // 强制转换为整形
             $res = $this->shopcart->addShopCart($fid);
-            if ($res){
-                return json(['code'=>'200','msg'=>'加入购物车成功']);
+            if ($res[0]){
+                return json(['code'=>'200','msg'=>$res['msg']]);
             }else{
-                return json(['code'=>'200','msg'=>'已经在购物车中啦！']);
+                return json(['code'=>'200','msg'=>$res['msg']]);
             }
 
         }
         return json(['code'=>'200','msg'=>'非法操作']);
     }
     // 一处购物车
-    public function delCart($id){
-
+    public function delCart($sid){
+        $res = $this->shopcart->delectCart($sid);
+        if ($res[0]){
+            return $this->redirect('index');
+        }else{
+            return $this->error($res['msg'],'index');;
+        }
     }
 }

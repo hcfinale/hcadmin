@@ -85,7 +85,7 @@
                         message: res.message,
                         position: 'top',
                         onClosed: function() {
-                            $$('#editor').text("");
+                            $$('#editor').text('<p><br></p>');
                             window.location.href = res.url;
                         }
                     })

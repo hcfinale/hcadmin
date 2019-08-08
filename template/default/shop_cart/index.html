@@ -4,74 +4,167 @@
     <!-- 最新内容 -->
     <p class="mdui-m-t-3"></p>
     <div class="mdui-typo">
-        <h8 class="doc-article-title">当前位置：{$column} <a class="doc-anchor" id="divider"></a></h8>
+        <h5 class="doc-article-title">当前位置：{$column} <a class="doc-anchor" id="divider"></a></h5>
     </div>
     <p class="mdui-m-t-3"></p>
-    <table class="mdui-table">
-        <thead>
-        <tr>
-            <td></td>
-            <td><label class="am-inline-block"><input id="all" type="checkbox"><a class="am-link">全选</a></label></td>
-            <td><label class="am-inline-block"><button class="am-btn am-btn-danger hc-delect">批量删除</button></label></td>
-        </tr>
-        <tr><th width="15"></th><th>id</th><th>用户id</th><th>栏目名称</th><th>价格</th><th>操作</th></tr>
-        </thead>
-        <tbody id="hc-list">
-        {volist name="shopCartAll" id="vo"}
+    <div class="mdui-table-fluid">
+        <table class="mdui-table">
+            <thead>
+            <tr class=""><th width="15">#</th><th>id</th><th>用户id</th><th>栏目名称</th><th>价格</th><th>操作</th></tr>
+            </thead>
+            <tbody id="hc-list">
+            {volist name="shopCartAll" id="vo"}
             <tr>
-                <td><input type="checkbox" name="test[]" value="{$vo.sid}"></td>
+                <td>
+                    <label class="mdui-checkbox">
+                        <input class="check" type="checkbox" name="test[]" value="{$vo.sid}" />
+                        <i class="mdui-checkbox-icon"></i>
+                    </label>
+                </td>
                 <td>{$vo.sid}</td>
                 <td>{$vo.uid}</a></td>
                 <td>{$vo.name}</td>
-                <td>{$vo.money}</td>
+                <td class="price">{$vo.money}</td>
                 <td>
-                    <a href="{:url('ShopCart/delCart/id/'.$vo['sid'])}" onclick="return confirm('确认要删除？');">删除</a>
+                    <a href="{:url('ShopCart/delCart',['sid'=>$vo['sid']])}" onclick="return confirm('确认要删除？');">删除</a>
                 </td>
             </tr>
-        {/volist}
-        </tbody>
-    </table>
+            {/volist}
+            </tbody>
+        </table>
+        <div class="mdui-row-xs-12">
+            <div class="mdui-col-xs-2" style="margin-left: 3rem;">
+                <label class="mdui-checkbox">
+                    <input class="all check" type="checkbox"/>
+                    <i class="mdui-checkbox-icon"></i>
+                    全选
+                </label>
+            </div>
+            <div class="mdui-col-xs-2">
+                <button class="mdui-btn mdui-color-theme-accent mdui-ripple hc-delect">批量删除</button>
+            </div>
+            <div class="mdui-col-xs-4 mdui-float-right">
+                <h3>
+                    <span>总价格：</span><span class="total-price">0</span><span>元</span>
+                    <button class="mdui-btn mdui-color-indigo mdui-float-right hc-pay">购买</button>
+                </h3>
+            </div>
+        </div>
+    </div>
 </div>
 {include file="common/right_tool"} {/block}{block name="js"}
 <script>
-    //type 中的类型并没有什么限制  tp默认的ajax传输类型是json类型，可以在controller中指定要传输的类型。
-    $(document).ready(function () {
-        // 全选
-        $("#all").click(function(){
-            if(this.checked){
-                $("#hc-list :checkbox").prop("checked", true);
-            }else{
-                $("#hc-list :checkbox").prop("checked", false);
+//type 中的类型并没有什么限制  tp默认的ajax传输类型是json类型，可以在controller中指定要传输的类型。
+window.onload = function() {
+    var uls = document.getElementById('hc-list').getElementsByTagName('tr');//每一行
+    var checkInputs = document.getElementsByClassName('check'); // 勾选框
+    var piecesTotal = document.getElementsByClassName('total-price')[0];//总价
+    var checkAll = document.getElementsByClassName('all');
+    var delects = document.querySelector('.hc-delect');
+    var pay = document.querySelector('.hc-pay');
+
+    var list = [];
+    // 计算总价格
+    function getTotal(){
+        price = 0;
+        for(var i = 0; i < uls.length;i++){
+            if(uls[i].getElementsByTagName('input')[0].checked){
+                price += parseFloat(uls[i].getElementsByClassName('price')[0].innerHTML);
             }
-        });
-        //删除
-        $(".hc-delect").click(function(){
-            var valArr = new Array;
-            $("#hc-list :checkbox[checked]").each(function(i){
-                valArr[i] = $(this).val();
-            });
-            var vals = valArr.join(',');
-            console.log(vals);
-            if(vals!="") {
-                if(confirm("确定要是这些吗？")){
-                    $.ajax({
-                        type:"POST",
-                        url:"{:url('ShopCart/delCart')}",
-                        data:{'id':vals},
-                        success:function(data){
-                            if(data){
-                                alert('修改成功');
-                                window.location.reload();
-                            }else {
-                                alert('修改失败');
-                            }
-                        }
-                    });
+        }
+        piecesTotal.innerHTML = '￥' + price.toFixed(2);
+    }
+    for(var i = 0;i < checkInputs.length;i++){
+        checkInputs[i].onclick = function(){
+            if(this.className === 'all check'){
+                for(var j = 0;j < checkInputs.length; j++){
+                    checkInputs[j].checked = this.checked;
                 }
-            }else {
-                alert ("请给用户权限");
             }
-        });
+            if(this.checked == false){
+                for(var k = 0;k < checkAll.length;k++){
+                    checkAll[k].checked = false;
+                }
+            }
+            getTotal();
+        }
+    }
+    // 单个商品选中跑出value
+    function getSubTotal(ul){
+        return ul.querySelector('.check').value;
+    }
+    for(var i = 0; i < uls.length;i++){
+        uls[i].onclick = function(e){
+            getSubTotal(this);
+        }
+        getTotal();
+    }
+
+    // 全部删除
+    delects.onclick = function(){
+        for(var i = 0; i < uls.length;i++){
+            if(uls[i].getElementsByTagName('input')[0].checked){
+                list.push(uls[i].getElementsByTagName('input')[0].value);
+            }
+        }
+        var vals = list.join(',');
+        console.log(vals);
+        if(vals!="") {
+            if(confirm("确定要是删除这些吗？")){
+                $.ajax({
+                    type:"GET",
+                    url:"{:url('ShopCart/delCart')}",
+                    data:{'sid':vals},
+                    success:function(data){
+                        alert('删除成功');
+                        window.location.reload();
+                    },
+                    error:function(e){
+                        alert('发生错误'+e);
+                    }
+                });
+            }
+            list = [];
+        }else {
+            alert ("请选择要删掉的栏目");
+            list = [];
+        }
+    };
+
+    layui.use(['layer'], function(){
+        var layer = layui.layer;
+        pay.onclick = function(){
+            for(var i = 0; i < uls.length;i++){
+                if(uls[i].getElementsByTagName('input')[0].checked){
+                    list.push(uls[i].getElementsByTagName('input')[0].value);
+                }
+            }
+            var sid = list.join(',');
+            layer.open({
+                type:2,
+                area:['500px','400px'],
+                fix: false, // 不固定
+                shade:0.5,
+                title:'微信支付',
+                btn:['确定'],
+                anim: 5,
+                yes:function(index,layero){
+                    layer.close(index);
+                    list = [];
+                    setTimeout(function () {
+                        location.reload();
+                    },2000);
+                },
+                cancel:function(){
+                    list = [];
+                    setTimeout(function () {
+                        location.reload();
+                    },2000);
+                },
+                content: "/index/wxpay/index.html"+'?sid='+sid,
+            });
+        }
     });
+};
 </script>
 {/block}
