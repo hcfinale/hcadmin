@@ -224,4 +224,24 @@ class Topic extends Model
                 break;
         }
     }
+    public function isPay($tid){
+        $result = Db::name('topic')->alias('t')->join('__FORUM__ f','t.fid = f.fid')->where('t.tid',$tid)->field('f.fid,f.name,f.money')->find();
+        if ($result['money'] != '0') {
+            if (!User::isLogin()) {
+                return [false,'未登录'];
+            }
+            $res = Db::name('order')->where('uid',session('uid'))->where('ispay','eq','1')->field('id,fid')->select();
+            $arrs = [];
+            foreach ($res as $k => $v){
+                $arrs[$k] = $v['fid'];
+            }
+            if (in_array($result['fid'],$arrs)){
+                return [true,'访问成功'];
+            }else{
+                return [false,'这个栏目需要付费，需要购买！'];
+            }
+        }else{
+            return [true,'访问成功'];
+        }
+    }
 }

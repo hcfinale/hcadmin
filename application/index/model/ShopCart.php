@@ -37,7 +37,7 @@ class ShopCart extends Model
     // 查看购物车中的商品
     public function selectCart(){
         $uid = session('uid');
-        $res = $this->alias('s')->where(['s.uid'=>$uid,'s.ispay'=>'0'])->join('forum fm','s.fid=fm.fid')->field('s.sid,s.uid,s.fid,s.money,fm.pid,fm.name')->select();
+        $res = $this->alias('s')->where(['s.uid'=>$uid,'s.ispay'=>'0'])->join('forum fm','s.fid=fm.fid')->field('s.sid,s.uid,s.fid,s.money,s.create_time,fm.pid,fm.name')->select();
         return $res;
     }
     // 删除商品

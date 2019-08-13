@@ -7,48 +7,131 @@
         <h5 class="doc-article-title">当前位置：{$column} <a class="doc-anchor" id="divider"></a></h5>
     </div>
     <p class="mdui-m-t-3"></p>
-    <div class="mdui-table-fluid">
-        <table class="mdui-table">
-            <thead>
-            <tr class=""><th width="15">#</th><th>id</th><th>用户id</th><th>栏目名称</th><th>价格</th><th>操作</th></tr>
-            </thead>
-            <tbody id="hc-list">
-            {volist name="shopCartAll" id="vo"}
-            <tr>
-                <td>
+    <div class="mdui-tab" mdui-tab>
+        <a href="#example1-tab1" class="mdui-ripple">购物车</a>
+        <a href="#example1-tab2" class="mdui-ripple">待付款</a>
+        <a href="#example1-tab3" class="mdui-ripple">已购买栏目</a>
+    </div>
+    <div id="example1-tab1" class="mdui-p-a-2">
+        <div class="mdui-table-fluid">
+            <table class="mdui-table">
+                <thead>
+                <tr class=""><th width="15">#</th><th>id</th><th>栏目名称</th><th>价格</th><th>创建时间</th><th>操作</th></tr>
+                </thead>
+                <tbody id="hc-list-one">
+                {volist name="shopCartAll" id="vo"}
+                <tr>
+                    <td>
+                        <label class="mdui-checkbox">
+                            <input class="check" type="checkbox" name="test[]" value="{$vo.sid}" />
+                            <i class="mdui-checkbox-icon"></i>
+                        </label>
+                    </td>
+                    <td>{$vo.sid}</td>
+                    <td>{$vo.name}</td>
+                    <td class="price">{$vo.money}</td>
+                    <td>{$vo.create_time|date='Y-m-d H:i:s'}</td>
+                    <td>
+                        <a href="{:url('ShopCart/delCart',['sid'=>$vo['sid']])}" onclick="return confirm('确认要删除？');">删除</a>
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+            <div class="mdui-row-xs-12">
+                <div class="mdui-col-xs-2" style="margin-left: 3rem;">
                     <label class="mdui-checkbox">
-                        <input class="check" type="checkbox" name="test[]" value="{$vo.sid}" />
+                        <input class="all check" type="checkbox"/>
                         <i class="mdui-checkbox-icon"></i>
+                        全选
                     </label>
-                </td>
-                <td>{$vo.sid}</td>
-                <td>{$vo.uid}</a></td>
-                <td>{$vo.name}</td>
-                <td class="price">{$vo.money}</td>
-                <td>
-                    <a href="{:url('ShopCart/delCart',['sid'=>$vo['sid']])}" onclick="return confirm('确认要删除？');">删除</a>
-                </td>
+                </div>
+                <div class="mdui-col-xs-2">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple hc-delect">批量删除</button>
+                </div>
+                <div class="mdui-col-xs-4 mdui-float-right">
+                    <h3>
+                        <span>总价格：</span><span class="total-price">0</span><span>元</span>
+                        <button class="mdui-btn mdui-color-indigo mdui-float-right hc-pay">购买</button>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="example1-tab2" class="mdui-p-a-2">
+        <div class="mdui-table-fluid">
+            <table class="mdui-table">
+                <thead>
+                <tr>
+                    <th width="15">#</th>
+                    <th>购物车ID</th>
+                    <th>订单号</th>
+                    <th>栏目名称</th>
+                    <th>how much</th>
+                </tr>
+                </thead>
+                <tbody id="hc-list-two">
+                {volist name="orderDetail" id="vo"}
+                {if condition="$vo['ispay'] neq '1' & $vo['name'] neq ''"}
+                <tr>
+                    <td>
+                        <label class="mdui-checkbox">
+                            <input class="check" type="checkbox" name="oid[]" value="{$vo.id}" />
+                            <i class="mdui-checkbox-icon"></i>
+                        </label>
+                    </td>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.order_id}</td>
+                    <td>{$vo.name}</td>
+                    <td class="price">{$vo.amount}</td>
+                </tr>
+                {/if}
+                {/volist}
+                </tbody>
+            </table>
+            <div class="mdui-row-xs-12">
+                <div class="mdui-col-xs-2" style="margin-left: 3rem;">
+                    <label class="mdui-checkbox">
+                        <input class="all check" type="checkbox"/>
+                        <i class="mdui-checkbox-icon"></i>
+                        全选
+                    </label>
+                </div>
+                <div class="mdui-col-xs-4 mdui-float-right">
+                    <h3>
+                        <span>总价格：</span><span class="total-price">0</span><span>元</span>
+                        <button class="mdui-btn mdui-color-indigo mdui-float-right hc-pay">购买</button>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="example1-tab3" class="mdui-p-a-2">
+        <div class="mdui-table-fluid">
+            <table class="mdui-table">
+            <thead>
+            <tr>
+                <th width="15">订单ID</th>
+                <th>购物车ID</th>
+                <th>订单号</th>
+                <th>栏目名称</th>
+                <th>how much</th>
             </tr>
+            </thead>
+            <tbody>
+            {volist name="orderDetail" id="vo"}
+            {if condition="$vo['ispay'] eq '1'"}
+            <tr>
+                <td>{$vo.id}</td>
+                <td>{$vo.sid}</td>
+                <td>{$vo.order_id}</td>
+                <td>{$vo.name}</td>
+                <td>{$vo.amount}</td>
+            </tr>
+            {/if}
             {/volist}
             </tbody>
-        </table>
-        <div class="mdui-row-xs-12">
-            <div class="mdui-col-xs-2" style="margin-left: 3rem;">
-                <label class="mdui-checkbox">
-                    <input class="all check" type="checkbox"/>
-                    <i class="mdui-checkbox-icon"></i>
-                    全选
-                </label>
-            </div>
-            <div class="mdui-col-xs-2">
-                <button class="mdui-btn mdui-color-theme-accent mdui-ripple hc-delect">批量删除</button>
-            </div>
-            <div class="mdui-col-xs-4 mdui-float-right">
-                <h3>
-                    <span>总价格：</span><span class="total-price">0</span><span>元</span>
-                    <button class="mdui-btn mdui-color-indigo mdui-float-right hc-pay">购买</button>
-                </h3>
-            </div>
+            </table>
         </div>
     </div>
 </div>
@@ -56,55 +139,95 @@
 <script>
 //type 中的类型并没有什么限制  tp默认的ajax传输类型是json类型，可以在controller中指定要传输的类型。
 window.onload = function() {
-    var uls = document.getElementById('hc-list').getElementsByTagName('tr');//每一行
-    var checkInputs = document.getElementsByClassName('check'); // 勾选框
-    var piecesTotal = document.getElementsByClassName('total-price')[0];//总价
-    var checkAll = document.getElementsByClassName('all');
-    var delects = document.querySelector('.hc-delect');
-    var pay = document.querySelector('.hc-pay');
-
+    // 每一行
+    var list_one = document.querySelectorAll('#example1-tab1 #hc-list-one tr');
+    var list_two = document.querySelectorAll('#example1-tab2 #hc-list-two tr');
+    // 勾选框
+    var checkInputsOne = document.querySelectorAll('#example1-tab1 .check');
+    var checkInputsTwo = document.querySelectorAll('#example1-tab2 .check');
+    // 总价
+    var piecesTotalOne = document.querySelector('#example1-tab1 .total-price');
+    var piecesTotalTwo = document.querySelector('#example1-tab2 .total-price');
+    // 选中所有
+    var checkAllOne = document.querySelector('#example1-tab1 .all');
+    var checkAllTwo = document.querySelector('#example1-tab2 .all');
+    // 删除所有
+    var delectsOne = document.querySelector('#example1-tab1 .hc-delect');
+    // 付款
+    var payOne = document.querySelector('#example1-tab1 .hc-pay');
+    var payTwo = document.querySelector('#example1-tab2 .hc-pay');
     var list = [];
     // 计算总价格
     function getTotal(){
         price = 0;
-        for(var i = 0; i < uls.length;i++){
-            if(uls[i].getElementsByTagName('input')[0].checked){
-                price += parseFloat(uls[i].getElementsByClassName('price')[0].innerHTML);
+        for(var i = 0; i < list_one.length;i++){
+            if(list_one[i].getElementsByTagName('input')[0].checked){
+                price += parseFloat(list_one[i].getElementsByClassName('price')[0].innerHTML);
             }
         }
-        piecesTotal.innerHTML = '￥' + price.toFixed(2);
+        piecesTotalOne.innerHTML = '￥' + price.toFixed(2);
     }
-    for(var i = 0;i < checkInputs.length;i++){
-        checkInputs[i].onclick = function(){
+    function getTotalTwo(){
+        price = 0;
+        for(var i = 0; i < list_two.length;i++){
+            if(list_two[i].getElementsByTagName('input')[0].checked){
+                price += parseFloat(list_two[i].getElementsByClassName('price')[0].innerHTML);
+            }
+        }
+        piecesTotalTwo.innerHTML = '￥' + price.toFixed(2);
+    }
+
+    for(var i = 0;i < checkInputsOne.length;i++){
+        checkInputsOne[i].onclick = function(){
             if(this.className === 'all check'){
-                for(var j = 0;j < checkInputs.length; j++){
-                    checkInputs[j].checked = this.checked;
+                for(var j = 0;j < checkInputsOne.length; j++){
+                    checkInputsOne[j].checked = this.checked;
                 }
             }
             if(this.checked == false){
-                for(var k = 0;k < checkAll.length;k++){
-                    checkAll[k].checked = false;
+                for(var k = 0;k < checkAllOne.length;k++){
+                    checkAllOne[k].checked = false;
                 }
             }
             getTotal();
+        }
+    }
+    for(var i = 0;i < checkInputsTwo.length;i++){
+        checkInputsTwo[i].onclick = function(){
+            if(this.className === 'all check'){
+                for(var j = 0;j < checkInputsTwo.length; j++){
+                    checkInputsTwo[j].checked = this.checked;
+                }
+            }
+            if(this.checked == false){
+                for(var k = 0;k < checkAllTwo.length;k++){
+                    checkAllTwo[k].checked = false;
+                }
+            }
+            getTotalTwo();
         }
     }
     // 单个商品选中跑出value
     function getSubTotal(ul){
         return ul.querySelector('.check').value;
     }
-    for(var i = 0; i < uls.length;i++){
-        uls[i].onclick = function(e){
+    for(var i = 0; i < list_one.length;i++){
+        list_one[i].onclick = function(e){
             getSubTotal(this);
         }
         getTotal();
     }
-
+    for(var i = 0; i < list_two.length;i++){
+        list_two[i].onclick = function(e){
+            getSubTotal(this);
+        }
+        getTotalTwo();
+    }
     // 全部删除
-    delects.onclick = function(){
-        for(var i = 0; i < uls.length;i++){
-            if(uls[i].getElementsByTagName('input')[0].checked){
-                list.push(uls[i].getElementsByTagName('input')[0].value);
+    delectsOne.onclick = function(){
+        for(var i = 0; i < list_one.length;i++){
+            if(list_one[i].getElementsByTagName('input')[0].checked){
+                list.push(list_one[i].getElementsByTagName('input')[0].value);
             }
         }
         var vals = list.join(',');
@@ -133,10 +256,10 @@ window.onload = function() {
 
     layui.use(['layer'], function(){
         var layer = layui.layer;
-        pay.onclick = function(){
-            for(var i = 0; i < uls.length;i++){
-                if(uls[i].getElementsByTagName('input')[0].checked){
-                    list.push(uls[i].getElementsByTagName('input')[0].value);
+        payOne.onclick = function(){
+            for(var i = 0; i < list_one.length;i++){
+                if(list_one[i].getElementsByTagName('input')[0].checked){
+                    list.push(list_one[i].getElementsByTagName('input')[0].value);
                 }
             }
             var sid = list.join(',');
@@ -162,6 +285,37 @@ window.onload = function() {
                     },2000);
                 },
                 content: "/index/wxpay/index.html"+'?sid='+sid,
+            });
+        };
+        payTwo.onclick = function(){
+            for(var i = 0; i < list_two.length;i++){
+                if(list_two[i].getElementsByTagName('input')[0].checked){
+                    list.push(list_two[i].getElementsByTagName('input')[0].value);
+                }
+            }
+            var oid = list.join(',');
+            layer.open({
+                type:2,
+                area:['500px','400px'],
+                fix: false, // 不固定
+                shade:0.5,
+                title:'微信支付',
+                btn:['确定'],
+                anim: 5,
+                yes:function(index,layero){
+                    layer.close(index);
+                    list = [];
+                    setTimeout(function () {
+                        location.reload();
+                    },2000);
+                },
+                cancel:function(){
+                    list = [];
+                    setTimeout(function () {
+                        location.reload();
+                    },2000);
+                },
+                content: "/index/wxpay/order"+'?oid='+oid,
             });
         }
     });

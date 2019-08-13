@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 use app\index\model\ShopCart as shoppingCart;
+use app\common\model\Order;
 use app\index\model\User;
 use think\App;
 use traits\controller\Jump;
@@ -11,6 +12,7 @@ class ShopCart extends Base
     public function initialize(){
         parent::initialize();
         $this->shopcart = new shoppingCart();
+        $this->orders = new Order();
     }
 
     public function index(){
@@ -18,9 +20,11 @@ class ShopCart extends Base
             return json(['code'=>'200','msg'=>'您还没登录，请先登录','url'=>'index/user/login']);
         }
         $shopCartAll = $this->shopcart->selectCart();
+        $orderDetail = $this->orders->selectAll();
         return $this->fetch('',[
             'shopCartAll'   =>  $shopCartAll,
-            'column'    =>  '购物车列表',
+            'orderDetail'   =>  $orderDetail,
+            'column'    =>  '购买页面',
         ]);
     }
     // 加入购物车

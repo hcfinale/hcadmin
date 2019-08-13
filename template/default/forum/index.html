@@ -25,9 +25,11 @@
         <div class="lab-item ">
             <div class="mdui-row mdui-m-l-3 mdui-m-r-3 mdui-m-t-2 mdui-m-b-2">
                 <div class="mdui-float-left"><h3>{$column.name}</h3></div>
+                {if condition="$isMoney neq 0"}
                 <div class="mdui-float-right mdui-m-l-2 cursor" onclick="shopCart({$column['fid']})">
                     <i class="mdui-icon material-icons">&#xe8cc;</i>
                 </div>
+                {/if}
 		        <div class="mdui-float-right mdui-m-r-2 cursor" onclick="collect({$column['fid']})">
                     {if condition="isset($userData)"}
                         {if condition="in_array($column.fid,explode(',',$userData.collect))"}

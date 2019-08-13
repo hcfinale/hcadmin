@@ -27,18 +27,21 @@ class Wxpay extends Base{
         }
         if (request()->isGet()){
             $product_id = (time()+1).createStr(22);
-
             $cartId = request()->param('sid');
             $cartId = explode(',', $cartId);
             $this->Order->addPay($cartId,$product_id);
-            $id = db('order')->max('id');
-            $pay = db('order')->where('id',$id)->find();
-            $nidePrice = $pay['amount']*100;
+            // 为什么不用thinkphp中的链式操作，试过了，有点问题，一直报未定义的数组，不知道什么原因，所以使用了原生的sql查询中的子查询。
+            $pay = Db::query("select id,amount from pa_order where order_id = (select order_id from pa_order where id = (select MAX(id) from pa_order))");
+            $arrs = '';
+            foreach ($pay as $key => $value){
+                $arrs += $value['amount'];
+            }
+            $nidePrice = $arrs*100;
 
             $notify = new NativePay();
             $input = new WxPayUnifiedOrder();
-            $input->setBody("测试用的栏目名称");
-            $input->setAttach("xxx");
+            $input->setBody("购买所需");
+            $input->setAttach("HC");
             //$input->setOutTradeNo(WxPayConfig::MCHID.date("YmdHis"));
             $input->setOutTradeNo($product_id);
             $input->setTotalFee($nidePrice);//以分为单位,一般是要乘100的。
@@ -63,7 +66,54 @@ class Wxpay extends Base{
             return json(['code'=>'1004','data'=>'操作非法']);
         }
     }
+    /**
+     * @return mixed|\think\response\Json|\think\response\Redirect
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function order(){
+        if (request()->isGet()){
+            $oId = request()->param('oid');
+            $oId = explode(',', $oId);
+            $product_id = (time()+1).createStr(22);
+            $this->Order->payOrder($oId,$product_id);
+            // 为什么不用thinkphp中的链式操作，试过了，有点问题，一直报未定义的数组，不知道什么原因，所以使用了原生的sql查询中的子查询。
+            $pay = Db::query("select id,amount from pa_order where order_id = (select order_id from pa_order where id = (select MAX(id) from pa_order))");
+            $arrs = '';
+            foreach ($pay as $key => $value){
+                $arrs += $value['amount'];
+            }
+            $nidePrice = $arrs*100;
+            $notify = new NativePay();
+            $input = new WxPayUnifiedOrder();
 
+            $input->setBody("购买所需");
+            $input->setAttach("HC");
+            //$input->setOutTradeNo(WxPayConfig::MCHID.date("YmdHis"));
+            $input->setOutTradeNo($product_id);
+            $input->setTotalFee($nidePrice);//以分为单位,一般是要乘100的。
+            $input->setTimeStart(date("YmdHis"));
+            $input->setTimeExpire(date("YmdHis", time() + 600));
+            $input->setGoodsTag("test");
+            $input->setNotifyUrl(wxPayConfig::NOTIFY_URLS);
+            $input->setTradeType("NATIVE");
+            //$product_id 为商品自定义id 可用作订单ID
+            $input->setProductId($product_id);
+            $result = $notify->getPayUrl($input);
+            if (empty($result['code_url'])){
+                $qrCode_url = '';
+            }else{
+                $qrCode_url = $this->setQrcode($result['code_url']);
+            }
+            return $this->fetch('index',[
+                'qrCode_url' => $qrCode_url,
+                'product_id'    =>  $product_id,
+            ]);
+        }else{
+            return json(['code'=>'1004','data'=>'操作非法']);
+        }
+    }
     /**
      * 查看订单的状态
      */
@@ -77,9 +127,21 @@ class Wxpay extends Base{
             $input->setTransactionId($transaction_id);
             if (WxPayApi::orderQuery($input)['trade_state']==='SUCCESS'){
                 db('order')->where('order_id',$transaction_id)->update(['ispay'=>'1']);
+                $res = db('order')->where('order_id',$transaction_id)->field('id,order_id,oid')->select();
+                if (!empty($res['oid'])){
+                    $oid = explode(',',$res['oid']);
+                    foreach ($oid as $key => $value) {
+                        db('order')->where('id',$value)->update(['ispay' => '1']);
+                    }
+                }
             }else{
                 // 支付失败
-                db('order')->where('order_id',$transaction_id)->update(['ispay'=>'2']);
+                $res = db('order')->where('order_id',$transaction_id)->field('id,order_id,oid')->select();
+                if (!empty($res['oid'])){
+                    db('order')->where('order_id',$transaction_id)->update(['ispay' => '0','status'=>'0']);
+                }else{
+                    db('order')->where('order_id',$transaction_id)->update(['ispay'=>'2']);
+                }
             }
             return json(WxPayApi::orderQuery($input));
         }
@@ -89,8 +151,21 @@ class Wxpay extends Base{
             $input->setOutTradeNo($out_trade_no);
             if (WxPayApi::orderQuery($input)['trade_state']==='SUCCESS'){
                 db('order')->where('order_id',$out_trade_no)->update(['ispay'=>'1']);
+                $res = db('order')->where('order_id',$out_trade_no)->field('id,order_id,oid')->select();
+                if (!empty($res['oid'])){
+                    $oid = explode(',',$res['oid']);
+                    foreach ($oid as $key => $value) {
+                        db('order')->where('id',$value)->update(['ispay' => '1']);
+                    }
+                }
             }else{
-                db('order')->where('order_id',$out_trade_no)->update(['ispay'=>'2']);
+                // 支付失败
+                $res = db('order')->where('order_id',$out_trade_no)->field('id,order_id,oid')->select();
+                if (!empty($res['oid'])){
+                    db('order')->where('order_id',$out_trade_no)->update(['ispay' => '0','status'=>'0']);
+                }else{
+                    db('order')->where('order_id',$out_trade_no)->update(['ispay'=>'2']);
+                }
             }
             return json(WxPayApi::orderQuery($input));
         }
@@ -133,6 +208,46 @@ class Wxpay extends Base{
         }
         //TODO 数据更新 业务逻辑处理 $order
     }
+    /**
+     * 微信支付 回调逻辑处理，未购买栏目进行再次付款
+     * @return string
+     */
+    /*
+    public function notifys(){
+        $wxData = file_get_contents("php://input");
+        //file_put_contents('/tmp/2.txt',$wxData,FILE_APPEND);
+        try{
+            $resultObj = new WxPayResults();
+            $wxData = $resultObj->Init($wxData);
+        }catch (\Exception $e){
+            $resultObj ->setData('return_code','FAIL');
+            $resultObj ->setData('return_msg',$e->getMessage());
+            return $resultObj->toXml();
+        }
+
+        if ($wxData['return_code']==='FAIL'||
+            $wxData['return_code']!== 'SUCCESS'){
+            $resultObj ->setData('return_code','FAIL');
+            $resultObj ->setData('return_msg','error');
+            return $resultObj->toXml();
+        }
+        // TODO 根据订单号 out_trade_no 来查询订单数据
+        $out_trade_no = $wxData['out_trade_no'];
+        //此处为举例
+        $input = new WxPayUnifiedOrder();
+
+        db('order')->where('order_id',$input->getOutTradeNo())->update(['ispay'=>'1']);
+        db('order')->where('order_id',$out_trade_no)->update(['ispay'=>'2']);
+        $order = db('order')->where(['order_id' => $out_trade_no])->find();
+
+        if (!$order || $order->status == 1){
+            $resultObj ->setData('return_code','SUCCESS');
+            $resultObj ->setData('return_msg','OK');
+            return $resultObj->toXml();
+        }
+        //TODO 数据更新 业务逻辑处理 $order
+    }
+    */
     // redis 的操作
     public function myredis(){
         $client =  new Predis\Client([

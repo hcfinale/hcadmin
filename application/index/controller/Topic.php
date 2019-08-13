@@ -19,30 +19,36 @@ class Topic extends Base
         if ($tid == 0) {
             return \redirect('index/index/idnex');
         }
-        $topic = topicModel::get($tid);
+        $topModel = new topicModel();
+        $topic = $topModel->get($tid);
         if (empty($topic)) {
-            return $this->error('暂未找到此内容！', 'index/index/index');
+            $this->error('暂未找到此内容！', 'index/index/index');
         }
-        $topic->views += 1;
-        $topic->isAutoWriteTimestamp(false)->save();
-        $topic->update_time = date('Y-m-d H:i:s', $topic->update_time);
-        $topicUser = user::get($topic->uid);
-        $comment = $topic->comments;
-        $atta = Atta::where('sign', $topic->sign)->select();
-        count($atta) == 0 ? $atta = null : $atta;//解决ThinkPHP模型奇怪的array()不为空的问题
-        foreach ($comment as $key => $value) {
-            $data = Db::name('user')->where('uid', $value['uid'])->find();
-            $value['username'] = $data['username'];
-            $value['avatar'] = $data['avatar'];
-        }
+        $isPay = $topModel->isPay($tid);
+        if ($isPay[0]){
+            $topic->views += 1;
+            $topic->isAutoWriteTimestamp(false)->save();
+            $topic->update_time = date('Y-m-d H:i:s', $topic->update_time);
+            $topicUser = user::get($topic->uid);
+            $comment = $topic->comments;
+            $atta = Atta::where('sign', $topic->sign)->select();
+            count($atta) == 0 ? $atta = null : $atta;//解决ThinkPHP模型奇怪的array()不为空的问题
+            foreach ($comment as $key => $value) {
+                $data = Db::name('user')->where('uid', $value['uid'])->find();
+                $value['username'] = $data['username'];
+                $value['avatar'] = $data['avatar'];
+            }
 
-        return view('index', [
-            'option' => $this->siteOption($topic->subject),
-            'topicData' => $topic,
-            'topicUser' => $topicUser,
-            'commentData' => $comment,
-            'attaList' => $atta,
-        ]);
+            return view('index', [
+                'option' => $this->siteOption($topic->subject),
+                'topicData' => $topic,
+                'topicUser' => $topicUser,
+                'commentData' => $comment,
+                'attaList' => $atta,
+            ]);
+        }else{
+            $this->error("$isPay[1]");
+        }
     }
 
     public function create()

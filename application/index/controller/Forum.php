@@ -19,12 +19,13 @@ class Forum extends Base
         $column = $this->forum->getColumn($fid);
         $option = [
             'siteDes' => $data['seoDes'],
-            'siteKeywords' => $data['seoKeywords'],
+            'siteKeywords' => $data['seoKeywords']
         ];
         $option = $this->siteOption($data['name'],$option);
         !empty($data['notice']) ? $option['notice'] = $data['notice'] : $option['notice'];
         return view('index',[
             'fid'      => $fid,
+            'isMoney'   =>  $data['money'],
             'option'   => $option,
             'column'   => $column,
         ]);
@@ -57,7 +58,7 @@ class Forum extends Base
         if (request()->isPost()){
             $arr = [];
             $fid = request()->param('fid');
-            $collect = new \app\index\model\User();
+            $collect = new User();
             $res = $collect->where('uid',session('uid'))->field('collect')->find();
             (string)$result = $res['collect'];
             $arr = explode(',',$result);
