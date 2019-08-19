@@ -25,7 +25,7 @@
     // 产看订单状态
     var time = setInterval("check()",3000);    //3秒查询一次是否支付成功
     function check() {
-        var url = "{:url('/index/Wxpay/orderstate')}";
+        var url = "{:url('/index/Wxpay/orderState')}";
         var out_trade_no = $("#out_trade_no").val();
         var param = {'out_trade_no':out_trade_no};
         $.post(url,param,function(data){

@@ -1,4 +1,139 @@
-{extend name="./application/admin/view/public/admin_public.html"} {block name="content"}
+<?php /*a:5:{s:52:"E:\www\hcadmin\application\admin\view\set\forum.html";i:1566195451;s:49:"./application/admin/view/public/admin_public.html";i:1546402500;s:43:"./application/admin/view/public/header.html";i:1552446126;s:43:"./application/admin/view/public/topbar.html";i:1555385384;s:43:"./application/admin/view/public/footer.html";i:1546402746;}*/ ?>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>万和学院 管理后台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="万和学院后台" />
+    <meta name="description" content="万和学院后台" />
+    <meta name="author" content="北林">
+    <!-- 设置Theme -->
+    <meta name="setPrimary" content="<?php echo htmlentities($theme['themePrimary']); ?>">
+    <meta name="setAccent" content="<?php echo htmlentities($theme['themeAccent']); ?>">
+    <meta name="setLayout" content="<?php echo htmlentities($theme['themeLayout']); ?>">
+    
+    <link rel="stylesheet" href="/public/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/mdui.min.css">
+    <link rel="stylesheet" href="/public/static/css/admin_common.css">
+    <link rel="shortcut icon" href="//at.alicdn.com/t/font_579119_2arllyqcj9p8ehfr.css" type="image/x-icon">
+    <script src="/public/static/layui/layui.js"></script>
+    <script src="/public/static/js/mdui.min.js"></script>
+</head>
+
+
+<body class="mdui-theme-primary-pink mdui-theme-accent-pink mdui-drawer-body-left mdui-appbar-with-toolbar">
+    <script src="/public/static/js/theme.js"></script> <header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-menu'}">
+            <i class="mdui-icon material-icons">menu</i>
+        </a>
+        <a href="<?php echo url('admin/index/index'); ?>" class="mdui-typo-headline">HC后台</a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon" onclick="location.reload()">
+            <i class="mdui-icon material-icons">refresh</i>
+        </a>
+
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#more'}">
+            <i class="mdui-icon material-icons">more_vert</i>
+        </a>
+        <ul class="mdui-menu mdui-menu-cascade" id="more">
+            <li class="mdui-menu-item">
+                <a href="<?php echo url('index/index/index'); ?>" class="mdui-ripple">返回前台</a>
+            </li>
+        </ul>
+
+    </div>
+</header>
+
+
+
+<div class="mdui-drawer" id="left-menu">
+    <ul class="mdui-list mdui-collapse" id="collapse" mdui-collapse="{accordion:true}">
+
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">home</i>
+            <div class="mdui-list-item-content">
+                <a href="<?php echo url('admin/index/index'); ?>">后台首页</a>
+            </div>
+        </li>
+
+        <li class="mdui-collapse-item" id="sys">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
+                <div class="mdui-list-item-content">系统设置</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <a href="<?php echo url('set/base'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="base">基础设置</li>
+                </a>
+                <a href="<?php echo url('set/baseReg'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="baseReg">注册访问</li>
+                </a>
+                <a href="<?php echo url('set/baseTheme'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="baseTheme">模板设置</li>
+                </a>
+                <a href="<?php echo url('set/baseMail'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="baseMail">邮件设置</li>
+                </a>
+            </ul>
+        </li>
+
+        <li class="mdui-collapse-item" id="forum">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">forum</i>
+                <div class="mdui-list-item-content">论坛管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+
+
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <a href="<?php echo url('set/forum'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="setForum">板块管理</li>
+                </a>
+                <a href="<?php echo url('set/topic'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="setTopic">主题管理</li>
+                </a>
+                <a href="<?php echo url('set/forumSetting'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="forumSetting">论坛设置</li>
+                </a>
+                <a href="<?php echo url('set/resourceAll'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="resourceAll">资源管理</li>
+                </a>
+            </ul>
+        </li>
+
+        <li class="mdui-collapse-item" id="user">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">group</i>
+                <div class="mdui-list-item-content">用户管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+
+
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <a href="<?php echo url('set/user'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="setUser">用户管理</li>
+                </a>
+                <a href="<?php echo url('set/userGroup'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="setUserGroup">用户组管理</li>
+                </a>
+                <a href="<?php echo url('set/Auth'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="setAuth">权限管理</li>
+                </a>
+                <a href="<?php echo url('set/Expand'); ?>">
+                    <li class="mdui-list-item mdui-ripple" id="setExpand">拓展管理</li>
+                </a>
+            </ul>
+        </li>
+
+    </ul>
+</div>
+    <div class="mdui-container-fluid">
+        
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
 
     <h1 class="mdui-m-l-3">Forum 管理</h1>
@@ -21,27 +156,27 @@
             </tr>
         </thead>
         <tbody>
-            {volist name="forumData" id="vo"}
-            <tr id="{$vo.fid}">
-                <input type="hidden" name="fid" id="hcfid" value="{$vo.fid}">
-                <td><input type="text" name="sort" id="hcSort" value="{$vo.sort}" style="width: 35px;text-align: center;" /></td>
-                <td>{$vo.fid}</td>
+            <?php if(is_array($forumData) || $forumData instanceof \think\Collection || $forumData instanceof \think\Paginator): $i = 0; $__LIST__ = $forumData;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+            <tr id="<?php echo htmlentities($vo['fid']); ?>">
+                <input type="hidden" name="fid" id="hcfid" value="<?php echo htmlentities($vo['fid']); ?>">
+                <td><input type="text" name="sort" id="hcSort" value="<?php echo htmlentities($vo['sort']); ?>" style="width: 35px;text-align: center;" /></td>
+                <td><?php echo htmlentities($vo['fid']); ?></td>
                 <td>
-                    {if condition ="$vo['pid'] neq '0'"}|
+                    <?php if($vo['pid'] != '0'): ?>|
                     <?php echo str_repeat("_",$vo['level']*4); ?>
-                    {/if}
-                    {$vo.name}
+                    <?php endif; ?>
+                    <?php echo htmlentities($vo['name']); ?>
                 </td>
-                <td style="display: none;">{$vo.introduce}</td>
-                <td>{$vo.cgroup}</td>
+                <td style="display: none;"><?php echo htmlentities($vo['introduce']); ?></td>
+                <td><?php echo htmlentities($vo['cgroup']); ?></td>
                 <td>
                     <div class="layui-btn-group">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="editorForum('#{$vo.fid}')">编辑</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del('{$vo.fid}')">删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="editorForum('#<?php echo htmlentities($vo['fid']); ?>')">编辑</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del('<?php echo htmlentities($vo['fid']); ?>')">删除</button>
                     </div>
                 </td>
             </tr>
-            {/volist}
+            <?php endforeach; endif; else: echo "" ;endif; ?>
         </tbody>
     </table>
 
@@ -54,11 +189,11 @@
                     <div class="layui-input-block">
                         <select name="pid" lay-verify="required">
                             <option value="0">顶级栏目</option>
-                            {volist name="forumData" id="forum"}
-                            <option value="{$forum.fid}">
-                                {if condition ="$forum['pid'] neq '0'"}|<?php echo str_repeat("___",$forum['level']); ?>{/if}{$forum.name}
+                            <?php if(is_array($forumData) || $forumData instanceof \think\Collection || $forumData instanceof \think\Paginator): $i = 0; $__LIST__ = $forumData;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$forum): $mod = ($i % 2 );++$i;?>
+                            <option value="<?php echo htmlentities($forum['fid']); ?>">
+                                <?php if($forum['pid'] != '0'): ?>|<?php echo str_repeat("___",$forum['level']); ?><?php endif; ?><?php echo htmlentities($forum['name']); ?>
                             </option>
-                            {/volist}
+                            <?php endforeach; endif; else: echo "" ;endif; ?>
                         </select>
                     </div>
                 </div>
@@ -93,16 +228,16 @@
                     <label class="layui-form-label">权限用户组</label>
                     <div class="layui-input-block">
                         <select name="cgroup" lay-verify="required">
-                            {volist name="group" id="guser"}
-                            <option value="{$guser.gid}">
-                                {$guser.groupName}
+                            <?php if(is_array($group) || $group instanceof \think\Collection || $group instanceof \think\Paginator): $i = 0; $__LIST__ = $group;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$guser): $mod = ($i % 2 );++$i;?>
+                            <option value="<?php echo htmlentities($guser['gid']); ?>">
+                                <?php echo htmlentities($guser['groupName']); ?>
                             </option>
-                            {/volist}
+                            <?php endforeach; endif; else: echo "" ;endif; ?>
                         </select>
                     </div>
                     <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
                 </div>
-                 {:token()}
+                 <?php echo token(); ?>
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -120,11 +255,11 @@
                     <div class="layui-input-block">
                         <select name="pid" lay-verify="required">
                             <option value="0">顶级栏目</option>
-                            {volist name="forumData" id="forum"}
-                            <option value="{$forum.fid}">
-                                {if condition ="$forum['pid'] neq '0'"}|<?php echo str_repeat("___",$forum['level']); ?>{/if}{$forum.name}
+                            <?php if(is_array($forumData) || $forumData instanceof \think\Collection || $forumData instanceof \think\Paginator): $i = 0; $__LIST__ = $forumData;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$forum): $mod = ($i % 2 );++$i;?>
+                            <option value="<?php echo htmlentities($forum['fid']); ?>">
+                                <?php if($forum['pid'] != '0'): ?>|<?php echo str_repeat("___",$forum['level']); ?><?php endif; ?><?php echo htmlentities($forum['name']); ?>
                             </option>
-                            {/volist}
+                            <?php endforeach; endif; else: echo "" ;endif; ?>
                         </select>
                     </div>
                 </div>
@@ -150,16 +285,16 @@
                     <label class="layui-form-label">权限用户组</label>
                     <div class="layui-input-block">
                         <select name="cgroup" lay-verify="required">
-                            {volist name="group" id="guser"}
-                            <option value="{$guser.gid}">
-                                {$guser.groupName}
+                            <?php if(is_array($group) || $group instanceof \think\Collection || $group instanceof \think\Paginator): $i = 0; $__LIST__ = $group;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$guser): $mod = ($i % 2 );++$i;?>
+                            <option value="<?php echo htmlentities($guser['gid']); ?>">
+                                <?php echo htmlentities($guser['groupName']); ?>
                             </option>
-                            {/volist}
+                            <?php endforeach; endif; else: echo "" ;endif; ?>
                         </select>
                     </div>
                     <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
                 </div>
-                {:token()}
+                <?php echo token(); ?>
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -168,10 +303,14 @@
     </div>
 </div>
 
-{/block} {block name="js"}
+
+    </div>
+    <footer class="mdui-bottom-nav">
+    <div>HC版权设置</div>
+</footer> 
 <script>
     var option = {
-        columnImgUrl: "{:url('admin/set/upcolumnimg')}",
+        columnImgUrl: "<?php echo url('admin/set/upcolumnimg'); ?>",
     };
     var $$ = mdui.JQ,
         data = '',
@@ -251,7 +390,7 @@
             var sort = $$(this).val();
             $$.ajax({
                 method: 'post',
-                url: '{:url("admin/set/sort")}',
+                url: '<?php echo url("admin/set/sort"); ?>',
                 data: {
                     fid: fid,
                     sort: sort,
@@ -284,7 +423,7 @@
         data = $$('#editForm').serialize();
         $$.ajax({
             method: 'post',
-            url: '{:url("admin/set/forum")}',
+            url: '<?php echo url("admin/set/forum"); ?>',
             data: data,
             dataType: 'json',
             success: function (res) {
@@ -335,7 +474,7 @@
                     onClick: function (inst) {
                         $$.ajax({
                             method: 'post',
-                            url: '{:url("admin/api/del")}',
+                            url: '<?php echo url("admin/api/del"); ?>',
                             data: {
                                 type: 'forum',
                                 id: fid,
@@ -363,4 +502,7 @@
             ]
         });
     }
-</script> {/block}
+</script> 
+</body>
+
+</html>

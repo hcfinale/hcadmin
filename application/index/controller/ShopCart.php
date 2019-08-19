@@ -44,8 +44,11 @@ class ShopCart extends Base
         }
         return json(['code'=>'200','msg'=>'非法操作']);
     }
-    // 一处购物车
+    // 删除购物车
     public function delCart($sid){
+        if (is_int($sid)) {
+            return $this->error('参数不和法！','index');;
+        }
         $res = $this->shopcart->delectCart($sid);
         if ($res[0]){
             return $this->redirect('index');

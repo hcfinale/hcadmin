@@ -1,4 +1,4 @@
-<?php /*a:8:{s:39:"./template/default/shop_cart\index.html";i:1566183761;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common\topbar_user.html";i:1565138280;s:37:"./template/default/common\topbar.html";i:1557450469;s:41:"./template/default/common\right_tool.html";i:1553237427;s:37:"./template/default/common\footer.html";i:1545980648;}*/ ?>
+<?php /*a:8:{s:35:"./template/default/forum\lists.html";i:1555031922;s:43:"./template/default/common\forum_public.html";i:1545268338;s:37:"./template/default/common\header.html";i:1545268308;s:24:"template/fullscreen.html";i:1545200232;s:42:"./template/default/common\topbar_user.html";i:1565138280;s:37:"./template/default/common\topbar.html";i:1557450469;s:41:"./template/default/common\right_tool.html";i:1553237427;s:37:"./template/default/common\footer.html";i:1545980648;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -200,137 +200,87 @@
             
 <!-- 论坛最新内容列表页 -->
 <div class="mdui-col-xs-12 mdui-col-sm-9 mdui-shadow-1">
-    <!-- 最新内容 -->
-    <p class="mdui-m-t-3"></p>
     <div class="mdui-typo">
-        <h5 class="doc-article-title">当前位置：<?php echo htmlentities($column); ?> <a class="doc-anchor" id="divider"></a></h5>
+        <h4 class="doc-article-title">当前位置：<?php echo htmlentities($column['name']); ?> <a class="doc-anchor" id="divider"></a></h4>
+    </div>
+    <style>
+        .mdui-subheader a{font-size: 14px;border-right: 1px solid #dedede;padding: 0px 10px;}
+        .mdui-subheader a:first-child{font-size: 16px;font-weight: bold;}
+        .mdui-grid-tile-actions{cursor: pointer;}
+        .mdui-ripple{font-weight: bold;}
+    </style>
+
+    <div class="mdui-container">
+        <div class="mdui-tab mdui-tab-centered" mdui-tab>
+            <?php if(is_array($listss) || $listss instanceof \think\Collection || $listss instanceof \think\Paginator): $i = 0; $__LIST__ = $listss;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+            <a href="#example2-tab<?php echo htmlentities($vo['fid']); ?>" class="mdui-ripple"><?php echo htmlentities($vo['name']); ?></a>
+            <?php endforeach; endif; else: echo "" ;endif; ?>
+        </div>
     </div>
     <p class="mdui-m-t-3"></p>
-    <div class="mdui-tab" mdui-tab>
-        <a href="#example1-tab1" class="mdui-ripple">购物车</a>
-        <a href="#example1-tab2" class="mdui-ripple">待付款</a>
-        <a href="#example1-tab3" class="mdui-ripple">已购买栏目</a>
+    <?php if(is_array($listss) || $listss instanceof \think\Collection || $listss instanceof \think\Paginator): $i = 0; $__LIST__ = $listss;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+    <div class="mdui-row" id="example2-tab<?php echo htmlentities($vo['fid']); ?>">
+        <?php if(is_array($vo['child']) || $vo['child'] instanceof \think\Collection || $vo['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$son): $mod = ($i % 2 );++$i;?>
+        <div class="mdui-col-sm-4" style="height: 13rem;">
+            <div class="mdui-grid-tile">
+                <a href="<?php echo url('index/forum/index',array('fid'=>$son['fid'])); ?>">
+                    <img src="<?php echo htmlentities($son['img']); ?>"/>
+                    <div class="mdui-grid-tile-actions">
+                        <div class="mdui-grid-tile-text">
+                            <div class="mdui-grid-tile-title mdui-text-center"><?php echo htmlentities($son['name']); ?></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <?php endforeach; endif; else: echo "" ;endif; ?>
     </div>
-    <div id="example1-tab1" class="mdui-p-a-2">
-        <div class="mdui-table-fluid">
-            <table class="mdui-table">
-                <thead>
-                <tr class=""><th width="15">#</th><th>id</th><th>栏目名称</th><th>价格</th><th>创建时间</th><th>操作</th></tr>
-                </thead>
-                <tbody id="hc-list-one">
-                <?php if(is_array($shopCartAll) || $shopCartAll instanceof \think\Collection || $shopCartAll instanceof \think\Paginator): $i = 0; $__LIST__ = $shopCartAll;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
-                <tr>
-                    <td>
-                        <label class="mdui-checkbox">
-                            <input class="check" type="checkbox" name="test[]" value="<?php echo htmlentities($vo['sid']); ?>" />
-                            <i class="mdui-checkbox-icon"></i>
-                        </label>
-                    </td>
-                    <td><?php echo htmlentities($vo['sid']); ?></td>
-                    <td><?php echo htmlentities($vo['name']); ?></td>
-                    <td class="price"><?php echo htmlentities($vo['money']); ?></td>
-                    <td><?php echo htmlentities(date('Y-m-d H:i:s',!is_numeric($vo['create_time'])? strtotime($vo['create_time']) : $vo['create_time'])); ?></td>
-                    <td>
-                        <a href="<?php echo url('ShopCart/delCart',['sid'=>$vo['sid']]); ?>" onclick="return confirm('确认要删除？');">删除</a>
-                    </td>
-                </tr>
-                <?php endforeach; endif; else: echo "" ;endif; ?>
-                </tbody>
-            </table>
-            <div class="mdui-row-xs-12">
-                <div class="mdui-col-xs-2" style="margin-left: 3rem;">
-                    <label class="mdui-checkbox">
-                        <input class="all check" type="checkbox"/>
-                        <i class="mdui-checkbox-icon"></i>
-                        全选
-                    </label>
+    <?php endforeach; endif; else: echo "" ;endif; ?>
+    <!--
+    <?php if(is_array($listss) || $listss instanceof \think\Collection || $listss instanceof \think\Paginator): $i = 0; $__LIST__ = $listss;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+    <div class="mdui-row mdui-m-t-2">
+        <div class="mdui-col-sm-12 mdui-col-md-12">
+            <div class="mdui-card">
+                <div class="mdui-col-lg-6 mdui-float-left mdui-hidden-xs">
+                    <div class="mdui-card-media">
+                        <a href="<?php echo url('index/forum/index',array('fid'=>$vo['fid'])); ?>">
+                            <img src="<?php echo htmlentities($vo['img']); ?>" style="margin: 1rem auto;height: 250px;"/>
+                        </a>
+                    </div>
                 </div>
-                <div class="mdui-col-xs-2">
-                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple hc-delect">批量删除</button>
-                </div>
-                <div class="mdui-col-xs-4 mdui-float-right">
-                    <h3>
-                        <span>总价格：</span><span class="total-price">0</span><span>元</span>
-                        <button class="mdui-btn mdui-color-indigo mdui-float-right hc-pay">购买</button>
-                    </h3>
+                <div class="mdui-col-xs-12 mdui-col-lg-6 mdui-float-right">
+                    <div class="mdui-card-primary">
+                        <div class="mdui-card-primary-title">
+                            <a href="<?php echo url('index/forum/index',array('fid'=>$vo['fid'])); ?>"><?php echo htmlentities($vo['name']); ?></a>
+                        </div>
+                    </div>
+                    <div class="mdui-card-content mdui-hidden-xs"><?php echo htmlentities($vo['introduce']); ?></div>
+                    <div class="mdui-card-actions">
+                        <?php if(is_array($vo['child']) || $vo['child'] instanceof \think\Collection || $vo['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$son): $mod = ($i % 2 );++$i;?>
+                        <a href="<?php echo url('index/forum/index',array('fid'=>$son['fid'])); ?>" class="mdui-btn mdui-ripple"><?php echo htmlentities($son['name']); ?></a>
+                        <?php endforeach; endif; else: echo "" ;endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="example1-tab2" class="mdui-p-a-2">
-        <div class="mdui-table-fluid">
-            <table class="mdui-table">
-                <thead>
-                <tr>
-                    <th width="15">#</th>
-                    <th>购物车ID</th>
-                    <th>订单号</th>
-                    <th>栏目名称</th>
-                    <th>How Much</th>
-                </tr>
-                </thead>
-                <tbody id="hc-list-two">
-                <?php if(is_array($orderDetail) || $orderDetail instanceof \think\Collection || $orderDetail instanceof \think\Paginator): $i = 0; $__LIST__ = $orderDetail;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;if($vo['ispay'] != '1' & $vo['name'] != ''): ?>
-                <tr>
-                    <td>
-                        <label class="mdui-checkbox">
-                            <input class="check" type="checkbox" name="oid[]" value="<?php echo htmlentities($vo['id']); ?>" />
-                            <i class="mdui-checkbox-icon"></i>
-                        </label>
-                    </td>
-                    <td><?php echo htmlentities($vo['id']); ?></td>
-                    <td><?php echo htmlentities($vo['order_id']); ?></td>
-                    <td><?php echo htmlentities((isset($vo['name']) && ($vo['name'] !== '')?$vo['name']:'再次付款订单栏目')); ?></td>
-                    <td class="price"><?php echo htmlentities($vo['amount']); ?></td>
-                </tr>
+    <?php endforeach; endif; else: echo "" ;endif; ?>
+
+    <ul class="mdui-list">
+        <?php if(is_array($listss) || $listss instanceof \think\Collection || $listss instanceof \think\Paginator): $i = 0; $__LIST__ = $listss;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+        <li class="mdui-subheader">
+            <a href="<?php echo url('index/forum/index',array('fid'=>$vo['fid'])); ?>">
+                <?php echo htmlentities($vo['name']); if(count($vo['child']) > 0): ?>
+                :
                 <?php endif; ?>
-                <?php endforeach; endif; else: echo "" ;endif; ?>
-                </tbody>
-            </table>
-            <div class="mdui-row-xs-12">
-                <div class="mdui-col-xs-2" style="margin-left: 3rem;">
-                    <label class="mdui-checkbox">
-                        <input class="all check" type="checkbox"/>
-                        <i class="mdui-checkbox-icon"></i>
-                        全选
-                    </label>
-                </div>
-                <div class="mdui-col-xs-4 mdui-float-right">
-                    <h3>
-                        <span>总价格：</span><span class="total-price">0</span><span>元</span>
-                        <button class="mdui-btn mdui-color-indigo mdui-float-right hc-pay">购买</button>
-                    </h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="example1-tab3" class="mdui-p-a-2">
-        <div class="mdui-table-fluid">
-            <table class="mdui-table">
-            <thead>
-            <tr>
-                <th width="15">订单ID</th>
-                <th>购物车ID</th>
-                <th>订单号</th>
-                <th>栏目名称</th>
-                <th>How Much</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php if(is_array($orderDetail) || $orderDetail instanceof \think\Collection || $orderDetail instanceof \think\Paginator): $i = 0; $__LIST__ = $orderDetail;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;if($vo['ispay'] == '1' and $vo['name'] != ''): ?>
-            <tr>
-                <td><?php echo htmlentities($vo['id']); ?></td>
-                <td><?php echo htmlentities($vo['sid']); ?></td>
-                <td><?php echo htmlentities($vo['order_id']); ?></td>
-                <td><?php echo htmlentities((isset($vo['name']) && ($vo['name'] !== '')?$vo['name']:'再次付款订单栏目')); ?></td>
-                <td><?php echo htmlentities($vo['amount']); ?></td>
-            </tr>
-            <?php endif; ?>
+            </a>
+            <?php if(is_array($vo['child']) || $vo['child'] instanceof \think\Collection || $vo['child'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vo['child'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$son): $mod = ($i % 2 );++$i;?>
+            <a href="<?php echo url('index/forum/index',array('fid'=>$son['fid'])); ?>"><?php echo htmlentities($son['name']); ?></a>
             <?php endforeach; endif; else: echo "" ;endif; ?>
-            </tbody>
-            </table>
-        </div>
-    </div>
+        </li>
+        <?php endforeach; endif; else: echo "" ;endif; ?>
+    </ul>
+    -->
 </div>
 <!-- 论坛右侧各类信息展示 -->
 <div class="mdui-hidden-xs mdui-col-sm-3 mdui-typo mdui-float-right">
@@ -461,191 +411,6 @@
     }
 </script>
 <script src="/public/static/js/mltree-message.js"></script> 
-<script>
-//type 中的类型并没有什么限制  tp默认的ajax传输类型是json类型，可以在controller中指定要传输的类型。
-window.onload = function() {
-    // 每一行
-    var list_one = document.querySelectorAll('#example1-tab1 #hc-list-one tr');
-    var list_two = document.querySelectorAll('#example1-tab2 #hc-list-two tr');
-    // 勾选框
-    var checkInputsOne = document.querySelectorAll('#example1-tab1 .check');
-    var checkInputsTwo = document.querySelectorAll('#example1-tab2 .check');
-    // 总价
-    var piecesTotalOne = document.querySelector('#example1-tab1 .total-price');
-    var piecesTotalTwo = document.querySelector('#example1-tab2 .total-price');
-    // 选中所有
-    var checkAllOne = document.querySelector('#example1-tab1 .all');
-    var checkAllTwo = document.querySelector('#example1-tab2 .all');
-    // 删除所有
-    var delectsOne = document.querySelector('#example1-tab1 .hc-delect');
-    // 付款
-    var payOne = document.querySelector('#example1-tab1 .hc-pay');
-    var payTwo = document.querySelector('#example1-tab2 .hc-pay');
-    var list = [];
-    // 计算总价格
-    function getTotal(){
-        price = 0;
-        for(var i = 0; i < list_one.length;i++){
-            if(list_one[i].getElementsByTagName('input')[0].checked){
-                price += parseFloat(list_one[i].getElementsByClassName('price')[0].innerHTML);
-            }
-        }
-        piecesTotalOne.innerHTML = '￥' + price.toFixed(2);
-    }
-    function getTotalTwo(){
-        price = 0;
-        for(var i = 0; i < list_two.length;i++){
-            if(list_two[i].getElementsByTagName('input')[0].checked){
-                price += parseFloat(list_two[i].getElementsByClassName('price')[0].innerHTML);
-            }
-        }
-        piecesTotalTwo.innerHTML = '￥' + price.toFixed(2);
-    }
-
-    for(var i = 0;i < checkInputsOne.length;i++){
-        checkInputsOne[i].onclick = function(){
-            if(this.className === 'all check'){
-                for(var j = 0;j < checkInputsOne.length; j++){
-                    checkInputsOne[j].checked = this.checked;
-                }
-            }
-            if(this.checked == false){
-                for(var k = 0;k < checkAllOne.length;k++){
-                    checkAllOne[k].checked = false;
-                }
-            }
-            getTotal();
-        }
-    }
-    for(var i = 0;i < checkInputsTwo.length;i++){
-        checkInputsTwo[i].onclick = function(){
-            if(this.className === 'all check'){
-                for(var j = 0;j < checkInputsTwo.length; j++){
-                    checkInputsTwo[j].checked = this.checked;
-                }
-            }
-            if(this.checked == false){
-                for(var k = 0;k < checkAllTwo.length;k++){
-                    checkAllTwo[k].checked = false;
-                }
-            }
-            getTotalTwo();
-        }
-    }
-    // 单个商品选中跑出value
-    function getSubTotal(ul){
-        return ul.querySelector('.check').value;
-    }
-    for(var i = 0; i < list_one.length;i++){
-        list_one[i].onclick = function(e){
-            getSubTotal(this);
-        }
-        getTotal();
-    }
-    for(var i = 0; i < list_two.length;i++){
-        list_two[i].onclick = function(e){
-            getSubTotal(this);
-        }
-        getTotalTwo();
-    }
-    // 全部删除
-    delectsOne.onclick = function(){
-        for(var i = 0; i < list_one.length;i++){
-            if(list_one[i].getElementsByTagName('input')[0].checked){
-                list.push(list_one[i].getElementsByTagName('input')[0].value);
-            }
-        }
-        var vals = list.join(',');
-        console.log(vals);
-        if(vals!="") {
-            if(confirm("确定要是删除这些吗？")){
-                $.ajax({
-                    type:"GET",
-                    url:"<?php echo url('ShopCart/delCart'); ?>",
-                    data:{'sid':vals},
-                    success:function(data){
-                        alert('删除成功');
-                        window.location.reload();
-                    },
-                    error:function(e){
-                        alert('发生错误'+e);
-                    }
-                });
-            }
-            list = [];
-        }else {
-            alert ("请选择要删掉的栏目");
-            list = [];
-        }
-    };
-
-    layui.use(['layer'], function(){
-        var layer = layui.layer;
-        payOne.onclick = function(){
-            for(var i = 0; i < list_one.length;i++){
-                if(list_one[i].getElementsByTagName('input')[0].checked){
-                    list.push(list_one[i].getElementsByTagName('input')[0].value);
-                }
-            }
-            var sid = list.join(',');
-            layer.open({
-                type:2,
-                area:['500px','400px'],
-                fix: false, // 不固定
-                shade:0.5,
-                title:'微信支付',
-                btn:['确定'],
-                anim: 5,
-                yes:function(index,layero){
-                    layer.close(index);
-                    list = [];
-                    setTimeout(function () {
-                        location.reload();
-                    },2000);
-                },
-                cancel:function(){
-                    list = [];
-                    setTimeout(function () {
-                        location.reload();
-                    },2000);
-                },
-                content: "/index/wxpay/index.html"+'?sid='+sid,
-            });
-        };
-        payTwo.onclick = function(){
-            for(var i = 0; i < list_two.length;i++){
-                if(list_two[i].getElementsByTagName('input')[0].checked){
-                    list.push(list_two[i].getElementsByTagName('input')[0].value);
-                }
-            }
-            var oid = list.join(',');
-            layer.open({
-                type:2,
-                area:['500px','400px'],
-                fix: false, // 不固定
-                shade:0.5,
-                title:'微信支付',
-                btn:['确定'],
-                anim: 5,
-                yes:function(index,layero){
-                    layer.close(index);
-                    list = [];
-                    setTimeout(function () {
-                        location.reload();
-                    },2000);
-                },
-                cancel:function(){
-                    list = [];
-                    setTimeout(function () {
-                        location.reload();
-                    },2000);
-                },
-                content: "/index/wxpay/order"+'?oid='+oid,
-            });
-        }
-    });
-};
-</script>
  <?php echo $option['siteFooterJs']; ?>
 </body>
 

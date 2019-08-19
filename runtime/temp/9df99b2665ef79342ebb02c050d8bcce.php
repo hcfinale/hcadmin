@@ -1,4 +1,4 @@
-<?php /*a:1:{s:35:"./template/default/wxpay\index.html";i:1565663513;}*/ ?>
+<?php /*a:1:{s:35:"./template/default/wxpay\index.html";i:1566184106;}*/ ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -24,10 +24,9 @@
 </div>
 <script type="text/javascript">
     // 产看订单状态
-    /**
     var time = setInterval("check()",3000);    //3秒查询一次是否支付成功
     function check() {
-        var url = "<?php echo url('/index/Wxpay/orderstate'); ?>";
+        var url = "<?php echo url('/index/Wxpay/orderState'); ?>";
         var out_trade_no = $("#out_trade_no").val();
         var param = {'out_trade_no':out_trade_no};
         $.post(url,param,function(data){
@@ -43,7 +42,6 @@
             }
         });
     }
-    **/
 </script>
 </body>
 </html>
